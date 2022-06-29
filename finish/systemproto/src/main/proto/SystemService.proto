@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package io.openliberty.guides.systemproto;
+
+option java_multiple_files = true;
+
+service SystemService {
+    rpc getProperty (SystemPropertyName) returns (SystemPropertyValue) {}
+    rpc getPropertiesServer (SystemPropertyName) returns (stream SystemProperty) {}
+    rpc getPropertiesClient (stream SystemPropertyName) returns (SystemProperties) {}
+    rpc getPropertiesBidirect (stream SystemPropertyName) returns (stream SystemProperty) {}
+}
+
+message SystemPropertyValue {
+    string propertyValue = 1;
+}
+
+message SystemPropertyName {
+    string propertyName = 1;
+}
+
+message SystemProperty {
+    string propertyName = 1;
+    string propertyValue = 2;
+}
+
+message SystemProperties {
+    map<string, string> properties = 1;
+}
