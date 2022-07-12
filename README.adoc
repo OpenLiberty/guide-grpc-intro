@@ -1,0 +1,322 @@
+//  Copyright (c) 2022 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+//   https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//     IBM Corporation
+//
+:projectid: grpc-intro
+:page-layout: guide-multipane
+:page-duration: 30 minutes
+:page-releasedate: 2022-07-08
+:page-guide-category: none
+:page-essential: false
+:page-description: Learn how to use gRPC to send properties through a traditional REST, along with server, client, and bidirectional streaming using Open Liberty.
+:guide-author: Open Liberty
+:page-tags: ['gRPC']
+:page-related-guides: []
+:page-permalink: /guides/{projectid}
+:imagesdir: /img/guide/{projectid}
+:page-seo-title: Streaming updates from a MicroProfile Reactive Messaging microservice using Server-Sent Events (SSE)
+:page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bi-directional streaming various properties using gRPC calls.
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
+:source-highlighter: prettify
+= Streaming updates to a client using Server-Sent Events
+
+[.hidden]
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+
+Learn how to use gRPC to send properties through a traditional REST, along with server, client, and bidirectional streaming using Open Liberty.
+
+// =================================================================================================
+//  What you'll learn
+// =================================================================================================
+
+== What you'll learn
+
+You will learn how to stream messages from a GRPc Client to a GRPc server using the terminal.
+
+== What is gRPC?
+
+== Additional prerequisites
+
+[role='command']
+include::{common-includes}/gitclone.adoc[]
+
+== Try what you'll build
+// generate gRPC classes
+[role='command']
+----
+mvn -pl systemproto install
+----
+
+// starting dev mode
+[role='command']
+----
+mvn -pl system liberty:dev
+mvn -pl query liberty:dev
+----
+
+// curl request to test endpoint
+[role='command']
+----
+curl http://localhost:9081/query/properties/<propertiesName>
+----
+
+// stopping dev mode
+[role='command']
+----
+mvn -pl system liberty:stop
+mvn -pl query liberty:stop
+----
+
+== Creating and defining gRPC services
+// go to start directory
+[role='command']
+----
+cd ../start
+----
+
+// Create SystemProto.proto
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the `SystemProto` class.#
+`finish/systemproto/src/main/proto/SystemService.proto`
+----
+SystemProto.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/system/src/main/java/io/openliberty/guides/system/SystemProto.java[]
+----
+
+// run mvn install to generate abstract classes
+[role='command']
+----
+mvn -pl systeproto install
+----
+
+== Implementing unary call
+
+// Commands for system service
+// start dev mode for system
+[role='command']
+```
+mvn -pl system liberty:dev
+```
+
+// Create SystemService
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+// update server.xml
+[role='code_command hotspot file=1', subs="quotes"]
+----
+#Replace the `server.xml` file.#
+`src/main/liberty/config/server.xml`
+----
+
+server.xml
+[source, xml, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/system/src/main/liberty/config/server.xml[]
+----
+
+// Commands for query service
+// start dev mode for query
+[role='command']
+```
+mvn -pl query liberty:dev
+```
+
+// Create PropertiesResource
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Create the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+// update server.xml
+[role='code_command hotspot file=3', subs="quotes"]
+----
+#Replace the `server.xml` file.#
+`src/main/liberty/config/server.xml`
+----
+
+server.xml
+[source, xml, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/query/src/main/liberty/config/server.xml[]
+----
+
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/<propertiesName>
+----
+
+== Implementing server streaming 
+
+// Commands for system service
+// Replace SystemService
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+// Commands for query service
+
+// Replace PropertiesResource
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/os
+----
+
+
+== Implementing client streaming 
+
+// Commands for system service
+// Replace SystemService
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+// Commands for query service
+
+// Replace PropertiesResource
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/user
+----
+
+== Implementing bidirectional streaming 
+
+// Commands for system service
+// Replace SystemService
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+// Commands for query service
+
+// Replace PropertiesResource
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/java
+----
+
+== Testing the application
+// Create QueryIT.java
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the `QueryIT` class.#
+`finish/query/src/main// #TODO`
+----
+QueryIT.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/query/#TODO
+----
+
+[role="code_command hotspot", subs="quotes"]
+----
+#Create the `QueryIT` class.#
+`finish/src/test/java/it/io/openliberty/guides/QueryIT.java`
+----
+
+QueryIT.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+link:finish/query/src/test/java/it/io/openliberty/guides/QueryIT.java[]
+----
+
+[role='command']
+link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/devmode-test.adoc[]
+
+[role='command']
+link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/devmode-quit.adoc[]
+
+
+== Great work! You're done!
+
+
+EXAMPLE: You have just completed building a simple todo list application using JAXRS and CDI services in Open Liberty.
+
+link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/attribution.adoc[]
