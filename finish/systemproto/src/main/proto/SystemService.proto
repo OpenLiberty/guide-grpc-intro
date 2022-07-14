@@ -1,29 +1,62 @@
+// tag::copyright[]
+/*******************************************************************************
+ * Copyright (c) 2022 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - Initial implementation
+ *******************************************************************************/
+// end::copyright[]
+// tag::syntax[]
 syntax = "proto3";
+// end::syntax[]
 
 package io.openliberty.guides.systemproto;
 
 option java_multiple_files = true;
 
 service SystemService {
+    // tag::getProperty[]
     rpc getProperty (SystemPropertyName) returns (SystemPropertyValue) {}
+    // end::getProperty[]
+
+    // tag::getPropertiesServer[]
     rpc getPropertiesServer (SystemPropertyName) returns (stream SystemProperty) {}
+    // end::getPropertiesServer[]
+
+    // tag::getPropertiesClient[]
     rpc getPropertiesClient (stream SystemPropertyName) returns (SystemProperties) {}
+    // end::getPropertiesClient[]
+
+    // tag::getPropertiesBidirect[]
     rpc getPropertiesBidirect (stream SystemPropertyName) returns (stream SystemProperty) {}
+    // end::getPropertiesBidirect[]
 }
 
+// tag::SystemPropertyValue[]
 message SystemPropertyValue {
     string propertyValue = 1;
 }
+// end::SystemPropertyValue[]
 
+// tag::SystemPropertyName[]
 message SystemPropertyName {
     string propertyName = 1;
 }
+// end::SystemPropertyName[]
 
+// tag::SystemProperty[]
 message SystemProperty {
     string propertyName = 1;
     string propertyValue = 2;
 }
+// end::SystemProperty[]
 
+// tag::SystemProperties[]
 message SystemProperties {
     map<string, string> properties = 1;
 }
+// end::SystemProperties[]
