@@ -22,12 +22,13 @@
 :page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bi-directional streaming various properties using gRPC calls.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
-= Streaming updates to a client using Server-Sent Events
+
+= Exchanging system properties between client and a server using gRPC
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
 
-Learn how to use gRPC to send properties through a traditional REST, along with server, client, and bidirectional streaming using Open Liberty.
+Learn how to make gRPC service calls in traditional REST fashion along with streaming. 
 
 // =================================================================================================
 //  What you'll learn
@@ -35,35 +36,59 @@ Learn how to use gRPC to send properties through a traditional REST, along with 
 
 == What you'll learn
 
-You will learn how to stream messages from a GRPc Client to a GRPc server using the terminal.
+You will learn how to create various types of gRPC services using protocol buffers and how to implement them using Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice as well as to interact with the running Liberty instance. 
 
-== What is gRPC?
+=== What is gRPC?
+gRPC is a technology that implements RPC style APIs using HTTP/2.
+Remote Procedure Call (RPC) is a protocol that provides the high-level communications paradigm used in the operating system. The RPC protocol enables users to work with remote procedures as if the procedures were local. The remote procedure calls are defined through routines contained in the RPC protocol. As the routines are predefined, the RPC calls are lightweight and straightforward. 
 
-== Additional prerequisites
+gRPC uses Protocol Buffers to define its routines which include service calls as well as expected messages. For each service defined in the .proto file, gRPC will automatically generate the skeleton code for users to implement/ extend. Protocol Buffers uses a binary format to send and receive messages which end up being much faster and lightweight compared to JSON used in traditional REST APIs.
 
+gRPC clients and servers are also able to run and communicate with each other even if they are not on the same environments, as long as the .proto file is defined and the stubs are generated. For example, an gRPC client is able to make a call to a gRPC server running on a different machine. This allows for an easy integration microservices. 
+
+The application you will build in this guide consists of a `query` serice, a `system` service, and a `systemproto` service.
+
+
+// =================================================================================================
+// Getting Started
+// =================================================================================================
 [role='command']
 include::{common-includes}/gitclone.adoc[]
 
-== Try what you'll build
+=== Try what you'll build
+The `finish` directory in the root of this guide contains the finished application. Give it a try before you proceed.
+
+To try out the application, first go to the `finish` directory and run the following Maven goal to generate all the gRPC abstract classes defined in the proto file. 
+
 // generate gRPC classes
 [role='command']
 ----
+cd finish
 mvn -pl systemproto install
 ----
 
-// starting dev mode
+Start the system service by running the following maven command. 
+// starting system
 [role='command']
 ----
 mvn -pl system liberty:dev
+----
+
+Next, open another terminal window and run the following maven command to start the query service.  
+// starting query
+[role='command']
+----
 mvn -pl query liberty:dev
 ----
 
+Open another terminal window and run the following curl command to test out the basic unary service. Replace `<propertiesName>` with the name of the property you would like to see, an example is `os.name`. You should see your system os name in the terminal. 
 // curl request to test endpoint
 [role='command']
 ----
 curl http://localhost:9081/query/properties/<propertiesName>
 ----
 
+After you're statisfied testing the unary service, close the query and system servers using the instructions below or by pressing `q` or `CTRL + C`.
 // stopping dev mode
 [role='command']
 ----
@@ -72,6 +97,7 @@ mvn -pl query liberty:stop
 ----
 
 == Creating and defining gRPC services
+
 // go to start directory
 [role='command']
 ----
@@ -89,6 +115,8 @@ SystemProto.java
 ----
 link:finish/system/src/main/java/io/openliberty/guides/system/SystemProto.java[]
 ----
+
+SystemProto defines
 
 // run mvn install to generate abstract classes
 [role='command']
@@ -315,8 +343,5 @@ link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/devmode-
 
 
 == Great work! You're done!
-
-
-EXAMPLE: You have just completed building a simple todo list application using JAXRS and CDI services in Open Liberty.
-
+[role='command']
 link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/attribution.adoc[]
