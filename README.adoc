@@ -10,19 +10,16 @@
 :page-layout: guide-multipane
 :page-duration: 30 minutes
 :page-releasedate: 2022-07-08
-:page-guide-category: none
 :page-essential: false
 :page-description: Learn how to use gRPC to send properties through a traditional REST, along with server, client, and bidirectional streaming using Open Liberty.
 :guide-author: Open Liberty
 :page-tags: ['gRPC']
-:page-related-guides: []
 :page-permalink: /guides/{projectid}
 :imagesdir: /img/guide/{projectid}
+:source-highlighter: prettify
 :page-seo-title: Streaming updates from a MicroProfile Reactive Messaging microservice using Server-Sent Events (SSE)
 :page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bi-directional streaming various properties using gRPC calls.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
-:source-highlighter: prettify
-
 = Exchanging system properties between client and a server using gRPC
 
 [.hidden]
@@ -411,9 +408,5 @@ then pressing the `enter/return` key.
 == Great work! You're done!
 
 You developed an application that implements four different types of calls using gRPC using Open Liberty. 
-[role='command']
-link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/attribution.adoc[]
 
-http://localhost:9081/query/properties/os
-http://localhost:9081/query/properties/user
-http://localhost:9081/query/properties/java
+include::{common-includes}/attribution.adoc[subs="attributes"]
