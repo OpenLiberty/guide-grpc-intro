@@ -45,6 +45,7 @@ public class QueryIT {
 
     @Test
     @Order(1)
+    // tag::getPropertiesString[]
     public void testGetPropertiesString() throws MalformedURLException {
         WebTarget target = client.target(URL + "query/properties/os.name");
         Response response = target.request().get();
@@ -52,9 +53,11 @@ public class QueryIT {
                      "Incorrect response code from " + target.getUri().getPath());
         response.close();
     }
+    // end::getPropertiesString[]
 
     @Test
     @Order(2)
+    // tag::getOSProperties[]
     public void testGetOSProperties() throws MalformedURLException {
         WebTarget target = client.target(URL + "query/properties/os");
         Response response = target.request().get();
@@ -62,8 +65,12 @@ public class QueryIT {
                      "Incorrect response code from " + target.getUri().getPath());
         response.close();
     }
+    // end::getOSProperties[]
+
+
     @Test
     @Order(3)
+    // tag::getUserProperties[]
     public void testGetUserProperties() throws MalformedURLException {
         WebTarget target = client.target(URL + "query/properties/user");
         Response response = target.request().get();
@@ -71,8 +78,11 @@ public class QueryIT {
                      "Incorrect response code from " + target.getUri().getPath());
         response.close();
     }
+    // end::getUserProperties[]
+
     @Test
     @Order(4)
+    // tag::getJavaProperties[]
     public void testGetJavaProperties() throws MalformedURLException {
         WebTarget target = client.target(URL + "query/properties/java");
         Response response = target.request().get();
@@ -80,4 +90,5 @@ public class QueryIT {
                      "Incorrect response code from " + target.getUri().getPath());
         response.close();
     }
+    // end::getJavaProperties[]
 }
