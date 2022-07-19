@@ -20,21 +20,27 @@
             <scope>provided</scope>
         </dependency>
         <!-- grpc compile dependencies; provided by Liberty at runtime -->
+        <!-- tag::grpc[] -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
             <version>1.47.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- end::grpc[] -->
+        <!-- tag::grpc-stub[] -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
             <version>1.47.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- end::grpc-stub[] -->
     </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
+        <!-- tag::protobufmavenplugin[] -->
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
@@ -42,6 +48,7 @@
                 <version>1.7.0</version>
             </extension>
         </extensions>
+        <!-- end::protobufmavenplugin[] -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

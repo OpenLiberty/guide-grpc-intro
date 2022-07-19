@@ -53,6 +53,7 @@ public class PropertiesResource {
     @ConfigProperty(name = "system.port", defaultValue = "9080")
     int SYSTEM_PORT;
 
+    // tag::unary[]
     @GET
     @Path("/{propertyName}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -66,9 +67,10 @@ public class PropertiesResource {
         SystemPropertyValue response = client.getProperty(request);
         channel.shutdownNow();
         return response.getPropertyValue();
-
     }
+    // end::unary[]
 
+    // tag::serverStreaming[]
     @GET
     @Path("/os")
     @Produces(MediaType.APPLICATION_JSON)
@@ -115,7 +117,9 @@ public class PropertiesResource {
 
         return properties;
     }
+    // end::serverStreaming[]
 
+    // tag::clientStreaming[]
     @GET
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
@@ -175,7 +179,9 @@ public class PropertiesResource {
 
         return properties;
     }
+    // end::clientStreaming[]
 
+    // tag::bidirectionalStreaming[]
     @GET
     @Path("/java")
     @Produces(MediaType.APPLICATION_JSON)
@@ -234,4 +240,5 @@ public class PropertiesResource {
 
         return properties;
     }
+    // end::bidirectionalStreaming[]
 }
