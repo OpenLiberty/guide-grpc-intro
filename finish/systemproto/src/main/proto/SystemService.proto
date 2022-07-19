@@ -18,6 +18,7 @@ package io.openliberty.guides.systemproto;
 
 option java_multiple_files = true;
 
+// tag::SystemService[]
 service SystemService {
     // tag::getProperty[]
     rpc getProperty (SystemPropertyName) returns (SystemPropertyValue) {}
@@ -35,6 +36,7 @@ service SystemService {
     rpc getPropertiesBidirect (stream SystemPropertyName) returns (stream SystemProperty) {}
     // end::getPropertiesBidirect[]
 }
+// end::SystemService[]
 
 // tag::SystemPropertyValue[]
 message SystemPropertyValue {

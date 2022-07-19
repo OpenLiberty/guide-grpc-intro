@@ -74,7 +74,7 @@ Start the system service by running the following maven command.
 mvn -pl system liberty:dev
 ----
 
-Next, open another terminal window and run the following maven command to start the query service.  
+Next, open another terminal window and start the query service using the following maven command.
 // starting query
 [role='command']
 ----
@@ -96,7 +96,15 @@ mvn -pl system liberty:stop
 mvn -pl query liberty:stop
 ----
 
+// =================================================================================================
+// Creating proto file and generating gRPC stubs
+// =================================================================================================
+
 == Creating and defining gRPC services
+
+In this section, you will create the `.proto` file and generate the gRPC classes which we will implement/ extend later on. The `.proto` file describes all the services we will use in this guide including their parameters. The file also defines message types to tell the query and system what to expect, the message types can be customized as need be. 
+
+Navigate to the `start` directory to begin.
 
 // go to start directory
 [role='command']
@@ -116,13 +124,24 @@ SystemProto.java
 link:finish/system/src/main/java/io/openliberty/guides/system/SystemProto.java[]
 ----
 
-SystemProto defines
+The [hotspot=syntax file=0]`syntax()` defines this file as a proto file. The[hotspot=SystemService file=0]`SystemService()` has the four services we will be using in this guide. The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call, the query service sends a property name to the system service and receives the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName()` message type defines that the property value must be a string, and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue()` also defines that the response must be a string.
 
+The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` defines the server streaming service, in this service the query service makes a call to the system service using the `os` endpoint afterwhich the os properties are streamed back. Notice the `stream` tag before the return message type, this indicates that the response will be streamed. The [hotspot=SystemProperty file=0]`SystemProperty()` defines the return message, containing a `propertyName` and `propertyValue`. 
+
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service, in this service the query service streams user properties to the system service using the `user` endpoint after which the map of the properties is sent back. The [hotspot=SystemProperties file=0]`SystemProperties()` the message type for a map of the properties to be returned from the system service. 
+
+The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` defines teh bidirectional streaming service, in this service the query service streams java properties to the system service using the `java` endpoint after which the values for those properties are sent back by the system streaming.
+
+Run the command below to generate the abstract classes automatically from this proto file. 
 // run mvn install to generate abstract classes
 [role='command']
 ----
 mvn -pl systeproto install
 ----
+
+// =================================================================================================
+// Implementing unary call
+// =================================================================================================
 
 == Implementing unary call
 
@@ -198,6 +217,10 @@ include::finish/query/src/main/liberty/config/server.xml[]
 curl http://localhost:9081/query/properties/<propertiesName>
 ----
 
+// =================================================================================================
+// Implementing server streaming  
+// =================================================================================================
+
 == Implementing server streaming 
 
 // Commands for system service
@@ -234,6 +257,10 @@ link:finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.j
 ----
 curl http://localhost:9081/query/properties/os
 ----
+
+// =================================================================================================
+// Implementing client streaming 
+// =================================================================================================
 
 
 == Implementing client streaming 
@@ -273,6 +300,10 @@ link:finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.j
 curl http://localhost:9081/query/properties/user
 ----
 
+// =================================================================================================
+// Implementing bidirectional streaming 
+// =================================================================================================
+
 == Implementing bidirectional streaming 
 
 // Commands for system service
@@ -310,6 +341,10 @@ link:finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.j
 curl http://localhost:9081/query/properties/java
 ----
 
+// =================================================================================================
+// Testing the application
+// =================================================================================================
+
 == Testing the application
 // Create QueryIT.java
 [role="code_command hotspot file=0", subs="quotes"]
@@ -338,10 +373,24 @@ link:finish/query/src/test/java/it/io/openliberty/guides/QueryIT.java[]
 [role='command']
 link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/devmode-test.adoc[]
 
+// =================================================================================================
+// Tearing down the environment
+// =================================================================================================
+== Tearing down the environment
+
 [role='command']
 link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/devmode-quit.adoc[]
 
+// =================================================================================================
+// Great work! You're done!
+// =================================================================================================
 
 == Great work! You're done!
+
+You developed an application that implements four different types of calls using gRPC using Open Liberty. 
 [role='command']
 link:https://raw.githubusercontent.com/OpenLiberty/guides-common/master/attribution.adoc[]
+
+http://localhost:9081/query/properties/os
+http://localhost:9081/query/properties/user
+http://localhost:9081/query/properties/java
