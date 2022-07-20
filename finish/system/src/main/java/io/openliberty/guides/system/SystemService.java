@@ -110,11 +110,9 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             // tag::clientStreamingCompleted[]
             @Override
             public void onCompleted() {
-                // tag::buildClientStreamingProperties
                 SystemProperties value = SystemProperties.newBuilder()
                                              .putAllProperties(properties)
                                              .build();
-                // end::buildClientStreamingProperties
                 observer.onNext(value);
                 observer.onCompleted();
                 System.out.println("client streaming was completed!");
