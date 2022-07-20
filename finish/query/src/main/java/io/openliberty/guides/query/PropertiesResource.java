@@ -76,16 +76,18 @@ public class PropertiesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Properties getOSProperties() {
 
+        // tag::createChannel[]
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
+        // end::createChannel[]
 
         Properties properties = new Properties();
         CountDownLatch countDown = new CountDownLatch(1);
         SystemPropertyName request = SystemPropertyName.newBuilder()
                                          .setPropertyName("os.").build();
+        // tag::sendProperties[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
-
             @Override
             public void onNext(SystemProperty value) {
                 System.out.println("server streaming received: " 
@@ -103,19 +105,22 @@ public class PropertiesResource {
                 System.out.println("server streaming completed");
                 countDown.countDown();
             }
-
         });
+        // end::sendProperties[]
 
-          // wait until completed
+
+        // wait until completed
         try {
             countDown.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        // tag::closeConnection[]
         channel.shutdownNow();
 
         return properties;
+        // end::closeConnection[]
     }
     // end::serverStreaming[]
 
@@ -132,6 +137,7 @@ public class PropertiesResource {
         CountDownLatch countDown = new CountDownLatch(1);
         
         Properties properties = new Properties();
+        // tag::defineClient[]
         StreamObserver<SystemPropertyName> v = client.getPropertiesClient(
             new StreamObserver<SystemProperties>() {
 
@@ -154,19 +160,24 @@ public class PropertiesResource {
                 }
 
             });
+        // end::defineClient[]
 
+        // tag::getPropertiesClientStreaming[]
         // collect the property names starting with user.
         List<String> keys = System.getProperties()
                                   .stringPropertyNames()
                                   .stream()
                                   .filter(k -> k.startsWith("user."))
                                   .collect(Collectors.toList());
+        // end::getPropertiesClientStreaming[]
 
+        // tag::clientStream[]
         // send messages to the server
         keys.stream()
               .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
               .forEach(v::onNext);
           v.onCompleted();
+        // end::clientStream[]
 
           // wait until completed
         try {

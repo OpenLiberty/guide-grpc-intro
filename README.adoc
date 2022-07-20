@@ -112,23 +112,23 @@ cd ../start
 // Create SystemProto.proto
 [role="code_command hotspot file=0", subs="quotes"]
 ----
-#Create the `SystemProto` class.#
+#Create the `SystemProto` file.#
 `finish/systemproto/src/main/proto/SystemService.proto`
 ----
 SystemProto.java
 [source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
 ----
-include::finish/system/src/main/java/io/openliberty/guides/system/SystemProto.java[]
+include::finish/systemproto/src/main/proto/SystemService.proto[]
 ----
 
 // Import pom.xml
 pom.xml
 [source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
 ----
-include::finish/pom.xml[]
+include::finish/systemproto/pom.xml[]
 ----
 
-The [hotspot=syntax file=0]`syntax()` defines this file as a proto file. The [hotspot=SystemService file=0]`SystemService()` has the four services we will be using in this guide. The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call, the query service sends a property name to the system service and receives the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName()` message type defines that the property value must be a string, and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue()` also defines that the response must be a string.
+The [hotspot=basicConfig file=0]`basic configuration()` defines this file as a proto file. The [hotspot=SystemService file=0]`SystemService()` has the four services we will be using in this guide. The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call, the query service sends a property name to the system service and receives the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName()` message type defines that the property value must be a string, and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue()` also defines that the response must be a string.
 
 The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` defines the server streaming service, in this service the query service makes a call to the system service using the `os` endpoint afterwhich the os properties are streamed back. Notice the `stream` tag before the return message type, this indicates that the response will be streamed. The [hotspot=SystemProperty file=0]`SystemProperty()` defines the return message, containing a `propertyName` and `propertyValue`. 
 
@@ -162,7 +162,7 @@ mvn -pl query liberty:dev
 ```
 The PropertiesResource class acts like a client calling the query service for a response. 
 // Create PropertiesResource
-[role="code_command hotspot file=2", subs="quotes"]
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Create the `PropertiesResource` class.#
 `/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
@@ -175,7 +175,7 @@ include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResour
 ----
 
 // update server.xml
-[role='code_command hotspot file=3', subs="quotes"]
+[role='code_command hotspot file=1', subs="quotes"]
 ----
 #Replace the `server.xml` file.#
 `src/main/liberty/config/server.xml`
@@ -213,7 +213,8 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 
 The [hotspot=getProperty file=0]`getProperty()` is the implementation of the rpc call defined in the proto file. The [hotspot=pName file=0]`pName()` variable stores the request string, notice the use of the getter `getPropertyName`, this is also automatically generated using the mesasge type. The [hotspot=pValue file=0]`pValue()` gets and stores the System property value. The [hotspot=response file=0]`value()` variable stores the built response to be sent back. Notice the variable type `SystemPropertyValue`, this is the message type we defined in the proto file. The built response is then sent to the query service using [hotspot=complete file=0]`onNext()` and [hotspot=complete file=0]`onComplete()`
 
-Open another terminal window and run the following curl command to test out the unary service. Replace `<propertiesName>` with the name of the property you would like to see, an example is `os.name`. You should see your system os name in the terminal. 
+Open another terminal window and run the following curl command to test out the unary service. Replace `<propertiesName>` with the name of the property you would like to see, an example is `os.name`. You should see your system os name in the terminal.
+
 // curl request
 [role='command']
 ----
@@ -225,17 +226,35 @@ curl http://localhost:9081/query/properties/<propertiesName>
 // =================================================================================================
 
 == Implementing server streaming 
-The next service we'll implement is `Server Streaming`. The query service will send a request using the `os` endpoint and the system service will stream the os properties back to the query service. 
+The next service we'll implement is `Server Streaming`. The query service will send a request using the `os` endpoint and the system service will stream the os properties back to the query service. When streaming, there is a channel created between the query and the system service which is only closed by the system service after it has sent the last message to the query service. 
+
+Replace the `PropertiesResource` class to add the implementation of serverSteraming for query service. 
+// Commands for query service
+// Replace PropertiesResource
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+First a [hotspot=createChannel file=0]`channel()` is created between query and system services using the stubs generated by the proto file. Then the properties are [hotspot=sendProperties file=0]`streamed()` individually from the system service. After all of the properties are received, the [hotspot=closeConnection file=0]`channel()` is closed. 
 
 // Commands for system service
-
-Update the SystemService class to include the implementation of `getOSProperties()`
+Update the SystemService class to include the implementation of `getOSProperties()`, which receives the os properties from the system service. 
 // Replace SystemService
-[role="code_command hotspot file=0", subs="quotes"]
+[role="code_command hotspot file=1", subs="quotes"]
 ----
 #Replace the `SystemService` class.#
 `/system/src/main/java/io/openliberty/guides/system/SystemService.java`
 ----
+
+The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` method implements server streaming for the system service. The properties are [hotspot=serverStreaming file=0]`individually streamed()` to the query service. The message `server streaming was completed!` is printed in the system service terminal at the conclusion of the method. 
 
 SystemService.java
 [source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
@@ -244,22 +263,8 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 ----
 
 
-
-// Commands for query service
-
-// Replace PropertiesResource
-[role="code_command hotspot file=2", subs="quotes"]
-----
-#Replace the `PropertiesResource` class.#
-`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
-----
-
-PropertiesResource.java
-[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
-----
-include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
-----
-
+Run the following curl command to test out the server streaming.
+You should see each property that was streamed from the system service to the query service and a message saying `server streaming completed`.
 // curl request
 [role='command']
 ----
@@ -273,35 +278,46 @@ curl http://localhost:9081/query/properties/os
 
 == Implementing client streaming 
 
-// Commands for system service
-// Replace SystemService
-[role="code_command hotspot file=0", subs="quotes"]
-----
-#Replace the `SystemService` class.#
-`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
-----
-
-SystemService.java
-[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
-----
-include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
-----
-
+The next service we'll implement is `Client Streaming`. The query service will stream user properties to the system service using the `user` endpoint and the system service will return a map of those user properties.
 // Commands for query service
-
 // Replace PropertiesResource
-[role="code_command hotspot file=2", subs="quotes"]
+
+Replace the `PropertiesResource` class to add the implementation of serverSteraming for query service. 
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace the `PropertiesResource` class.#
 `/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
 ----
 
 PropertiesResource.java
-[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,bidirectionalStreaming"]
 ----
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
+After a connection is created between the two services, a[hotspot=defineClient file=0]`client[]` is defined to ensure the expected behaviour. The [hotspot=getPropertiesClientStreaming file=0]`user properties[]` are [hotspot=clientStream file=0]`streamed[]` to the system service. 
+
+// Commands for system service
+// Replace SystemService
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,bidirectionalStreaming"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+The system service isreceives user properties  to it in a .
+
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()[]` method implements client streaming for the system service. In this method, system service [hotspot=receivingProperties file=0]`receives[]` the user properties from the query service and stores them in a [hotspot=clientStreamingMap file=0]`Map[]`, and after the streaming is completed the stored map is [hotspot=clientStreamingCompleted file=0]`returned[]` to the query service. 
+
+
+Run the following curl command to test out the client streaming.
+You should see each property that was streamed from the query service to the system service and a message saying `client streaming completed`.
 // curl request
 [role='command']
 ----
@@ -314,24 +330,9 @@ curl http://localhost:9081/query/properties/user
 
 == Implementing bidirectional streaming 
 
-// Commands for system service
-// Replace SystemService
-[role="code_command hotspot file=0", subs="quotes"]
-----
-#Replace the `SystemService` class.#
-`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
-----
-
-SystemService.java
-[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
-----
-include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
-----
-
 // Commands for query service
-
 // Replace PropertiesResource
-[role="code_command hotspot file=2", subs="quotes"]
+[role="code_command hotspot file=0", subs="quotes"]
 ----
 #Replace the `PropertiesResource` class.#
 `/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
@@ -343,6 +344,23 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
+// Commands for system service
+// Replace SystemService
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+
+Run the following curl command to test out bidirectional  streaming.
+You should see each property that was streamed from the query service to the system as well from the system to the query service and a message saying `bidirectional streaming completed`.
 // curl request
 [role='command']
 ----
@@ -358,7 +376,7 @@ curl http://localhost:9081/query/properties/java
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Create the `QueryIT` class.#
-`finish/src/test/java/it/io/openliberty/guides/QueryIT.java`
+`finish/query/src/test/java/it/io/openliberty/guides/QueryIT.java`
 ----
 
 QueryIT.java
