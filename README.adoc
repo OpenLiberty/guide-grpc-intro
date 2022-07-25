@@ -187,7 +187,7 @@ PropertiesResource.java
 ----
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
-The `PropertiesResource` class provides endpoints to interact with the system service. The `query/<propertiesName>` endpoint makes a unary request to return the property value from system service.
+The `PropertiesResource` class provides endpoints to interact with the system service. The `/<propertiesName>` endpoint is a unary service call to get the property value from the system service. 
 
 // update server.xml
 [role='code_command hotspot file=1', subs="quotes"]
