@@ -292,7 +292,7 @@ curl http://localhost:9081/query/properties/os
 
 == Implementing client streaming 
 
-The next service we'll implement is `Client Streaming`. The query service will stream user properties to the system service using the `user` endpoint and the system service will return a map of those user properties.
+The next service to implement is `Client Streaming`. The query service streams user properties to the system service by using the `user` endpoint and the system service returns a map of those user properties with their values.
 // Commands for query service
 // Replace PropertiesResource
 
@@ -309,7 +309,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-After a connection is created between the two services, a [hotspot=defineClient file=0]`client[]` is defined to ensure the expected behaviour. The [hotspot=getPropertiesClientStreaming file=0]`user properties[]` are [hotspot=clientStream file=0]`streamed[]` to the system service. 
+After a connection is created between the two services, a [hotspot=defineClient file=0]`client[]` is defined to ensure the expected behavior. The [hotspot=getPropertiesClientStreaming file=0]`user properties[]` are [hotspot=clientStream file=0]`streamed[]` to the system service. 
 
 // Commands for system service
 // Replace SystemService
@@ -325,7 +325,7 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()[]` method implements client streaming for the system service. In this method, system service [hotspot=receivingProperties file=0]`receives[]` the user properties from the query service and stores them in a [hotspot=clientStreamingMap file=0]`Map[]`, and after the streaming is completed the stored map is [hotspot=clientStreamingCompleted file=0]`returned[]` to the query service. 
+The [hotspot=getPropertiesClient file=1]`getPropertiesClient()[]` method implements client streaming for the system service. In this method, system service [hotspot=receivingProperties file=1]`receives[]` the user properties from the query service and stores them in a [hotspot=clientStreamingMap file=1]`Map[]`, and after the streaming is completed the stored map is [hotspot=clientStreamingCompleted file=1]`returned[]` to the query service. 
 
 
 Run the following curl command to test out the client streaming.
@@ -341,7 +341,7 @@ curl http://localhost:9081/query/properties/user
 // =================================================================================================
 
 == Implementing bidirectional streaming 
-The next service we'll implement is `Bidirectional Streaming`. The query service will stream java properties while the system service will stream the values of those properties back to the query service. 
+The next service to implement is `bidirectional Streaming`. The query service streams the Java properties while the system service streams the values of those properties back to the query service. 
 // Commands for query service
 // Replace PropertiesResource
 [role="code_command hotspot file=0", subs="quotes"]
@@ -356,7 +356,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-Similar to the client streaming service, the [hotspot=bidirectionalStreaming file=0]`birectional streaming[]` also receives streamed properties from the query service but in addition it also streams the values for the properties received back to the query service. 
+Similar to the client streaming service, the [hotspot=bidirectionalStreaming file=0]`bidirectional streaming[]` also receives streamed properties from the query service but in addition it also streams the values for the properties received back to the query service. 
 
 // Commands for system service
 // Replace SystemService
@@ -372,10 +372,10 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()[]` method implements bidirectional streaming for the system service. In this method, system service [hotspot=receiveBidirectionalProperties file=0]`receives and sends[]` the java properties with their respective values back to the query service.
+The [hotspot=getPropertiesBidirect file=1]`getPropertiesBidirect()[]` method implements bidirectional streaming for the system service. In this method, system service [hotspot=receiveBidirectionalProperties file=1]`receives and sends[]` the Java properties with their respective values back to the query service.
 
 
-Run the following curl command to test out bidirectional  streaming.
+Run the following curl command to test out bidirectional streaming.
 You should see each property that was streamed from the query service to the system as well from the system to the query service and a message saying `bidirectional streaming completed`.
 // curl request
 [role='command']
@@ -441,6 +441,6 @@ then pressing the `enter/return` key.
 
 == Great work! You're done!
 
-You developed an application that implements four different types of calls using gRPC using Open Liberty. 
+You developed an application that implements four unique calls with gRPC by using Open Liberty. 
 
 include::{common-includes}/attribution.adoc[subs="attributes"]
