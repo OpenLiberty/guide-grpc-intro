@@ -125,7 +125,7 @@ include::finish/systemproto/src/main/proto/SystemService.proto[]
 
 // Import pom.xml
 pom.xml
-[source, XML, linenums, role="code_column"]
+[source, XML, linenums, role="code_column hotspot file=1"]
 ----
 include::finish/systemproto/pom.xml[]
 ----
