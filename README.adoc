@@ -125,7 +125,7 @@ include::finish/systemproto/src/main/proto/SystemService.proto[]
 
 // Import pom.xml
 pom.xml
-[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+[source, XML, linenums, role="code_column"]
 ----
 include::finish/systemproto/pom.xml[]
 ----
