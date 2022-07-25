@@ -34,7 +34,7 @@ Learn how to make gRPC service calls in traditional REST fashion and streaming b
 
 == What you'll learn
 
-You will learn how to create various gRPC services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice as well as to interact with the running Liberty instance. 
+You will learn how to create various gRPC services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice and to interact with the running Liberty instance. 
 
 === What is gRPC?
 gRPC is a technology that implements RPC style APIs with HTTP/2.
@@ -101,7 +101,7 @@ mvn -pl query liberty:stop
 
 == Creating and defining gRPC services
 
-In this section, you will create the `.proto` file and generate the gRPC classes which we will implement/ extend later on. The `.proto` file describes all the services we will use in this guide including their parameters. The file also defines message types to tell the query and system what to expect, the message types can be customized as need be. 
+In this section, you will create the `.proto` file and generate many gRPC classes, some of which will have to be implemented/ extended later . The `.proto` file defines all the service calls and message types. The message types are used in the service call definition, and define what parameters if any a request and response should have.
 
 Navigate to the `start` directory to begin.
 
@@ -130,17 +130,19 @@ pom.xml
 include::finish/systemproto/pom.xml[]
 ----
 
-The [hotspot=basicConfig file=0]`basic configuration()` defines this file as a proto file. The [hotspot=SystemService file=0]`SystemService()` has the four services we will be using in this guide. The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call, the query service sends a property name to the system service and receives the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName()` message type defines that the property value must be a string, and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue()` also defines that the response must be a string.
+The first few lines define the [hotspot=basicConfig file=0]`basic configuration()` of a proto file. The [hotspot=SystemService file=0]`SystemService()` contains the four service calls that will be implemented.
 
-The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` defines the server streaming service, in this service the query service makes a call to the system service using the `os` endpoint afterwhich the os properties are streamed back. Notice the `stream` tag before the return message type, this indicates that the response will be streamed. The [hotspot=SystemProperty file=0]`SystemProperty()` defines the return message, containing a `propertyName` and `propertyValue`. 
+The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call. In this call the query service sends a property name to the system service and receives back the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName()` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue()` message types define that the property value and property name must be a string.
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service, in this service the query service streams user properties to the system service using the `user` endpoint after which the map of the properties is sent back. The [hotspot=SystemProperties file=0]`SystemProperties()` the message type for a map of the properties to be returned from the system service. 
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. The query service streams user properties to the system service using the `\user` endpoint and a map of the properties with their respective values is sent back. The [hotspot=SystemProperties file=0]`SystemProperties()` message type is used to return a map of the properties from the system service. 
 
-The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` defines teh bidirectional streaming service, in this service the query service streams java properties to the system service using the `java` endpoint after which the values for those properties are sent back by the system streaming.
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. In this service, the query service streams user properties to the system service by using the `user` endpoint after which the map of the properties is sent back. The [hotspot=SystemProperties file=0]`SystemProperties()` the message type for a map of the properties to be returned from the system service. 
 
-Add [hotspot=grpc file=1]`grpc()` and [hotspot=grpc-stub file=1]`grpc-stub()` dependencies to the pom files. The [hotspot=protobufmavenplugin file=1]`os-maven-plugin()` automatically install the correct version of Protobuf compiler. 
+The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` defines the bidirectional streaming service. In this service, the query service streams Java properties to the system service by using the `java` endpoint after which the values for those properties are sent back by the system streaming.
 
-Run the command below to generate the abstract classes. 
+In order to compile the `.proto` file, the `pom.xml` needs two dependencies. ßAdd [hotspot=grpc file=1]`grpc()` and [hotspot=grpc-stub file=1]`grpc-stub()` dependencies to the pom files. The [hotspot=protobufmavenplugin file=1]`os-maven-plugin()` automatically install the correct version of Protobuf compiler. 
+
+Run the command below to generate the gRPC classes. 
 // run mvn install to generate abstract classes
 [role='command']
 ----
