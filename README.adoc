@@ -118,7 +118,7 @@ cd ../start
 `finish/systemproto/src/main/proto/SystemService.proto`
 ----
 SystemService.proto
-[source, Java, linenums, indent=0, role="code_column"]
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
 ----
 include::finish/systemproto/src/main/proto/SystemService.proto[]
 ----
@@ -392,13 +392,13 @@ curl http://localhost:9081/query/properties/java
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Create the `QueryIT` class.#
-`finish/query/src/test/java/it/io/openliberty/guides/QueryIT.java`
+`finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java`
 ----
 
 QueryIT.java
 [source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
 ----
-include::finish/query/src/test/java/it/io/openliberty/guides/QueryIT.java[]
+include::finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java[]
 ----
 Each test case tests one of the methods for instantiating a RESTful client.
 
