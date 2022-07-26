@@ -38,7 +38,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
         // end::pName[]
         // tag::pValue[]
         String pValue = System.getProperty(pName);
-        // tag::pValue[]
+        // end::pValue[]
         // tag::response[]
         SystemPropertyValue value = SystemPropertyValue
                                         .newBuilder()
@@ -123,7 +123,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
         };
 
     }
-    // end::getPropertiesServer[]
+    // end::getPropertiesClient[]
 
     // tag::getPropertiesBidirect[]
     @Override

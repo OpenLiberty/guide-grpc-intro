@@ -410,9 +410,6 @@ The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `http:
 
 The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `http://localhost:9081/query/properties/java` endpoint and confirms that a response is received. 
 
-=== Running the tests
-Because you started Open Liberty in dev mode, you can run the tests by pressing the enter/return key from the command-line session where you started dev mode.
-
 [role=command]
 include::{common-includes}/devmode-test.adoc[]
 
