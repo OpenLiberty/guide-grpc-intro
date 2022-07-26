@@ -46,8 +46,10 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                                         .build();
         // end::response[]
 
-        // tag::complete[]
+        // tag::next[]
         observer.onNext(value);
+        // end::next[]
+        // tag::complete[]
         observer.onCompleted();
         // end::complete[]
 
