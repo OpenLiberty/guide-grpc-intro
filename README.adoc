@@ -10,16 +10,14 @@
 :page-layout: guide-multipane
 :page-duration: 30 minutes
 :page-releasedate: 2022-07-08
-:page-essential: false
 :page-description: Learn how to use gRPC to send properties through a traditional REST, along with server, client, and bidirectional streaming using Open Liberty.
-:guide-author: Open Liberty
 :page-tags: ['gRPC']
 :page-permalink: /guides/{projectid}
-:imagesdir: /img/guide/{projectid}
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
 :page-seo-title: Exchanging system properties by using gRPC calls
 :page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming various properties by using gRPC calls.
-:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
+:guide-author: Open Liberty
 
 = Exchanging system properties between client and a server by using gRPC calls
 
@@ -40,7 +38,7 @@ You will learn how to create various gRPC services by using protocol buffers and
 gRPC is a technology that implements RPC style APIs with HTTP/2.
 Remote Procedure Call (RPC) is a protocol that provides the high-level communications paradigm that is used in the operating system. The RPC protocol enables users to work with remote procedures as if the procedures were local. The remote procedure calls are defined through routines that are contained in the RPC protocol. As the routines are predefined, the RPC calls are lightweight and straightforward. 
 
-gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement/ extend. Protocol Buffers use a binary format to send and receive messages which are much faster and lightweight compared to JSON used in traditional REST APIs.
+gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement/ extend. Protocol Buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in traditional REST APIs.
 
 Protocol buffers allow cross project support through the `.proto` file, as a result gRPC clients and servers are also able to run and communicate with each other on different environments. For example, a gRPC client running in Java codebase is able to call a gRPC server from a Python codebase. This feature of protocol buffers allows for easier integration between microservices.
 
@@ -87,7 +85,7 @@ Open another terminal window and run the following curl command to test out the 
 curl http://localhost:9081/query/properties/<propertiesName>
 ----
 
-After you're satisfied testing the unary service, close the query and system servers by using the instructions below or by pressing `q` or `CTRL + C`.
+After you're satisfied testing the unary service, close the query and system servers by using the instructions below or by pressing `q` or `Ctrl + C`.
 // stopping dev mode
 [role='command']
 ----
@@ -101,7 +99,7 @@ mvn -pl query liberty:stop
 
 == Creating and defining gRPC services
 
-In this section, you will create the `.proto` file and generate many gRPC classes, some of which will have to be implemented/ extended later . The `.proto` file defines all the service calls and message types. The message types are used in the service call definition, and define what parameters if any a request and response should have.
+In this section, you will create the `.proto` file and generate gRPC classes, some of which must be implemented later. The `.proto` file defines all the service calls and message types. The message types are used in the service call definition, and define what parameters, if any, the request and response have.
 
 Navigate to the `start` directory to begin.
 
@@ -132,15 +130,15 @@ include::finish/systemproto/pom.xml[]
 
 The first few lines define the [hotspot=basicConfig file=0]`basic configuration` of a proto file. The [hotspot=SystemService file=0]`SystemService()` contains the four service calls that will be implemented.
 
-The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call. In this call the query service sends a property name to the system service and receives back the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the property value and property name must be a string.
+The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call. In this call, the query service sends a property name to the system service and receives back the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the property value and property name must be a string.
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. The query service streams user properties to the system service using the `\user` endpoint and a map of the properties with their respective values is sent back. The [hotspot=SystemProperties file=0]`SystemProperties` message type is used to return a map of the properties from the system service. 
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. The query service streams user properties to the system service by using the `\user` endpoint and a map of the properties with their respective values is sent back. The [hotspot=SystemProperties file=0]`SystemProperties` message type is used to return a map of the properties from the system service. 
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. In this service, the query service streams user properties to the system service by using the `user` endpoint after which the map of the properties is sent back. The [hotspot=SystemProperties file=0]`SystemProperties` message type for a map of the properties to be returned from the system service. 
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. In this service, the query service streams user properties to the system service by using the `user` endpoint. In return, a map of the property values is sent from the system service. The [hotspot=SystemProperties file=0]`SystemProperties` message type is used to send a map of the properties and their values from the system service. 
 
-The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` defines the bidirectional streaming service. In this service, the query service streams Java properties to the system service by using the `java` endpoint after which the values for those properties are sent back by the system streaming.
+The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` defines the bidirectional streaming service. In this service, the query service streams Java properties to the system service by using the `java` endpoint. In return, the values for those properties are streamed back from the system service.
 
-In order to compile the `.proto` file, the `pom.xml` needs two dependencies. ßAdd [hotspot=grpc file=1]`grpc` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies to the pom files. The [hotspot=protobufmavenplugin file=1]`os-maven-plugin()` automatically install the correct version of Protobuf compiler. 
+To compile the `.proto` file, the `pom.xml` needs two dependencies. ßAdd [hotspot=grpc file=1]`grpc` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies to the pom files. The [hotspot=protobufmavenplugin file=1]`os-maven-plugin()` automatically install the correct version of Protobuf compiler. 
 
 Run the command below to generate the gRPC classes. 
 // run mvn install to generate abstract classes
@@ -212,7 +210,7 @@ Open another terminal window and start the system service in dev mode by using t
 mvn -pl system liberty:dev
 ```
 
-The SystemService class implements the `SystemServiceGrpc` class that is generated by the proto file. The four types of services defined in the proto file will be implemented here. 
+The SystemService class implements the `SystemServiceGrpc` class that is generated by the proto file. The four types of services that are defined in the proto file will be implemented here. 
 // Create SystemService
 [role="code_command hotspot file=2", subs="quotes"]
 ----
@@ -241,7 +239,7 @@ curl http://localhost:9081/query/properties/<propertiesName>
 // =================================================================================================
 
 == Implementing server streaming 
-The next service to implement is `Server Streaming`. The query service sends a request by using the `os` endpoint and the system service will streams the os properties back to the query service. When streaming, there is a channel that is created between the query and the system service, which is only closed by the system service after it has sent the last message to the query service. 
+The next service to implement is `Server Streaming`. The query service sends a request by using the `os` endpoint and the system service will streams the os properties back to the query service. There is a channel that is created between the query and the system service to stream properties. This channel is only closed by the system service after it has sent the last message to the query service. 
 
 Replace the `PropertiesResource` class to add the implementation of serverSteraming for query service. 
 // Commands for query service
@@ -438,6 +436,6 @@ then pressing the `enter/return` key.
 
 == Great work! You're done!
 
-You developed an application that implements four unique calls with gRPC by using Open Liberty. 
+You just developed an application that implements four unique calls with gRPC by using Open Liberty. 
 
 include::{common-includes}/attribution.adoc[subs="attributes"]
