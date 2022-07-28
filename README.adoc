@@ -18,7 +18,6 @@
 :page-seo-title: Exchanging system properties by using gRPC calls
 :page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming various properties by using gRPC calls.
 :guide-author: Open Liberty
-
 = Exchanging system properties between client and a server by using gRPC calls
 
 [.hidden]
