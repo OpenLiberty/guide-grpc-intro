@@ -31,6 +31,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+// tag::grpcImports[]
 import io.openliberty.guides.systemproto.SystemProperties;
 import io.openliberty.guides.systemproto.SystemProperty;
 import io.openliberty.guides.systemproto.SystemPropertyName;
@@ -38,6 +39,7 @@ import io.openliberty.guides.systemproto.SystemPropertyValue;
 import io.openliberty.guides.systemproto.SystemServiceGrpc;
 import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceBlockingStub;
 import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceStub;
+// end::grpcImports[]
 
 @ApplicationScoped
 @Path("/properties")
@@ -51,6 +53,7 @@ public class PropertiesResource {
     @ConfigProperty(name = "system.port", defaultValue = "9080")
     int SYSTEM_PORT;
 
+    // tag::unary[]
     @GET
     @Path("/{propertyName}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -64,24 +67,27 @@ public class PropertiesResource {
         SystemPropertyValue response = client.getProperty(request);
         channel.shutdownNow();
         return response.getPropertyValue();
-
     }
+    // end::unary[]
 
+    // tag::serverStreaming[]
     @GET
     @Path("/os")
     @Produces(MediaType.APPLICATION_JSON)
     public Properties getOSProperties() {
 
+        // tag::createChannel[]
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
+        // end::createChannel[]
 
         Properties properties = new Properties();
         CountDownLatch countDown = new CountDownLatch(1);
         SystemPropertyName request = SystemPropertyName.newBuilder()
                                          .setPropertyName("os.").build();
+        // tag::sendProperties[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
-
             @Override
             public void onNext(SystemProperty value) {
                 System.out.println("server streaming received: " 
@@ -99,21 +105,26 @@ public class PropertiesResource {
                 System.out.println("server streaming completed");
                 countDown.countDown();
             }
-
         });
+        // end::sendProperties[]
 
-          // wait until completed
+
+        // wait until completed
         try {
             countDown.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        // tag::closeConnection[]
         channel.shutdownNow();
 
         return properties;
+        // end::closeConnection[]
     }
+    // end::serverStreaming[]
 
+    // tag::clientStreaming[]
     @GET
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
@@ -126,6 +137,7 @@ public class PropertiesResource {
         CountDownLatch countDown = new CountDownLatch(1);
         
         Properties properties = new Properties();
+        // tag::defineClient[]
         StreamObserver<SystemPropertyName> v = client.getPropertiesClient(
             new StreamObserver<SystemProperties>() {
 
@@ -148,19 +160,24 @@ public class PropertiesResource {
                 }
 
             });
+        // end::defineClient[]
 
+        // tag::getPropertiesClientStreaming[]
         // collect the property names starting with user.
         List<String> keys = System.getProperties()
                                   .stringPropertyNames()
                                   .stream()
                                   .filter(k -> k.startsWith("user."))
                                   .collect(Collectors.toList());
+        // end::getPropertiesClientStreaming[]
 
+        // tag::clientStream[]
         // send messages to the server
         keys.stream()
               .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
               .forEach(v::onNext);
           v.onCompleted();
+        // end::clientStream[]
 
           // wait until completed
         try {
@@ -173,7 +190,9 @@ public class PropertiesResource {
 
         return properties;
     }
+    // end::clientStreaming[]
 
+    // tag::bidirectionalStreaming[]
     @GET
     @Path("/java")
     @Produces(MediaType.APPLICATION_JSON)
@@ -232,4 +251,5 @@ public class PropertiesResource {
 
         return properties;
     }
+    // end::bidirectionalStreaming[]
 }

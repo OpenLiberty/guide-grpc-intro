@@ -10,12 +10,12 @@
  *     IBM Corporation - Initial implementation
  *******************************************************************************/
 // end::copyright[]
-package io.openliberty.guides.system;
+package io.openliberty.guides.query;
 
-import javax.ws.rs.core.Application;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
-@ApplicationPath("system")
-public class SystemApplication extends Application {
+@ApplicationPath("query")
+public class QueryApplication extends Application {
 
 }

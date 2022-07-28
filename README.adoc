@@ -1,0 +1,440 @@
+// Copyright (c) 2022 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+// https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//     IBM Corporation
+//
+:projectid: grpc-intro
+:page-layout: guide-multipane
+:page-duration: 30 minutes
+:page-releasedate: 2022-07-08
+:page-description: Learn how to use gRPC to send properties through a traditional REST, along with server, client, and bidirectional streaming using Open Liberty.
+:page-tags: ['gRPC']
+:page-permalink: /guides/{projectid}
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
+:source-highlighter: prettify
+:page-seo-title: Exchanging system properties by using gRPC calls
+:page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming various properties by using gRPC calls.
+:guide-author: Open Liberty
+= Exchanging system properties between client and a server by using gRPC calls
+
+[.hidden]
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+
+Learn how to make gRPC service calls in traditional REST fashion and streaming between two services.  
+
+// =================================================================================================
+//  What you'll learn
+// =================================================================================================
+
+== What you'll learn
+
+You will learn how to create various gRPC services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice and to interact with the running Liberty instance. 
+
+=== What is gRPC?
+gRPC is a technology that implements RPC style APIs with HTTP/2.
+Remote Procedure Call (RPC) is a protocol that provides the high-level communications paradigm that is used in the operating system. The RPC protocol enables users to work with remote procedures as if the procedures were local. The remote procedure calls are defined through routines that are contained in the RPC protocol. As the routines are predefined, the RPC calls are lightweight and straightforward. 
+
+gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement/ extend. Protocol Buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in traditional REST APIs.
+
+Protocol buffers allow cross project support through the `.proto` file, as a result gRPC clients and servers are also able to run and communicate with each other on different environments. For example, a gRPC client running in Java codebase is able to call a gRPC server from a Python codebase. This feature of protocol buffers allows for easier integration between microservices.
+
+The application that you will build in this guide consists of a `query` service, a `system` service, and a `systemproto` service.
+
+
+// =================================================================================================
+// Getting Started
+// =================================================================================================
+[role='command']
+include::{common-includes}/gitclone.adoc[]
+
+=== Try what you'll build
+
+The `finish` directory in the root of this guide contains the finished application. Give it a try before you proceed.
+
+To try out the application, first go to the `finish` directory and run the following Maven goal to generate all the gRPC abstract classes defined in the `.proto` file. 
+
+// generate gRPC classes
+[role='command']
+----
+cd finish
+mvn -pl systemproto install
+----
+
+Start the system service by running the following maven command. 
+// starting system
+[role='command']
+----
+mvn -pl system liberty:dev
+----
+
+Next, open another terminal window and start the query service by using the following maven command.
+// starting query
+[role='command']
+----
+mvn -pl query liberty:dev
+----
+
+Open another terminal window and run the following curl command to test out the basic unary service. Replace `<propertiesName>` with the name of the property that you would like to see, an example is `os.name`. You will see your system os name in the terminal. 
+// curl request to test endpoint
+[role='command']
+----
+curl http://localhost:9081/query/properties/<propertiesName>
+----
+
+After you're satisfied testing the unary service, close the query and system servers by using the instructions below or by pressing `q` or `Ctrl + C`.
+// stopping dev mode
+[role='command']
+----
+mvn -pl system liberty:stop
+mvn -pl query liberty:stop
+----
+
+// =================================================================================================
+// Creating proto file and generating gRPC stubs
+// =================================================================================================
+
+== Creating and defining gRPC services
+
+In this section, you will create the `.proto` file and generate gRPC classes, some of which must be implemented later. The `.proto` file defines all the service calls and message types. The message types are used in the service call definition, and define what parameters, if any, the request and response have.
+
+Navigate to the `start` directory to begin.
+
+// go to start directory
+[role='command']
+----
+cd ../start
+----
+
+// Create SystemProto.proto
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the `SystemService.proto` file.#
+`finish/systemproto/src/main/proto/SystemService.proto`
+----
+SystemService.proto
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/systemproto/src/main/proto/SystemService.proto[]
+----
+
+// Import pom.xml
+pom.xml
+[source, XML, linenums, role="code_column"]
+----
+include::finish/systemproto/pom.xml[]
+----
+
+The first few lines define the [hotspot=basicConfig file=0]`basic configuration` of a proto file. The [hotspot=SystemService file=0]`SystemService()` contains the four service calls that will be implemented.
+
+The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call. In this call, the query service sends a property name to the system service and receives back the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the property value and property name must be a string.
+
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. The query service streams user properties to the system service by using the `\user` endpoint and a map of the properties with their respective values is sent back. The [hotspot=SystemProperties file=0]`SystemProperties` message type is used to return a map of the properties from the system service. 
+
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. In this service, the query service streams user properties to the system service by using the `user` endpoint. In return, a map of the property values is sent from the system service. The [hotspot=SystemProperties file=0]`SystemProperties` message type is used to send a map of the properties and their values from the system service. 
+
+The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` defines the bidirectional streaming service. In this service, the query service streams Java properties to the system service by using the `java` endpoint. In return, the values for those properties are streamed back from the system service.
+
+To compile the `.proto` file, the `pom.xml` needs two dependencies. ßAdd [hotspot=grpc file=1]`grpc` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies to the pom files. The [hotspot=protobufmavenplugin file=1]`os-maven-plugin()` automatically install the correct version of Protobuf compiler. 
+
+Run the command below to generate the gRPC classes. 
+// run mvn install to generate abstract classes
+[role='command']
+----
+mvn -pl systeproto install
+----
+
+// =================================================================================================
+// Implementing unary call
+// =================================================================================================
+
+== Implementing unary call
+
+Start by implementing the first service call, the unary call. In this service call, the query service sends one property to the system service, which will return the property value. This type of service call resembles the traditional REST API. 
+
+Start the query service in dev mode by using the following command. 
+// Commands for query service
+// start dev mode for query
+[role='command']
+```
+mvn -pl query liberty:dev
+```
+
+After you see the following message, your application server in dev mode is ready:
+
+[role="no_copy"]
+----
+**************************************************************
+*    Liberty is running in dev mode.
+----
+
+Dev mode holds your command-line session to listen for file changes. Open another command-line session to continue, or open the project in your editor.
+
+// Create PropertiesResource
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,serverStreaming,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+The `PropertiesResource` class provides endpoints to interact with the system service. The `/<propertiesName>` endpoint is a unary service call to get the property value from the system service. 
+
+// update server.xml
+[role='code_command hotspot file=1', subs="quotes"]
+----
+#Replace the `server.xml` file.#
+`src/main/liberty/config/server.xml`
+----
+
+server.xml
+[source, xml, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/query/src/main/liberty/config/server.xml[]
+----
+
+The [hotspot=grpc file=1]`grpc-1.0` and [hotspot=grpcClient file=1]`grpcClient-1.0` enable gRPC compatibility with Open Liberty. 
+
+Open another terminal window and start the system service in dev mode by using the following command. 
+// Commands for system service
+// start dev mode for system
+[role='command']
+```
+mvn -pl system liberty:dev
+```
+
+The SystemService class implements the `SystemServiceGrpc` class that is generated by the proto file. The four types of services that are defined in the proto file will be implemented here. 
+// Create SystemService
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Create the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getPropertiesServer,getPropertiesClient,getPropertiesBidirect"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+The [hotspot=getProperty file=2]`getProperty()` is the implementation of the rpc call defined in the proto file. The [hotspot=pName file=2]`pName` variable stores the request string, notice the use of the getter `getPropertyName`, this is also automatically generated by gRPC. The [hotspot=pValue file=2]`pValue` gets and stores the System property value. The [hotspot=response file=2]`value` variable stores the built response to be sent back. Notice the variable type `SystemPropertyValue`, this is the message type that was defined in the proto file. The built response is then sent to the query service by using [hotspot=next file=2]`onNext()` and [hotspot=complete file=2]`onComplete()`
+
+Open another terminal window and run the following curl command to test out the unary service. Replace `<propertiesName>` with the name of the property that you would like to see, an example is `os.name`. You should see your system os name in the terminal.
+
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/<propertiesName>
+----
+
+// =================================================================================================
+// Implementing server streaming  
+// =================================================================================================
+
+== Implementing server streaming 
+The next service to implement is `Server Streaming`. The query service sends a request by using the `os` endpoint and the system service will streams the os properties back to the query service. There is a channel that is created between the query and the system service to stream properties. This channel is only closed by the system service after it has sent the last message to the query service. 
+
+Replace the `PropertiesResource` class to add the implementation of serverSteraming for query service. 
+// Commands for query service
+// Replace PropertiesResource
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+First, a [hotspot=createChannel file=0]`channel` is created between query and system services by using the stubs that are generated by the proto file. Then, the properties are [hotspot=sendProperties file=0]`streamed` individually from the system service. After all of the properties are received, the [hotspot=closeConnection file=0]`channel` is closed. 
+
+// Commands for system service
+Update the SystemService class to include the implementation of `getOSProperties()`, which receives the os properties from the system service. 
+// Replace SystemService
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+The [hotspot=getPropertiesServer file=1]`getPropertiesServer()` method implements server streaming for the system service. The properties are [hotspot=serverStreaming file=1]`individually streamed` to the query service. The message `server streaming was completed!` is printed in the system service terminal at the conclusion of the method. 
+
+
+Run the following curl command to test out the server streaming.
+You should see each property that was streamed from the system service to the query service and a message saying `server streaming completed`.
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/os
+----
+
+// =================================================================================================
+// Implementing client streaming 
+// =================================================================================================
+
+
+== Implementing client streaming 
+
+The next service to implement is `Client Streaming`. The query service streams user properties to the system service by using the `user` endpoint and the system service returns a map of those user properties with their values.
+// Commands for query service
+// Replace PropertiesResource
+
+Replace the `PropertiesResource` class to add the implementation of serverSteraming for query service. 
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+After a connection is created between the two services, a [hotspot=defineClient file=0]`client` is defined to ensure the expected behavior. The [hotspot=getPropertiesClientStreaming file=0]`user properties` are [hotspot=clientStream file=0]`streamed` to the system service. 
+
+// Commands for system service
+// Replace SystemService
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,bidirectionalStreaming"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+The [hotspot=getPropertiesClient file=1]`getPropertiesClient()` method implements client streaming for the system service. In this method, system service [hotspot=receivingProperties file=1]`receives` the user properties from the query service and stores them in a [hotspot=clientStreamingMap file=1]`Map`, and after the streaming is completed the stored map is [hotspot=clientStreamingCompleted file=1]`returned` to the query service. 
+
+
+Run the following curl command to test out the client streaming.
+You should see each property that was streamed from the query service to the system service and a message saying `client streaming completed`.
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/user
+----
+
+// =================================================================================================
+// Implementing bidirectional streaming 
+// =================================================================================================
+
+== Implementing bidirectional streaming 
+The next service to implement is `bidirectional Streaming`. The query service streams the Java properties while the system service streams the values of those properties back to the query service. 
+// Commands for query service
+// Replace PropertiesResource
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
+
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
+
+Similar to the client streaming service, the [hotspot=bidirectionalStreaming file=0]`bidirectional streaming` also receives streamed properties from the query service but in addition it also streams the values for the properties received back to the query service. 
+
+// Commands for system service
+// Replace SystemService
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`/system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+The [hotspot=getPropertiesBidirect file=1]`getPropertiesBidirect()` method implements bidirectional streaming for the system service. In this method, system service [hotspot=receiveBidirectionalProperties file=1]`receives and sends` the Java properties with their respective values back to the query service.
+
+
+Run the following curl command to test out bidirectional streaming.
+You should see each property that was streamed from the query service to the system as well from the system to the query service and a message saying `bidirectional streaming completed`.
+// curl request
+[role='command']
+----
+curl http://localhost:9081/query/properties/java
+----
+
+// =================================================================================================
+// Testing the application
+// =================================================================================================
+
+== Testing the application
+// Create QueryIT.java
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the `QueryIT` class.#
+`finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java`
+----
+
+QueryIT.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java[]
+----
+Each test case tests one of the methods for instantiating a RESTful client.
+
+The [hotspot=getPropertiesString file=0]`testGetPropertiesString()` tests the `http://localhost:9081/query/properties/os.name` endpoint and confirms that a response is received. 
+
+The [hotspot=getOSProperties file=0]`testGetOSProperties()` tests the `http://localhost:9081/query/properties/os` endpoint and confirms that a response is received. 
+
+The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `http://localhost:9081/query/properties/user` endpoint and confirms that a response is received. 
+
+The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `http://localhost:9081/query/properties/java` endpoint and confirms that a response is received. 
+
+[role=command]
+include::{common-includes}/devmode-test.adoc[]
+
+[source, role="no_copy"]
+----
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running it.io.openliberty.guides.query.QueryIT
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.247 s - in it.io.openliberty.guides.query.QueryIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] Integration tests finished.
+----
+
+When you are finished, exit dev mode by pressing `CTRL+C` in the
+command-line session that the container was started from, or by typing `q` and
+then pressing the `enter/return` key.
+
+// =================================================================================================
+// Great work! You're done!
+// =================================================================================================
+
+== Great work! You're done!
+
+You just developed an application that implements four unique calls with gRPC by using Open Liberty. 
+
+include::{common-includes}/attribution.adoc[subs="attributes"]
