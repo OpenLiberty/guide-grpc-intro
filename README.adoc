@@ -31,9 +31,7 @@ Learn how to use gRPC unary, server streaming, client streaming, and bidirection
 
 == What is gRPC?
 
-gRPC Remote Procedure Call is a technology that implements remote procedure call (RPC) style APIs with HTTP/2. RPC is a protocol that provides the high-level communications paradigm that is used in the operating system. The RPC protocol enables users to work with remote procedures as if the procedures were local. The remote procedure calls are defined through routines that are contained in the RPC protocol. As the routines are predefined, the RPC calls are lightweight and straightforward.
-
-gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement and extend. Protocol buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in traditional RESTful APIs.
+gRPC Remote Procedure Call is a technology that implements remote procedure call (RPC) style APIs with HTTP/2. gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement and extend. Protocol buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in traditional RESTful APIs.
 
 Protocol buffers allow cross project support through the `.proto` file, as a result gRPC clients and servers are also able to run and communicate with each other on different environments. For example, a gRPC client running in Java codebase is able to call a gRPC server from a Python codebase. This feature of protocol buffers allows for easier integration between services.
 
@@ -41,8 +39,9 @@ Protocol buffers allow cross project support through the `.proto` file, as a res
 
 You will learn how to create gRPC client and server services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice and to interact with the running Liberty instance. 
 
-The application that you will build in this guide consists of a `query` service, a `system` service, and a `systemproto` service.
+The application that you will build in this guide consists of a `query` client service, a `system` server service, and a `systemproto` model project.
 
+image::architecture.png[gRPC application architecture where the system service provides gRPC server and the query service to make different gRPC streaming calls. align="center"]
 
 // =================================================================================================
 // Getting Started
