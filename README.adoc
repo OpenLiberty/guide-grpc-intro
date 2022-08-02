@@ -9,16 +9,16 @@
 :projectid: grpc-intro
 :page-layout: guide-multipane
 :page-duration: 30 minutes
-:page-releasedate: 2022-07-08
-:page-description: Learn how to use gRPC to send properties through a traditional REST, along with server, client, and bidirectional streaming using Open Liberty.
+:page-releasedate: 2022-09-08
+:page-description: Learn how to use gRPC unary, server streaming, client streaming, and bidirectional streaming to communicate client and server services with using Open Liberty.
 :page-tags: ['gRPC']
 :page-permalink: /guides/{projectid}
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
-:page-seo-title: Exchanging system properties by using gRPC calls
-:page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming various properties by using gRPC calls.
+:page-seo-title: Communicating client and server services with gRPC streaming calls
+:page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming by using Google Remote Procedure Call gRPC calls.
 :guide-author: Open Liberty
-= Exchanging system properties between client and a server by using gRPC calls
+= Communicating client and server services with gRPC streaming calls
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
