@@ -10,36 +10,36 @@
 :page-layout: guide-multipane
 :page-duration: 30 minutes
 :page-releasedate: 2022-09-08
-:page-description: Learn how to use gRPC unary, server streaming, client streaming, and bidirectional streaming to communicate client and server services with using Open Liberty.
+:page-description: Learn how to use gRPC unary, server streaming, client streaming, and bidirectional streaming to communicate client and server services in Open Liberty.
 :page-tags: ['gRPC']
 :page-permalink: /guides/{projectid}
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
 :page-seo-title: Communicating client and server services with gRPC streaming calls
-:page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming by using Google Remote Procedure Call gRPC calls.
+:page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming by using gRPC Remote Procedure Calls in Open Liberty.
 :guide-author: Open Liberty
 = Communicating client and server services with gRPC streaming calls
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
 
-Learn how to make gRPC service calls in traditional REST fashion and streaming between two services.  
+Learn how to use gRPC unary, server streaming, client streaming, and bidirectional streaming to communicate client and server services in Open Liberty.
 
 // =================================================================================================
 //  What you'll learn
 // =================================================================================================
 
+== What is gRPC?
+
+gRPC Remote Procedure Call is a technology that implements remote procedure call (RPC) style APIs with HTTP/2. RPC is a protocol that provides the high-level communications paradigm that is used in the operating system. The RPC protocol enables users to work with remote procedures as if the procedures were local. The remote procedure calls are defined through routines that are contained in the RPC protocol. As the routines are predefined, the RPC calls are lightweight and straightforward.
+
+gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement and extend. Protocol buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in traditional RESTful APIs.
+
+Protocol buffers allow cross project support through the `.proto` file, as a result gRPC clients and servers are also able to run and communicate with each other on different environments. For example, a gRPC client running in Java codebase is able to call a gRPC server from a Python codebase. This feature of protocol buffers allows for easier integration between services.
+
 == What you'll learn
 
-You will learn how to create various gRPC services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice and to interact with the running Liberty instance. 
-
-=== What is gRPC?
-gRPC is a technology that implements RPC style APIs with HTTP/2.
-Remote Procedure Call (RPC) is a protocol that provides the high-level communications paradigm that is used in the operating system. The RPC protocol enables users to work with remote procedures as if the procedures were local. The remote procedure calls are defined through routines that are contained in the RPC protocol. As the routines are predefined, the RPC calls are lightweight and straightforward. 
-
-gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement/ extend. Protocol Buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in traditional REST APIs.
-
-Protocol buffers allow cross project support through the `.proto` file, as a result gRPC clients and servers are also able to run and communicate with each other on different environments. For example, a gRPC client running in Java codebase is able to call a gRPC server from a Python codebase. This feature of protocol buffers allows for easier integration between microservices.
+You will learn how to create gRPC client and server services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice and to interact with the running Liberty instance. 
 
 The application that you will build in this guide consists of a `query` service, a `system` service, and a `systemproto` service.
 
