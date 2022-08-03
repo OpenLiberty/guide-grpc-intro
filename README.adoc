@@ -126,16 +126,16 @@ include::finish/systemproto/pom.xml[]
 
 The first few lines define the [hotspot=basicConfig file=0]`syntax`, [hotspot=basicConfig file=0]`package`, and [hotspot=basicConfig file=0]`option` basic configuration of the `.proto` file. The [hotspot=SystemService file=0]`SystemService` service contains the four service calls that will be implemented in the coming sections.
 
-The [hotspot=getProperty file=0]`getProperty` rpc call defines the unary call. In this call, the client side sends a property name message to the server side that returns back a message with the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the `propertyName` and `propertyValue` must be string.
+The [hotspot=getProperty file=0]`getProperty` rpc defines the unary call. In this call, the client side sends a `SystemPropertyName` message to the server side that returns back a `SystemPropertyValue` message with the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the `propertyName` and `propertyValue` must be string.
 
-The [hotspot=getPropertiesServer file=0]`getPropertiesServer` rpc defines the server streaming call. The client side sends a property name message to the server side. The server returns back a stream of [hotspot=SystemProperty file=0]`SystemProperty` messages. Each `SystemProperty` message contains a `propertyName` and `propertyValue`.
+The [hotspot=getPropertiesServer file=0]`getPropertiesServer` rpc defines the server streaming call. The client side sends a `SystemPropertyName` message to the server side. The server returns back a stream of `SystemProperty` messages. Each [hotspot=SystemProperty file=0]`SystemProperty` message contains a `propertyName` and `propertyValue`.
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient` rpc defines the client streaming call. The client side streams `SystemPropertyName` properties to the server side. The server returns back a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient` rpc defines the client streaming call. The client side streams `SystemPropertyName` messages to the server side. The server returns back a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
 
 
-The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect` rpc defines the bidirectional streaming call. In this service, the client side streams `SystemPropertyName` properties to the server side. The server returns back a stream of [hotspot=SystemProperty file=0]`SystemProperty` messages.
+The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect` rpc defines the bidirectional streaming call. In this service, the client side streams `SystemPropertyName` messages to the server side. The server returns back a stream of [hotspot=SystemProperty file=0]`SystemProperty` messages.
 
-To compile the `.proto` file, the `pom.xml` Maven configuration file needs the  [hotspot=grpc file=1]`grpc` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies. To install the correct version of Protobuf compiler automatically, the [hotspot=protobufmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
+To compile the `.proto` file, the `pom.xml` Maven configuration file needs the  [hotspot=grpc file=1]`grpc-protobuf` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies, and the [hotspot=protobufmavenplugin file=1]`protobuf-maven-plugin` plugin. To install the correct version of Protobuf compiler automatically, the [hotspot=osmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
 
 Run the following command to generate the gRPC classes.
 // run mvn install to generate abstract classes
