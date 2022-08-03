@@ -77,13 +77,13 @@ Next, open another command-line session and start the `query` service by using t
 mvn -pl query liberty:run
 ----
 
-Point your browser to the http://localhost:9080/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out:
+Point your browser to the http://localhost:9081/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out:
 
-* client streaming - http://localhost:9080/query/properties/os 
+* client streaming - http://localhost:9081/query/properties/os 
 
-* server streaming - http://localhost:9080/query/properties/user
+* server streaming - http://localhost:9081/query/properties/user
 
-* bidirectional streaming - http://localhost:9080/query/properties/java
+* bidirectional streaming - http://localhost:9081/query/properties/java
 
 Observe the output from the consoles running the `system` and `query` services.
 
@@ -103,7 +103,7 @@ mvn -pl query liberty:stop
 
 Navigate to the `start` directory to begin.
 
-First, create the `.proto` file and generate gRPC classes. You will implement the gRPC server with the generated classes later. The `.proto` file defines all the service calls and message types. The message types are used in the service call definition and define the parameters of the requests and responses.
+First, create the `.proto` file and generate gRPC classes. You will implement the gRPC server with the generated classes later. The `.proto` file defines all the service calls and message types. The message types are used in the service call definition for the parameters and returns.
 
 // Create SystemProto.proto
 [role="code_command hotspot file=0", subs="quotes"]
@@ -124,19 +124,20 @@ pom.xml
 include::finish/systemproto/pom.xml[]
 ----
 
-The first few lines define the [hotspot=basicConfig file=0]`basic configuration` of a proto file. The [hotspot=SystemService file=0]`SystemService()` contains the four service calls that will be implemented.
+The first few lines define the `syntax`[hotspot=basicConfig file=0], `package`[hotspot=basicConfig file=0], and `option`[hotspot=basicConfig file=0] basic configuration of the `.proto` file. The [hotspot=SystemService file=0]`SystemService` service contains the four service calls that will be implemented in the coming sections.
 
-The [hotspot=getProperty file=0]`getProperty()` rpc call defines the Unary API call. In this call, the query service sends a property name to the system service and receives back the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the property value and property name must be a string.
+The `getProperty`[hotspot=getProperty file=0] rpc call defines the unary call. In this call, the client side sends a property name message to the server side that returns back a message with the property value. The `SystemPropertyName`[hotspot=SystemPropertyName file=0] and `SystemPropertyValue`[hotspot=SystemPropertyValue file=0] message types define that the propertyName and propertyValue must be string.
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. The query service streams user properties to the system service by using the `\user` endpoint and a map of the properties with their respective values is sent back. The [hotspot=SystemProperties file=0]`SystemProperties` message type is used to return a map of the properties from the system service. 
+The `getPropertiesServer`[hotspot=getPropertiesServer file=0] rpc defines the server streaming call. The client side sends a property name message to the server side. The server returns back a stream of `SystemProperty`[hotspot=SystemProperty file=0] messages. Each `SystemProperty` message contains a `propertyName` and `propertyValue`.
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` defines the client streaming service. In this service, the query service streams user properties to the system service by using the `user` endpoint. In return, a map of the property values is sent from the system service. The [hotspot=SystemProperties file=0]`SystemProperties` message type is used to send a map of the properties and their values from the system service. 
+The `getPropertiesClient`[hotspot=getPropertiesClient file=0] rpc defines the client streaming call. The client side streams `SystemPropertyName` properties to the server side. The server returns back a `SystemProperties`[hotspot=SystemProperties file=0] message that contains a map of the properties with their respective values.
 
-The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` defines the bidirectional streaming service. In this service, the query service streams Java properties to the system service by using the `java` endpoint. In return, the values for those properties are streamed back from the system service.
 
-To compile the `.proto` file, the `pom.xml` needs two dependencies. ßAdd [hotspot=grpc file=1]`grpc` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies to the pom files. The [hotspot=protobufmavenplugin file=1]`os-maven-plugin()` automatically install the correct version of Protobuf compiler. 
+The `getPropertiesBidirect`[hotspot=getPropertiesBidirect file=0] rpc defines the bidirectional streaming call. In this service, the client side streams `SystemPropertyName` properties to the server side. The server returns back a stream of `SystemProperty`[hotspot=SystemProperty file=0] messages.
 
-Run the command below to generate the gRPC classes. 
+To compile the `.proto` file, the `pom.xml` Maven configuration file needs the  `grpc`[hotspot=grpc file=1] and `grpc-stub`[hotspot=grpc-stub file=1] dependencies. To install the correct version of Protobuf compiler automatically, the `os-maven-plugin`[hotspot=protobufmavenplugin file=1] extension is required.
+
+Run the following command to generate the gRPC classes.
 // run mvn install to generate abstract classes
 [role='command']
 ----
