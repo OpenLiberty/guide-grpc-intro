@@ -85,7 +85,9 @@ Point your browser to the http://localhost:9080/query/properties/os.name URL to 
 
 * bidirectional streaming - http://localhost:9080/query/properties/java
 
-After you're satisfied testing the unary service, close the query and system servers by using the instructions below or by pressing `q` or `Ctrl + C`.
+Observe the output from the consoles running the `system` and `query` services.
+
+After you are finished checking out the application, stop both the `query` and `system` services by pressing `CTRL+C` in the command-line sessions where you ran them. Alternatively, you can run the following goals from the `finish` directory in another command-line session:
 // stopping dev mode
 [role='command']
 ----
@@ -99,21 +101,15 @@ mvn -pl query liberty:stop
 
 == Creating and defining gRPC services
 
-In this section, you will create the `.proto` file and generate gRPC classes, some of which must be implemented later. The `.proto` file defines all the service calls and message types. The message types are used in the service call definition, and define what parameters, if any, the request and response have.
-
 Navigate to the `start` directory to begin.
 
-// go to start directory
-[role='command']
-----
-cd ../start
-----
+First, create the `.proto` file and generate gRPC classes. You will implement the gRPC server with the generated classes later. The `.proto` file defines all the service calls and message types. The message types are used in the service call definition and define the parameters of the requests and responses.
 
 // Create SystemProto.proto
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Create the `SystemService.proto` file.#
-`finish/systemproto/src/main/proto/SystemService.proto`
+`systemproto/src/main/proto/SystemService.proto`
 ----
 SystemService.proto
 [source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
