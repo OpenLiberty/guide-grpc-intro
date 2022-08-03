@@ -32,15 +32,15 @@ Learn how to use gRPC unary, server streaming, client streaming, and bidirection
 
 == What is gRPC?
 
-gRPC Remote Procedure Call is a technology that implements remote procedure call (RPC) style APIs with HTTP/2. gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in the `.proto` file, gRPC will automatically generate the skeleton code for users to implement and extend. Protocol buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in traditional RESTful APIs.
+gRPC Remote Procedure Call is a technology that implements remote procedure call (RPC) style APIs with HTTP/2. gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in a `.proto` file, gRPC uses it to generate the skeleton code for users to implement and extend. Protocol buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in RESTful APIs.
 
 Protocol buffers allow cross project support through the `.proto` file, as a result gRPC clients and servers are also able to run and communicate with each other on different environments. For example, a gRPC client running in Java codebase is able to call a gRPC server from a Python codebase. This feature of protocol buffers allows for easier integration between services.
 
 == What you'll learn
 
-You will learn how to create gRPC client and server services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the microservice and to interact with the running Liberty instance. 
+You will learn how to create gRPC client and server services by using protocol buffers and how to implement them with Open Liberty. You will use Maven throughout the guide to generate the gRPC stubs and deploy the services and to interact with the running Liberty.
 
-The application that you will build in this guide consists of a `query` client service, a `system` server service, and a `systemproto` model project.
+The application that you will build in this guide consists of the `systemproto` model project, the `query` client service, and the `system` server service. The `query` service implements four RESTful APIs by using four different gRPC streaming methods.
 
 image::architecture.png[gRPC application architecture where the system service provides gRPC server and the query service to make different gRPC streaming calls. align="center"]
 
@@ -63,26 +63,27 @@ cd finish
 mvn -pl systemproto install
 ----
 
-Start the system service by running the following maven command. 
+Start the `system` service by running the following command:
 // starting system
 [role='command']
 ----
-mvn -pl system liberty:dev
+mvn -pl system liberty:run
 ----
 
-Next, open another terminal window and start the query service by using the following maven command.
+Next, open another command-line session and start the `query` service by using the following command:
 // starting query
 [role='command']
 ----
-mvn -pl query liberty:dev
+mvn -pl query liberty:run
 ----
 
-Open another terminal window and run the following curl command to test out the basic unary service. Replace `<propertiesName>` with the name of the property that you would like to see, an example is `os.name`. You will see your system os name in the terminal. 
-// curl request to test endpoint
-[role='command']
-----
-curl http://localhost:9081/query/properties/<propertiesName>
-----
+Point your browser to the http://localhost:9080/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out:
+
+* client streaming - http://localhost:9080/query/properties/os 
+
+* server streaming - http://localhost:9080/query/properties/user
+
+* bidirectional streaming - http://localhost:9080/query/properties/java
 
 After you're satisfied testing the unary service, close the query and system servers by using the instructions below or by pressing `q` or `Ctrl + C`.
 // stopping dev mode
@@ -152,7 +153,7 @@ mvn -pl systeproto install
 
 == Implementing unary call
 
-Start by implementing the first service call, the unary call. In this service call, the query service sends one property to the system service, which will return the property value. This type of service call resembles the traditional REST API. 
+Start by implementing the first service call, the unary call. In this service call, the query service sends one property to the system service, which will return the property value. This type of service call resembles the RESTful API. 
 
 Start the query service in dev mode by using the following command. 
 // Commands for query service
