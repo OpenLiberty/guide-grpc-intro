@@ -227,12 +227,14 @@ public class PropertiesResource {
         StreamObserver<SystemPropertyName> stream = client.getPropertiesBidirect(
                 new StreamObserver<SystemProperty>() {
 
+                    // tag::onNext2[]
                     @Override
                     public void onNext(SystemProperty value) {
                         System.out.println("bidirectional streaming received: "
                             + value.getPropertyName() + "=" + value.getPropertyValue());
                         properties.put(value.getPropertyName(), value.getPropertyValue());
                     }
+                    // end::onNext2[]
 
                     @Override
                     public void onError(Throwable t) {
