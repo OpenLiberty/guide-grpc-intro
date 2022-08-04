@@ -30,6 +30,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 
     public SystemService() {
     }
+
     // tag::getProperty[]
     @Override
     public void getProperty(SystemPropertyName request, StreamObserver<SystemPropertyValue> observer) {
@@ -54,7 +55,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
         // end::complete[]
 
     }
-    // end:getProperty[]
+    // end::getProperty[]
 
     // tag::getPropertiesServer[]
     @Override
