@@ -182,7 +182,7 @@ PropertiesResource.java
 ----
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
-The `PropertiesResource` class provides RESTfull endpoints to interact with the `system` service. The [hotspot=unary file=0]`/query/properties/${propertyName}` endpoint is a unary service call to get the property value from the `system` service. The endpoint creates a channel, use the channel to create a client by the `SystemServiceGrpc.newBlockingStub()` API, use the client to get the property value, and then shutdown the channel.
+The `PropertiesResource` class provides RESTfull endpoints to interact with the `system` service. The [hotspot=unary file=0]`/query/properties/${propertyName}` endpoint uses a unary service call to get the property value from the `system` service. The endpoint creates a channel, uses the channel to create a client by the `SystemServiceGrpc.newBlockingStub()` API, uses the client to get the property value, shutdowns the channel, and then returns the value that the `system` service responses immediately.
 
 // update server.xml
 [role='code_command hotspot file=1', subs="quotes"]
