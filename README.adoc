@@ -210,7 +210,7 @@ system/server.xml
 include::finish/system/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=1]`grpc-1.0` feature to the Liberty server configuration file. That feature enables gRPC server compatibility with the Liberty server. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about `grpc` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
+Add the [hotspot=grpc file=1]`grpc` feature to the Liberty server configuration file. That feature enables gRPC server compatibility with the Liberty server. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about `grpc` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
 
 Implement the RESTful endpoint in the `query` service.
 
@@ -241,7 +241,7 @@ query/server.xml
 include::finish/query/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=3]`grpc-1.0` and [hotspot=grpcClient file=3]`grpcClient-1.0` features to the Liberty server configuration file. Both features enable gRPC server and client compatibility with the Liberty server. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` feature with the `headersToPropagate` and `target` attributes. If you want to learn more about `grpcClient` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Client Properties^].
+Add the [hotspot=grpc file=3]`grpc` and [hotspot=grpcClient file=3]`grpcClient` features to the Liberty server configuration file. Both features enable gRPC server and client compatibility with the Liberty server. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` feature with the `headersToPropagate` and `target` attributes. If you want to learn more about `grpcClient` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
 
 Because you are running the `system` and `query` services in dev mode, the changes that you made were automatically picked up. You’re now ready to check out your application in your browser.
 
