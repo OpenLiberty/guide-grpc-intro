@@ -32,7 +32,7 @@ Learn how to use gRPC unary, server streaming, client streaming, and bidirection
 
 == What is gRPC?
 
-gRPC Remote Procedure Call is a technology that implements remote procedure call (RPC) style APIs with HTTP/2. gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in a `.proto` file, gRPC uses it to generate the skeleton code for users to implement and extend. Protocol buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in RESTful APIs.
+https://grpc.io/[gRPC^] Remote Procedure Call is a technology that implements remote procedure call (RPC) style APIs with HTTP/2. gRPC uses Protocol Buffers to define its routines that include service calls and expected messages. For each service defined in a `.proto` file, gRPC uses it to generate the skeleton code for users to implement and extend. Protocol buffers use a binary format to send and receive messages that are much faster and lightweight compared to JSON used in RESTful APIs.
 
 Protocol buffers allow cross project support through the `.proto` file, as a result gRPC clients and servers are also able to run and communicate with each other on different environments. For example, a gRPC client running in Java codebase is able to call a gRPC server from a Python codebase. This feature of protocol buffers allows for easier integration between services.
 
@@ -210,7 +210,7 @@ system/server.xml
 include::finish/system/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=1]`grpc-1.0` feature to the Liberty server configuration file. That feature enables gRPC server compatibility with the Liberty server.
+Add the [hotspot=grpc file=1]`grpc-1.0` feature to the Liberty server configuration file. That feature enables gRPC server compatibility with the Liberty server. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about `grpc` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
 
 Implement the RESTful endpoint in the `query` service.
 
@@ -241,7 +241,7 @@ query/server.xml
 include::finish/query/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=3]`grpc-1.0` and [hotspot=grpcClient file=3]`grpcClient-1.0` features to the Liberty server configuration file. Both features enable gRPC server and client compatibility with the Liberty server.
+Add the [hotspot=grpc file=3]`grpc-1.0` and [hotspot=grpcClient file=3]`grpcClient-1.0` features to the Liberty server configuration file. Both features enable gRPC server and client compatibility with the Liberty server. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` feature with the `headersToPropagate` and `target` attributes. If you want to learn more about `grpcClient` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Client Properties^].
 
 Because you are running the `system` and `query` services in dev mode, the changes that you made were automatically picked up. You’re now ready to check out your application in your browser.
 
