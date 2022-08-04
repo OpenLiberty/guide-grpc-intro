@@ -257,7 +257,7 @@ Point your browser to the http://localhost:9081/query/properties/os.name URL to 
 In the server streaming call, the `query` client service provides the `/query/properties/os` endpoint that sends a message to the `system` server service. The `system` service streams the properties started with `os.` back to the `query` service. A channel is created between the `query` and the `system` services to stream messages. The channel is only closed by the `system` service after sending the last message to the `query` service. 
 
 // Commands for system service
-Update the SystemService class to implement the server streaming rpc call.
+Update the `SystemService` class to implement the server streaming rpc call.
 // Replace SystemService
 [role="code_command hotspot file=0", subs="quotes"]
 ----
@@ -287,7 +287,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createChannel file=0]`channel` to the `system` service and a [hotspot=createClient file=0]`client` by using the `SystemServiceGrpc.newStub()` API. Then, call the [hotspot=getPropertiesServer file=0]`getPropertiesServer()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext file=0]`onNext()` method receives messages streaming from the server individually. After all properties are received, shutdown the [hotspot=closeConnection file=0]`channel`.  Because the rpc call is asynchronous, use the [hotspot=countDownLatch file=0]`CountDownLatch` to synchronize the streaming flow.
+The endpoint creates a [hotspot=createChannel file=1]`channel` to the `system` service and a [hotspot=createClient file=1]`client` by using the `SystemServiceGrpc.newStub()` API. Then, call the [hotspot=getPropertiesServer file=1]`getPropertiesServer()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext file=1]`onNext()` method receives messages streaming from the server individually. After all properties are received, shutdown the [hotspot=closeConnection file=1]`channel`.  Because the rpc call is asynchronous, use the [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` to synchronize the streaming flow.
 
 Point your browser to the http://localhost:9081/query/properties/os URL to test out the server streaming. You should see the `os.` properties from the `system` service. Observe the output from the consoles running the `system` and `query` services.
 
