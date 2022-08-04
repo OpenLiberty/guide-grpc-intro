@@ -33,8 +33,8 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 
     // tag::getProperty[]
     @Override
-    public void getProperty(SystemPropertyName request,
-        StreamObserver<SystemPropertyValue> observer) {
+    public void getProperty(
+        SystemPropertyName request, StreamObserver<SystemPropertyValue> observer) {
 
         // tag::pName[]
         String pName = request.getPropertyName();
@@ -64,24 +64,32 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     public void getPropertiesServer(
         SystemPropertyName request, StreamObserver<SystemProperty> observer) {
 
-        String pName = request.getPropertyName();
+        // tag::prefix[]
+        String prefix = request.getPropertyName();
+        // end::prefix[]
         System.getProperties()
               .stringPropertyNames()
               .stream()
-              .filter(name -> name.startsWith(pName))
-              // tag::serverStreaming[]
+              // tag::filter[]
+              .filter(name -> name.startsWith(prefix))
+              // end::filter[]
               .forEach(name -> {
                   String pValue = System.getProperty(name);
+                  // tag::serverMessage[]
                   SystemProperty value = SystemProperty
-                    .newBuilder()
-                    .setPropertyName(name)
-                    .setPropertyValue(pValue)
-                    .build();
+                      .newBuilder()
+                      .setPropertyName(name)
+                      .setPropertyValue(pValue)
+                      .build();
+                  // end::serverMessage[]
+                  // tag::serverNext[]
                   observer.onNext(value);
+                  // end::serverNext[]
                   System.out.println("server streaming sent property: " + name);
                });
-               // end::serverStreaming[]
+        // tag::serverComplete[]
         observer.onCompleted();
+        // end::serverComplete[]
         System.out.println("server streaming was completed!");
     }
     // end::getPropertiesServer[]

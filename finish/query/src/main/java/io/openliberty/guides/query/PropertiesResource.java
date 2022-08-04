@@ -79,21 +79,28 @@ public class PropertiesResource {
         // tag::createChannel[]
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
-        SystemServiceStub client = SystemServiceGrpc.newStub(channel);
         // end::createChannel[]
+        // tag::createClient[]
+        SystemServiceStub client = SystemServiceGrpc.newStub(channel);
+        // end::createClient[]
 
         Properties properties = new Properties();
+        // tag::countDownLatch1[]
         CountDownLatch countDown = new CountDownLatch(1);
+        // end::countDownLatch1[]
         SystemPropertyName request = SystemPropertyName.newBuilder()
                                          .setPropertyName("os.").build();
-        // tag::sendProperties[]
+        // tag::getPropertiesServer[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
+        	
+        	  // tag::onNext[]
             @Override
             public void onNext(SystemProperty value) {
                 System.out.println("server streaming received: " 
                    + value.getPropertyName() + "=" + value.getPropertyValue());
                 properties.put(value.getPropertyName(), value.getPropertyValue());
             }
+        	  // end::onNext[]
 
             @Override
             public void onError(Throwable t) {
@@ -103,24 +110,28 @@ public class PropertiesResource {
             @Override
             public void onCompleted() {
                 System.out.println("server streaming completed");
+                // tag::countDownLatch2[]
                 countDown.countDown();
+                // end::countDownLatch2[]
             }
         });
-        // end::sendProperties[]
+        // end::getPropertiesServer[]
 
 
         // wait until completed
+        // tag::countDownLatch3[]
         try {
             countDown.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // end::countDownLatch3[]
 
         // tag::closeConnection[]
         channel.shutdownNow();
+        // end::closeConnection[]
 
         return properties;
-        // end::closeConnection[]
     }
     // end::serverStreaming[]
 
