@@ -334,7 +334,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-After a connection is created between the two services, call the [hotspot=defineClient file=1]`client.getPropertiesClient()` API to get a `stream`, collect the properties started with [hotspot=collectUserProperties file=1]`user.`, create [hotspot=clientMessage file=1]`SystemPropertyName` messages individually, and send to the server through by th [hotspot=streamOnNext file=1]`stream::onNext`. When all property names are sent, finish the `stream` by calling the [hotspot=clientCompleted file=1]`onCompleted()`. Again, use a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` to synchronize the streaming flow.
+After a connection is created between the two services, call the [hotspot=defineClient file=1]`client.getPropertiesClient()` API to get a `stream`, collect the properties started with [hotspot=collectUserProperties file=1]`user.`, create [hotspot=clientMessage file=1]`SystemPropertyName` messages individually, and send to the server through by the [hotspot=streamOnNext file=1]`stream::onNext` action. When all property names are sent, finish the streaming by calling the [hotspot=clientCompleted file=1]`onCompleted()`. Again, use a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` to synchronize the streaming flow.
 
 Point your browser to the http://localhost:9081/query/properties/user URL to test out the client streaming. You should see the `user.` properties from the `system` service. Observe the output from the consoles running the `system` and `query` services.
 
