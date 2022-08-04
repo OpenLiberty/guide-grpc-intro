@@ -33,7 +33,9 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 
     // tag::getProperty[]
     @Override
-    public void getProperty(SystemPropertyName request, StreamObserver<SystemPropertyValue> observer) {
+    public void getProperty(SystemPropertyName request,
+        StreamObserver<SystemPropertyValue> observer) {
+
         // tag::pName[]
         String pName = request.getPropertyName();
         // end::pName[]
