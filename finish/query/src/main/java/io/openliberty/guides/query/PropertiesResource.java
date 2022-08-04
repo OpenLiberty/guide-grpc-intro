@@ -149,7 +149,7 @@ public class PropertiesResource {
         
         Properties properties = new Properties();
         // tag::defineClient[]
-        StreamObserver<SystemPropertyName> v = client.getPropertiesClient(
+        StreamObserver<SystemPropertyName> stream = client.getPropertiesClient(
             new StreamObserver<SystemProperties>() {
 
                 @Override
@@ -173,24 +173,26 @@ public class PropertiesResource {
             });
         // end::defineClient[]
 
-        // tag::getPropertiesClientStreaming[]
+        // tag::collectUserProperties[]
         // collect the property names starting with user.
         List<String> keys = System.getProperties()
                                   .stringPropertyNames()
                                   .stream()
                                   .filter(k -> k.startsWith("user."))
                                   .collect(Collectors.toList());
-        // end::getPropertiesClientStreaming[]
+        // end::collectUserProperties[]
 
-        // tag::clientStream[]
         // send messages to the server
+        // tag::clientStream[]
         keys.stream()
               .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
-              .forEach(v::onNext);
-          v.onCompleted();
+              .forEach(stream::onNext);
         // end::clientStream[]
+        // tag::clientCompleted[]
+        stream.onCompleted();
+        // end::clientCompleted[]
 
-          // wait until completed
+        // wait until completed
         try {
             countDown.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
