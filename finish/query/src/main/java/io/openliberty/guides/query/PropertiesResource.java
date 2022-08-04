@@ -144,12 +144,11 @@ public class PropertiesResource {
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
-
         // tag::countDownLatch4[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch4[]
-
         Properties properties = new Properties();
+
         // tag::defineClient[]
         StreamObserver<SystemPropertyName> stream = client.getPropertiesClient(
             new StreamObserver<SystemProperties>() {
@@ -173,15 +172,12 @@ public class PropertiesResource {
                     countDown.countDown();
                     // end::countDownLatch5[]
                 }
-
             });
         // end::defineClient[]
 
         // tag::collectUserProperties[]
         // collect the property names starting with user.
-        List<String> keys = System.getProperties()
-                                  .stringPropertyNames()
-                                  .stream()
+        List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith("user."))
                                   .collect(Collectors.toList());
         // end::collectUserProperties[]
