@@ -8,8 +8,8 @@
         // end::grpc[]
     </featureManager>
 
-    <!-- Due to target="*" this configuration will be applied to every gRPC service running on the server. 
-        This configuration registers a ServerInterceptor -->
+    <!-- Due to target="*", this configuration will be applied to every gRPC service 
+         running on the server. This configuration registers a ServerInterceptor -->
     <grpc target="*"/>
 
     <applicationManager autoExpand="true"/>
