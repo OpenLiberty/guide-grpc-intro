@@ -93,14 +93,14 @@ public class PropertiesResource {
         // tag::getPropertiesServer[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
         	
-        	  // tag::onNext[]
+        	  // tag::onNext1[]
             @Override
             public void onNext(SystemProperty value) {
                 System.out.println("server streaming received: " 
                    + value.getPropertyName() + "=" + value.getPropertyValue());
                 properties.put(value.getPropertyName(), value.getPropertyValue());
             }
-        	  // end::onNext[]
+        	  // end::onNext1[]
 
             @Override
             public void onError(Throwable t) {
@@ -149,7 +149,7 @@ public class PropertiesResource {
         // end::countDownLatch4[]
         Properties properties = new Properties();
 
-        // tag::defineClient[]
+        // tag::getPropertiesClient[]
         StreamObserver<SystemPropertyName> stream = client.getPropertiesClient(
             new StreamObserver<SystemProperties>() {
 
@@ -173,10 +173,10 @@ public class PropertiesResource {
                     // end::countDownLatch5[]
                 }
             });
-        // end::defineClient[]
+        // end::getPropertiesClient[]
 
-        // tag::collectUserProperties[]
         // collect the property names starting with user.
+        // tag::collectUserProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith("user."))
                                   .collect(Collectors.toList());
@@ -184,15 +184,15 @@ public class PropertiesResource {
 
         // send messages to the server
         keys.stream()
-            // tag::clientMessage[]
+            // tag::clientMessage1[]
             .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
-            // end::clientMessage[]
-            // tag::streamOnNext[]
+            // end::clientMessage1[]
+            // tag::streamOnNext1[]
             .forEach(stream::onNext);
-            // end::streamOnNext[]
-        // tag::clientCompleted[]
+            // end::streamOnNext1[]
+        // tag::clientCompleted1[]
         stream.onCompleted();
-        // end::clientCompleted[]
+        // end::clientCompleted1[]
 
         // wait until completed
         // tag::countDownLatch6[]
@@ -218,10 +218,13 @@ public class PropertiesResource {
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                       .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
-        
         Properties properties = new Properties();
+        // tag::countDownLatch7[]        
         CountDownLatch countDown = new CountDownLatch(1);
-        StreamObserver<SystemPropertyName> v = client.getPropertiesBidirect(
+        // end::countDownLatch7[]
+
+        // tag::getPropertiesBidirect[]
+        StreamObserver<SystemPropertyName> stream = client.getPropertiesBidirect(
                 new StreamObserver<SystemProperty>() {
 
                     @Override
@@ -239,30 +242,41 @@ public class PropertiesResource {
                     @Override
                     public void onCompleted() {
                         System.out.println("bidirectional streaming completed");
+                        // tag::countDownLatch8[]
                         countDown.countDown();
+                        // end::countDownLatch8[]
                     }
                     
                 });
+        // end::getPropertiesBidirect[]
 
         // collect the property names starting with java
-        List<String> keys = System.getProperties()
-                                  .stringPropertyNames()
-                                  .stream()
+        // tag::collectJavaProperties[]
+        List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith("java."))
                                   .collect(Collectors.toList());
-
+        // end::collectJavaProperties[]
+        
         // post messages to the server
         keys.stream()
+              // tag::clientMessage2[]
               .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
-              .forEach(v::onNext);
-          v.onCompleted();
-
-          // wait until completed
+              // end::clientMessage2[]
+              // tag::streamOnNext2[]
+              .forEach(stream::onNext);
+              // end::streamOnNext2[]
+        // tag::clientCompleted2[]
+        stream.onCompleted();
+        // end::clientCompleted2[]
+        
+        // wait until completed
+        // tag::countDownLatch9[]
         try {
             countDown.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // end::countDownLatch9[]
         
         channel.shutdownNow();
 

@@ -62,7 +62,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     // tag::getPropertiesServer[]
     @Override
     public void getPropertiesServer(
-        SystemPropertyName request, StreamObserver<SystemProperty> observer) {
+        SystemPropertyName request, StreamObserver<SystemProperty> serverStreamObserver) {
 
         // tag::prefix[]
         String prefix = request.getPropertyName();
@@ -82,13 +82,13 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                       .setPropertyValue(pValue)
                       .build();
                   // end::serverMessage[]
-                  // tag::serverNext[]
-                  observer.onNext(value);
-                  // end::serverNext[]
+                  // tag::serverNext1[]
+                  serverStreamObserver.onNext(value);
+                  // end::serverNext1[]
                   System.out.println("server streaming sent property: " + name);
                });
         // tag::serverComplete[]
-        observer.onCompleted();
+        serverStreamObserver.onCompleted();
         // end::serverComplete[]
         System.out.println("server streaming was completed!");
     }
@@ -97,7 +97,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     // tag::getPropertiesClient[]
     @Override
     public StreamObserver<SystemPropertyName> getPropertiesClient(
-        StreamObserver<SystemProperties> observer) {
+        StreamObserver<SystemProperties> serverStreamObserver) {
 
         // tag::streamObserverClient[]
         return new StreamObserver<SystemPropertyName>() {
@@ -127,8 +127,8 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                 SystemProperties value = SystemProperties.newBuilder()
                                              .putAllProperties(properties)
                                              .build();
-                observer.onNext(value);
-                observer.onCompleted();
+                serverStreamObserver.onNext(value);
+                serverStreamObserver.onCompleted();
                 System.out.println("client streaming was completed!");
             }
             // end::clientStreamingCompleted[]
@@ -140,8 +140,9 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     // tag::getPropertiesBidirect[]
     @Override
     public StreamObserver<SystemPropertyName> getPropertiesBidirect(
-        StreamObserver<SystemProperty> observer) {
+        StreamObserver<SystemProperty> serverStreamObserver) {
 
+        // tag::streamObserverBidirectional[]
         return new StreamObserver<SystemPropertyName>() {
             // tag::receiveBidirectionalProperties[]
             @Override
@@ -149,11 +150,15 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                 String pName = spn.getPropertyName();
                 String pValue = System.getProperty(pName);
                 System.out.println("bi-directional streaming received: " + pName);
+                // tag::systemPropertyMessage[]
                 SystemProperty value = SystemProperty.newBuilder()
                                            .setPropertyName(pName)
                                            .setPropertyValue(pValue)
                                            .build();
-                observer.onNext(value);
+                // end::systemPropertyMessage[]
+                // tag::serverNext2[]
+                serverStreamObserver.onNext(value);
+                // tag::serverNext2[]
             }
             // end::receiveBidirectionalProperties[]
 
@@ -164,12 +169,12 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             // tag::bidirectionalCompleted[]
             @Override
             public void onCompleted() {
-                observer.onCompleted();
+                serverStreamObserver.onCompleted();
                 System.out.println("bi-directional streaming was completed!");
             }
             // end::bidirectionalCompleted[]
         };
-
+        // end::streamObserverBidirectional[]
     }
     // end::getPropertiesBidirect[]
 }
