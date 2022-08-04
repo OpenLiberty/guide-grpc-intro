@@ -99,7 +99,7 @@ mvn -pl query liberty:stop
 // Creating proto file and generating gRPC stubs
 // =================================================================================================
 
-== Creating and defining gRPC services
+== Creating and defining gRPC service
 
 Navigate to the `start` directory to begin.
 
@@ -128,7 +128,7 @@ The first few lines define the [hotspot=basicConfig file=0]`syntax`, [hotspot=ba
 
 The [hotspot=getProperty file=0]`getProperty` rpc defines the unary call. In this call, the client side sends a `SystemPropertyName` message to the server side that returns back a `SystemPropertyValue` message with the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the `propertyName` and `propertyValue` must be string.
 
-The [hotspot=getPropertiesServer file=0]`getPropertiesServer` rpc defines the server streaming call. The client side sends a `SystemPropertyName` message to the server side. The server returns back a stream of `SystemProperty` messages. Each [hotspot=SystemProperty file=0]`SystemProperty` message contains a `propertyName` and `propertyValue`.
+The [hotspot=getPropertiesServer file=0]`getPropertiesServer` rpc defines the server streaming call. The client side sends a `SystemPropertyName` message to the server side. The server returns back a stream of `SystemProperty` messages. Each [hotspot=SystemProperty file=0]`SystemProperty` message contains a `propertyName` and a `propertyValue` strings.
 
 The [hotspot=getPropertiesClient file=0]`getPropertiesClient` rpc defines the client streaming call. The client side streams `SystemPropertyName` messages to the server side. The server returns back a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
 
@@ -150,9 +150,9 @@ mvn -pl systeproto install
 
 == Implementing unary call
 
-Start by implementing the first service call, the unary call. In this service call, the query service sends one property to the system service, which will return the property value. This type of service call resembles the RESTful API. 
+Start by implementing the first service call, the unary call. In this service call, the `query` client service sends a property to the `system` server service that will return the property value. This type of service call resembles the RESTful API. 
 
-Start the query service in dev mode by using the following command. 
+Run the following command to start the `query` service in dev mode: 
 // Commands for query service
 // start dev mode for query
 [role='command']
@@ -174,7 +174,7 @@ Dev mode holds your command-line session to listen for file changes. Open anothe
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Create the `PropertiesResource` class.#
-`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+`query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
 ----
 
 PropertiesResource.java
@@ -182,7 +182,7 @@ PropertiesResource.java
 ----
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
-The `PropertiesResource` class provides endpoints to interact with the system service. The `/<propertiesName>` endpoint is a unary service call to get the property value from the system service. 
+The `PropertiesResource` class provides RESTfull endpoints to interact with the `system` service. The [hotspot=unary file=0]`/query/properties/${propertyName}` endpoint is a unary service call to get the property value from the `system` service. The endpoint creates a channel, use the channel to create a client by the `SystemServiceGrpc.newBlockingStub()` API, use the client to get the property value, and then shutdown the channel.
 
 // update server.xml
 [role='code_command hotspot file=1', subs="quotes"]
