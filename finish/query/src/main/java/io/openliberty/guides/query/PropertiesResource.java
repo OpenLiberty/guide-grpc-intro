@@ -145,8 +145,10 @@ public class PropertiesResource {
                                      .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
 
+        // tag::countDownLatch4[]
         CountDownLatch countDown = new CountDownLatch(1);
-        
+        // end::countDownLatch4[]
+
         Properties properties = new Properties();
         // tag::defineClient[]
         StreamObserver<SystemPropertyName> stream = client.getPropertiesClient(
@@ -167,7 +169,9 @@ public class PropertiesResource {
                 @Override
                 public void onCompleted() {
                     System.out.println("client streaming completed");
+                    // tag::countDownLatch5[]
                     countDown.countDown();
+                    // end::countDownLatch5[]
                 }
 
             });
@@ -183,21 +187,25 @@ public class PropertiesResource {
         // end::collectUserProperties[]
 
         // send messages to the server
-        // tag::clientStream[]
         keys.stream()
-              .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
-              .forEach(stream::onNext);
-        // end::clientStream[]
+            // tag::clientMessage[]
+            .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
+            // end::clientMessage[]
+            // tag::streamOnNext[]
+            .forEach(stream::onNext);
+            // end::streamOnNext[]
         // tag::clientCompleted[]
         stream.onCompleted();
         // end::clientCompleted[]
 
         // wait until completed
+        // tag::countDownLatch6[]
         try {
             countDown.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // end::countDownLatch6[]
 
         channel.shutdownNow();
 

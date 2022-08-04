@@ -79,9 +79,9 @@ mvn -pl query liberty:run
 
 Point your browser to the http://localhost:9081/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out:
 
-* client streaming - http://localhost:9081/query/properties/os 
+* server streaming - http://localhost:9081/query/properties/os 
 
-* server streaming - http://localhost:9081/query/properties/user
+* client streaming - http://localhost:9081/query/properties/user
 
 * bidirectional streaming - http://localhost:9081/query/properties/java
 
@@ -297,7 +297,7 @@ Point your browser to the http://localhost:9081/query/properties/os URL to test 
 // ===============================================================================================
 
 
-== Implementing client streaming 
+== Implementing client streaming call
 
 In the client streaming call, the `query` client service provides the `/query/properties/user` endpoint that streams the user properties to the `system` server service. The `system` service returns a map of user properties with their values.
 
@@ -334,17 +334,16 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-After a connection is created between the two services, call the [hotspot=defineClient file=1]`client.getPropertiesClient()` API to get a stream, collect the properties started with [hotspot=collectUserProperties file=1]`user.`, create and send [hotspot=clientStream file=1]`SystemPropertyName` messages individually to the server. When all property names are sent, finish the `stream` by calling the [hotspot=clientCompleted file=1]`onCompleted()`;
-
+After a connection is created between the two services, call the [hotspot=defineClient file=1]`client.getPropertiesClient()` API to get a `stream`, collect the properties started with [hotspot=collectUserProperties file=1]`user.`, create [hotspot=clientMessage file=1]`SystemPropertyName` messages individually, and send to the server through by th [hotspot=streamOnNext file=1]`stream::onNext`. When all property names are sent, finish the `stream` by calling the [hotspot=clientCompleted file=1]`onCompleted()`. Again, use a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` to synchronize the streaming flow.
 
 Point your browser to the http://localhost:9081/query/properties/user URL to test out the client streaming. You should see the `user.` properties from the `system` service. Observe the output from the consoles running the `system` and `query` services.
 
 
 // ===============================================================================================
-// Implementing bidirectional streaming 
+// Implementing bidirectional streaming call
 // ===============================================================================================
 
-== Implementing bidirectional streaming 
+== Implementing bidirectional streaming call
 The next service to implement is `bidirectional Streaming`. The query service streams the Java properties while the system service streams the values of those properties back to the query service. 
 // Commands for query service
 // Replace PropertiesResource
