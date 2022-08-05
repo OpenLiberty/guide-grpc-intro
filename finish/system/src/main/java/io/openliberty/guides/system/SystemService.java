@@ -158,7 +158,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                 // end::systemPropertyMessage[]
                 // tag::serverNext2[]
                 observer.onNext(value);
-                // tag::serverNext2[]
+                // end::serverNext2[]
             }
             // end::receiveBidirectionalProperties[]
 
