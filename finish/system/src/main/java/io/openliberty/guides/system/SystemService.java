@@ -166,6 +166,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             public void onError(Throwable t) {
                 t.printStackTrace();
             }
+
             // tag::bidirectionalCompleted[]
             @Override
             public void onCompleted() {
