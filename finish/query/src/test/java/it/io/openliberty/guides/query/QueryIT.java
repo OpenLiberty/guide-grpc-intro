@@ -72,7 +72,6 @@ public class QueryIT {
     }
     // end::getOSProperties[]
 
-
     @Test
     // tag::getUserProperties[]
     public void testGetUserProperties() throws MalformedURLException {
