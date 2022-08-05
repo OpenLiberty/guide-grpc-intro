@@ -3,12 +3,7 @@
 
     <featureManager>
         <feature>jaxrs-2.1</feature>
-        <feature>grpc-1.0</feature>
     </featureManager>
-
-    <!-- Due to target="*", this configuration will be applied to every gRPC service 
-         running on the server. This configuration registers a ServerInterceptor -->
-    <grpc target="*"/>
 
     <applicationManager autoExpand="true"/>
 
