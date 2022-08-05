@@ -454,6 +454,6 @@ endif::[]
 
 == Great work! You're done!
 
-You just developed an application that implements four streaming calls with gRPC by using Open Liberty. 
+You just developed an application that implements four gRPC streaming calls with Open Liberty.
 
 include::{common-includes}/attribution.adoc[subs="attributes"]
