@@ -105,7 +105,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             // tag::clientStreamingMap[]
             private Map<String, String> properties = new HashMap<String, String>();
             // end::clientStreamingMap[]
-            
+
             // tag::receivingProperties[]
             @Override
             public void onNext(SystemPropertyName spn) {

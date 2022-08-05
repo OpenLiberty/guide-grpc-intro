@@ -96,15 +96,15 @@ public class PropertiesResource {
                                          .setPropertyName("os.").build();
         // tag::getPropertiesServer[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
-        	
-        	  // tag::onNext1[]
+
+            // tag::onNext1[]
             @Override
             public void onNext(SystemProperty value) {
-                System.out.println("server streaming received: " 
+                System.out.println("server streaming received: "
                    + value.getPropertyName() + "=" + value.getPropertyValue());
                 properties.put(value.getPropertyName(), value.getPropertyValue());
             }
-        	  // end::onNext1[]
+            // end::onNext1[]
 
             @Override
             public void onError(Throwable t) {
@@ -223,7 +223,7 @@ public class PropertiesResource {
                                       .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
         Properties properties = new Properties();
-        // tag::countDownLatch7[]        
+        // tag::countDownLatch7[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch7[]
 
@@ -252,7 +252,6 @@ public class PropertiesResource {
                         countDown.countDown();
                         // end::countDownLatch8[]
                     }
-                    
                 });
         // end::getPropertiesBidirect[]
 
@@ -262,7 +261,7 @@ public class PropertiesResource {
                                   .filter(k -> k.startsWith("java."))
                                   .collect(Collectors.toList());
         // end::collectJavaProperties[]
-        
+
         // post messages to the server
         keys.stream()
               // tag::clientMessage2[]
@@ -274,7 +273,7 @@ public class PropertiesResource {
         // tag::clientCompleted2[]
         stream.onCompleted();
         // end::clientCompleted2[]
-        
+
         // wait until completed
         // tag::countDownLatch9[]
         try {
@@ -283,7 +282,7 @@ public class PropertiesResource {
             e.printStackTrace();
         }
         // end::countDownLatch9[]
-        
+
         channel.shutdownNow();
 
         return properties;
