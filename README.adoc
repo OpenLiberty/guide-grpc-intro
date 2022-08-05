@@ -8,7 +8,7 @@
 //
 :projectid: grpc-intro
 :page-layout: guide-multipane
-:page-duration: 30 minutes
+:page-duration: 25 minutes
 :page-releasedate: 2022-09-08
 :page-description: Learn how to use gRPC unary, server streaming, client streaming, and bidirectional streaming to communicate client and server services in Open Liberty.
 :page-tags: ['gRPC']
