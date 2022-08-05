@@ -40,7 +40,7 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
-        <!-- tag::protobufmavenplugin[] -->
+        <!-- tag::osmavenplugin[] -->
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
@@ -48,13 +48,14 @@
                 <version>1.7.0</version>
             </extension>
         </extensions>
-        <!-- end::protobufmavenplugin[] -->
+        <!-- end::osmavenplugin[] -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
             </plugin>
+            <!-- tag::protobufmavenplugin[] -->
             <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
@@ -73,6 +74,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- end::protobufmavenplugin[] -->
         </plugins>
     </build>
 </project>

@@ -3,12 +3,16 @@
 
     <featureManager>
         <feature>jaxrs-2.1</feature>
+        <!-- tag::grpc[] -->
         <feature>grpc-1.0</feature>
+        <!-- end::grpc[] -->
     </featureManager>
 
-    <!-- Due to target="*" this configuration will be applied to every gRPC service running on the server. 
-        This configuration registers a ServerInterceptor -->
+    <!-- tag::grpcConfig[] -->
+    <!-- Due to target="*", this configuration will be applied to every gRPC service 
+         running on the server. This configuration registers a ServerInterceptor -->
     <grpc target="*"/>
+    <!-- end::grpcConfig[] -->
 
     <applicationManager autoExpand="true"/>
 

@@ -37,17 +37,17 @@ service SystemService {
 }
 // end::SystemService[]
 
-// tag::SystemPropertyValue[]
-message SystemPropertyValue {
-    string propertyValue = 1;
-}
-// end::SystemPropertyValue[]
-
 // tag::SystemPropertyName[]
 message SystemPropertyName {
     string propertyName = 1;
 }
 // end::SystemPropertyName[]
+
+// tag::SystemPropertyValue[]
+message SystemPropertyValue {
+    string propertyValue = 1;
+}
+// end::SystemPropertyValue[]
 
 // tag::SystemProperty[]
 message SystemProperty {

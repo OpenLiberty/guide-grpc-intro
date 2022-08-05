@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <server description="new server">
 
-    <!--The Liberty Maven Plugin has generated Liberty features necessary for your application in configDropins/overrides/generated-features.xml-->
-
     <featureManager>
         <feature>jaxrs-2.1</feature>
         <feature>cdi-2.0</feature>
@@ -16,11 +14,6 @@
                   httpPort="${default.http.port}"
                   httpsPort="${default.https.port}"
                   host="*"/>
-
-    <!-- Due to host="*" this configuration will be applied to every gRPC client call that gets made. 
-        This configuration registers a ClientInterceptor, and it directs Cookie headers to get forwarded
-        with any outbound RPC calls - which in this case enables authorization propagation. -->
-    <grpcClient headersToPropagate="Cookie" host="*"/>
 
     <applicationManager autoExpand="true"/>
 
