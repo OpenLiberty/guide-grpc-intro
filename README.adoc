@@ -226,7 +226,7 @@ PropertiesResource.java
 ----
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
-The `PropertiesResource` class provides RESTful endpoints to interact with the `system` service. The [hotspot=unary file=2]`/query/properties/${propertyName}` endpoint uses the unary service call to get the property value from the `system` service. The endpoint creates a channel, uses the channel to create a client by the `SystemServiceGrpc.newBlockingStub()` API, uses the client to get the property value, shutdowns the channel, and then returns the value that the `system` service responses immediately.
+The `PropertiesResource` class provides RESTful endpoints to interact with the `system` service. The [hotspot=unary file=2]`/query/properties/${propertyName}` endpoint uses the unary service call to get the property value from the `system` service. The endpoint creates a [hotspot=createChannel1 file=2]`channel`, uses the channel to create a client by the [hotspot=createClient1 file=2]`SystemServiceGrpc.newBlockingStub()` API, uses the client to get the property value, shutdowns the channel, and then returns the value that the `system` service responses immediately.
 
 // update server.xml
 [role='code_command hotspot file=3', subs="quotes"]
@@ -287,7 +287,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createChannel file=1]`channel` to the `system` service and a [hotspot=createClient file=1]`client` by using the `SystemServiceGrpc.newStub()` API. Then, call the [hotspot=getPropertiesServer file=1]`getPropertiesServer()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server individually and stores them into the `properties` placeholder. After all properties are received, shutdown the [hotspot=closeConnection file=1]`channel` and returns the placeholder. Because the rpc call is asynchronous, use a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` to synchronize the streaming flow.
+The endpoint creates a [hotspot=createChannel2 file=1]`channel` to the `system` service and a [hotspot=createClient2 file=1]`client` by using the `SystemServiceGrpc.newStub()` API. Then, call the [hotspot=getPropertiesServer file=1]`getPropertiesServer()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server individually and stores them into the `properties` placeholder. After all properties are received, shutdown the [hotspot=closeConnection file=1]`channel` and returns the placeholder. Because the rpc call is asynchronous, use a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` to synchronize the streaming flow.
 
 Point your browser to the http://localhost:9081/query/properties/os URL to test out the server streaming. You should see the `os.` properties from the `system` service. Observe the output from the consoles running the `system` and `query` services.
 

@@ -59,9 +59,13 @@ public class PropertiesResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getPropertiesString(@PathParam("propertyName") String propertyName) {
 
+        // tag::createChannel1[]
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
+        // end::createChannel1[]
+        // tag::createClient1[]
         SystemServiceBlockingStub client = SystemServiceGrpc.newBlockingStub(channel);
+        // end::createClient1[]
         SystemPropertyName request = SystemPropertyName.newBuilder()
                                              .setPropertyName(propertyName).build();
         SystemPropertyValue response = client.getProperty(request);
@@ -76,13 +80,13 @@ public class PropertiesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Properties getOSProperties() {
 
-        // tag::createChannel[]
+        // tag::createChannel2[]
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
-        // end::createChannel[]
-        // tag::createClient[]
+        // end::createChannel2[]
+        // tag::createClient2[]
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
-        // end::createClient[]
+        // end::createClient2[]
 
         Properties properties = new Properties();
         // tag::countDownLatch1[]
