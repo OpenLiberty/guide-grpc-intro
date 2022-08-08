@@ -11,7 +11,6 @@
 :page-duration: 25 minutes
 :page-releasedate: 2022-09-08
 :page-description: Learn how to use gRPC unary, server streaming, client streaming, and bidirectional streaming to communicate client and server services in Open Liberty.
-:page-tags: ['gRPC']
 :page-permalink: /guides/{projectid}
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :imagesdir: /img/guide/{projectid}
@@ -19,7 +18,7 @@
 :page-seo-title: Streaming messages between client and server services by gRPC remote procedure calls
 :page-seo-description: A getting started tutorial with examples on how to run unary, server streaming, client streaming, and bidirectional streaming by using gRPC remote procedure calls in Open Liberty.
 :guide-author: Open Liberty
-= Streaming messages between client and server services by gRPC calls
+= Streaming messages between client and server services by gRPC
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
