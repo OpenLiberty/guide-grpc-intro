@@ -1,16 +1,18 @@
 #!/bin/bash
 set -euxo pipefail
 
-mvn -pl systemproto install
+mvn -pl systemproto -q clean install
+
 
 mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
-    -pl system liberty:create liberty:install-feature liberty:deploy
+    -pl system -q clean package liberty:create liberty:install-feature liberty:deploy
+
 mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
-    -pl query liberty:create liberty:install-feature liberty:deploy
+    -pl query -q clean package liberty:create liberty:install-feature liberty:deploy
 
 mvn -pl system liberty:start
 mvn -pl query liberty:start
