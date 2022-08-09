@@ -76,13 +76,13 @@ Next, open another command-line session and start the `query` service by using t
 mvn -pl query liberty:run
 ----
 
-Point your browser to the http://localhost:9081/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out:
+Point your browser to the http://localhost:9081/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out the corresponding streaming rpc call: 
 
-* server streaming - http://localhost:9081/query/properties/os 
+* Visit http://localhost:9081/query/properties/os to test out the server streaming. You should see the information of your localhost operating system.
 
-* client streaming - http://localhost:9081/query/properties/user
+* Visit http://localhost:9081/query/properties/user to test out the client streaming. You should see the information of your localhost user properties. 
 
-* bidirectional streaming - http://localhost:9081/query/properties/java
+* Visit http://localhost:9081/query/properties/java to test out the bidirectional streaming. You should see the information of your localhost Java properties.
 
 Observe the output from the consoles running the `system` and `query` services.
 
