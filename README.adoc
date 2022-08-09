@@ -324,7 +324,7 @@ Update the `PropertiesResource` class to implement of `/query/properties/user` e
 [role="code_command hotspot file=1", subs="quotes"]
 ----
 #Replace the `PropertiesResource` class.#
-`/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+`query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
 ----
 
 PropertiesResource.java
@@ -393,7 +393,7 @@ Point your browser to the http://localhost:9081/query/properties/java URL to tes
 [role="code_command hotspot file=0", subs="quotes"]
 ----
 #Create the `QueryIT` class.#
-`finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java`
+`query/src/test/java/it/io/openliberty/guides/query/QueryIT.java`
 ----
 
 QueryIT.java
@@ -416,17 +416,15 @@ include::{common-includes}/devmode-test.adoc[]
 
 [source, role="no_copy"]
 ----
-[INFO] -------------------------------------------------------
-[INFO]  T E S T S
-[INFO] -------------------------------------------------------
-[INFO] Running it.io.openliberty.guides.query.QueryIT
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.247 s - in it.io.openliberty.guides.query.QueryIT
-[INFO] 
-[INFO] Results:
-[INFO] 
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
-[INFO] 
-[INFO] Integration tests finished.
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.query.QueryIT
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.247 s - in it.io.openliberty.guides.query.QueryIT
+
+Results:
+
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 When you are done checking out the services, exit dev mode by pressing `CTRL+C` in the command-line sessions where you ran the `system` and `query` services,  or by typing `q` and then pressing the `enter/return` key. Alternatively, you can run the `liberty:stop` goal from the `start` directory in another command-line session for the `system` and `query` services:
