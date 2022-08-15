@@ -23,8 +23,8 @@ jobs:
       - name: Invoke workflow in another repo with inputs
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: DraftConverter
+          workflow: DraftConverterV3
           repo: OpenLiberty/cloud-hosted-guides
           token: ${{ secrets.GUIDECONVERSIONTOOL_PASSWORD }}
-          inputs: '{ "branch": "refs/heads/draft", "guide_name": "${{ github.event.repository.name }}", "cloud_hosted_name": "cloud-hosted-draft-guide-grpc-intro" }'
+          inputs: '{ "branch": "refs/heads/draft", "guide_name": "${{ github.event.repository.name }}", "cloud_hosted_name": "cloud-hosted-guide-grpc-intro" }'
           ref: "refs/heads/prod"
