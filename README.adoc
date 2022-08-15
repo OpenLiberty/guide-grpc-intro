@@ -41,7 +41,7 @@ You will learn how to create gRPC client and server services by using protocol b
 
 The application that you will build in this guide consists of the `systemproto` model project, the `query` client service, and the `system` server service. The `query` service implements four RESTful APIs by using four different gRPC streaming methods.
 
-image::architecture.png[gRPC application architecture where the system service provides gRPC server and the query service to make different gRPC streaming calls. align="center"]
+image::architecture.png[gRPC application architecture that the system service provides gRPC server and the query service makes different gRPC streaming calls, align="center"]
 
 // ===============================================================================================
 // Getting Started
