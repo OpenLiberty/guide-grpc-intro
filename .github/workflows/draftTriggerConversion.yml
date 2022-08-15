@@ -27,4 +27,4 @@ jobs:
           repo: OpenLiberty/cloud-hosted-guides
           token: ${{ secrets.GUIDECONVERSIONTOOL_PASSWORD }}
           inputs: '{ "branch": "refs/heads/draft", "guide_name": "${{ github.event.repository.name }}", "cloud_hosted_name": "cloud-hosted-guide-grpc-intro" }'
-          ref: "refs/heads/prod"
+          ref: "refs/heads/staging"
