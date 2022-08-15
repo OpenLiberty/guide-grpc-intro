@@ -459,13 +459,13 @@ include::finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java[
 ----
 Each test case tests one of the methods for instantiating a RESTful client.
 
-The [hotspot=getPropertiesString file=0]`testGetPropertiesString()` tests the `http://localhost:9081/query/properties/os.name` endpoint and confirms that a response is received. 
+The [hotspot=getPropertiesString file=0]`testGetPropertiesString()` tests the `\http://localhost:9081/query/properties/os.name` endpoint and confirms that a response is received. 
 
-The [hotspot=getOSProperties file=0]`testGetOSProperties()` tests the `http://localhost:9081/query/properties/os` endpoint and confirms that a response is received. 
+The [hotspot=getOSProperties file=0]`testGetOSProperties()` tests the `\http://localhost:9081/query/properties/os` endpoint and confirms that a response is received. 
 
-The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `http://localhost:9081/query/properties/user` endpoint and confirms that a response is received. 
+The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `\http://localhost:9081/query/properties/user` endpoint and confirms that a response is received. 
 
-The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `http://localhost:9081/query/properties/java` endpoint and confirms that a response is received. 
+The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `\http://localhost:9081/query/properties/java` endpoint and confirms that a response is received. 
 
 [role=command]
 include::{common-includes}/devmode-test.adoc[]
