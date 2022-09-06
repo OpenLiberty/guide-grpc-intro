@@ -20,28 +20,28 @@ option java_multiple_files = true;
 // tag::SystemService[]
 service SystemService {
     // tag::getProperty[]
-    rpc getProperty (SystemPropertyName) returns (SystemPropertyValue) {}
+    rpc getProperty (SystemPropertyPrefix) returns (SystemPropertyValue) {}
     // end::getProperty[]
 
     // tag::getPropertiesServer[]
-    rpc getPropertiesServer (SystemPropertyName) returns (stream SystemProperty) {}
+    rpc getPropertiesServer (SystemPropertyPrefix) returns (stream SystemProperty) {}
     // end::getPropertiesServer[]
 
     // tag::getPropertiesClient[]
-    rpc getPropertiesClient (stream SystemPropertyName) returns (SystemProperties) {}
+    rpc getPropertiesClient (stream SystemPropertyPrefix) returns (SystemProperties) {}
     // end::getPropertiesClient[]
 
     // tag::getPropertiesBidirect[]
-    rpc getPropertiesBidirect (stream SystemPropertyName) returns (stream SystemProperty) {}
+    rpc getPropertiesBidirect (stream SystemPropertyPrefix) returns (stream SystemProperty) {}
     // end::getPropertiesBidirect[]
 }
 // end::SystemService[]
 
-// tag::SystemPropertyName[]
-message SystemPropertyName {
-    string propertyName = 1;
+// tag::SystemPropertyPrefix[]
+message SystemPropertyPrefix {
+    string propertyPrefix = 1;
 }
-// end::SystemPropertyName[]
+// end::SystemPropertyPrefix[]
 
 // tag::SystemPropertyValue[]
 message SystemPropertyValue {
@@ -51,7 +51,7 @@ message SystemPropertyValue {
 
 // tag::SystemProperty[]
 message SystemProperty {
-    string propertyName = 1;
+    string propertyPrefix = 1;
     string propertyValue = 2;
 }
 // end::SystemProperty[]

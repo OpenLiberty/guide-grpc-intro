@@ -34,7 +34,7 @@ import io.grpc.stub.StreamObserver;
 // tag::grpcImports[]
 import io.openliberty.guides.systemproto.SystemProperties;
 import io.openliberty.guides.systemproto.SystemProperty;
-import io.openliberty.guides.systemproto.SystemPropertyName;
+import io.openliberty.guides.systemproto.SystemPropertyPrefix;
 import io.openliberty.guides.systemproto.SystemPropertyValue;
 import io.openliberty.guides.systemproto.SystemServiceGrpc;
 import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceBlockingStub;
@@ -55,9 +55,9 @@ public class PropertiesResource {
 
     // tag::unary[]
     @GET
-    @Path("/{propertyName}")
+    @Path("/{propertyPrefix}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String getPropertiesString(@PathParam("propertyName") String propertyName) {
+    public String getPropertiesString(@PathParam("propertyPrefix") String propertyPrefix) {
 
         // tag::createChannel1[]
         ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
@@ -66,8 +66,8 @@ public class PropertiesResource {
         // tag::createClient1[]
         SystemServiceBlockingStub client = SystemServiceGrpc.newBlockingStub(channel);
         // end::createClient1[]
-        SystemPropertyName request = SystemPropertyName.newBuilder()
-                                             .setPropertyName(propertyName).build();
+        SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
+                                             .setPropertyPrefix(propertyPrefix).build();
         SystemPropertyValue response = client.getProperty(request);
         channel.shutdownNow();
         return response.getPropertyValue();
@@ -92,8 +92,8 @@ public class PropertiesResource {
         // tag::countDownLatch1[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch1[]
-        SystemPropertyName request = SystemPropertyName.newBuilder()
-                                         .setPropertyName("os.").build();
+        SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
+                                         .setPropertyPrefix("os.").build();
         // tag::getPropertiesServer[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
 
@@ -101,8 +101,8 @@ public class PropertiesResource {
             @Override
             public void onNext(SystemProperty value) {
                 System.out.println("server streaming received: "
-                   + value.getPropertyName() + "=" + value.getPropertyValue());
-                properties.put(value.getPropertyName(), value.getPropertyValue());
+                   + value.getPropertyPrefix() + "=" + value.getPropertyValue());
+                properties.put(value.getPropertyPrefix(), value.getPropertyValue());
             }
             // end::onNext1[]
 
@@ -154,7 +154,7 @@ public class PropertiesResource {
         Properties properties = new Properties();
 
         // tag::getPropertiesClient[]
-        StreamObserver<SystemPropertyName> stream = client.getPropertiesClient(
+        StreamObserver<SystemPropertyPrefix> stream = client.getPropertiesClient(
             new StreamObserver<SystemProperties>() {
 
                 @Override
@@ -189,7 +189,7 @@ public class PropertiesResource {
         // send messages to the server
         keys.stream()
             // tag::clientMessage1[]
-            .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
+            .map(k -> SystemPropertyPrefix.newBuilder().setPropertyPrefix(k).build())
             // end::clientMessage1[]
             // tag::streamOnNext1[]
             .forEach(stream::onNext);
@@ -228,15 +228,15 @@ public class PropertiesResource {
         // end::countDownLatch7[]
 
         // tag::getPropertiesBidirect[]
-        StreamObserver<SystemPropertyName> stream = client.getPropertiesBidirect(
+        StreamObserver<SystemPropertyPrefix> stream = client.getPropertiesBidirect(
                 new StreamObserver<SystemProperty>() {
 
                     // tag::onNext2[]
                     @Override
                     public void onNext(SystemProperty value) {
                         System.out.println("bidirectional streaming received: "
-                            + value.getPropertyName() + "=" + value.getPropertyValue());
-                        properties.put(value.getPropertyName(), value.getPropertyValue());
+                            + value.getPropertyPrefix() + "=" + value.getPropertyValue());
+                        properties.put(value.getPropertyPrefix(), value.getPropertyValue());
                     }
                     // end::onNext2[]
 
@@ -265,7 +265,7 @@ public class PropertiesResource {
         // post messages to the server
         keys.stream()
               // tag::clientMessage2[]
-              .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
+              .map(k -> SystemPropertyPrefix.newBuilder().setPropertyPrefix(k).build())
               // end::clientMessage2[]
               // tag::streamOnNext2[]
               .forEach(stream::onNext);
