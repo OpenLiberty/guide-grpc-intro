@@ -57,10 +57,12 @@ public class PropertiesResource {
     @GET
     @Path("/{propertyPrefix}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String getPropertiesString(@PathParam("propertyPrefix") String propertyPrefix) {
+    public String getPropertiesString(
+        @PathParam("propertyPrefix") String propertyPrefix) {
 
         // tag::createChannel1[]
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                     .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         // end::createChannel1[]
         // tag::createClient1[]
@@ -81,7 +83,8 @@ public class PropertiesResource {
     public Properties getOSProperties() {
 
         // tag::createChannel2[]
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                     .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         // end::createChannel2[]
         // tag::createClient2[]
@@ -145,7 +148,8 @@ public class PropertiesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Properties getUserProperties() {
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                     .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
         // tag::countDownLatch4[]
@@ -159,7 +163,7 @@ public class PropertiesResource {
 
                 @Override
                 public void onNext(SystemProperties value) {
-                    System.out.println("client streaming received a map that has " 
+                    System.out.println("client streaming received a map that has "
                         + value.getPropertiesCount() + " properties");
                     properties.putAll(value.getPropertiesMap());
                 }
@@ -219,7 +223,8 @@ public class PropertiesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Properties getJavaProperties() {
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                      .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                       .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
         Properties properties = new Properties();
@@ -235,8 +240,10 @@ public class PropertiesResource {
                     @Override
                     public void onNext(SystemProperty value) {
                         System.out.println("bidirectional streaming received: "
-                            + value.getPropertyPrefix() + "=" + value.getPropertyValue());
-                        properties.put(value.getPropertyPrefix(), value.getPropertyValue());
+                            + value.getPropertyPrefix() + "=" 
+                            + value.getPropertyValue());
+                        properties.put(value.getPropertyPrefix(), 
+                                       value.getPropertyValue());
                     }
                     // end::onNext2[]
 
