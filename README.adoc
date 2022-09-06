@@ -330,7 +330,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createChannel2 file=1]`channel` to the `system` service and a [hotspot=createClient2 file=1]`client` by using the `SystemServiceGrpc.newStub()` API. Then, call the [hotspot=getPropertiesServer file=1]`getPropertiesServer()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server individually and stores them into the `properties` placeholder. After all properties are received, shutdown the [hotspot=closeConnection file=1]`channel` and returns the placeholder. Because the rpc call is asynchronous, use a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` to synchronize the streaming flow.
+The endpoint creates a [hotspot=createChannel2 file=1]`channel` to the `system` service and a [hotspot=createClient2 file=1]`client` by using the `SystemServiceGrpc.newStub()` API. Then, calls the [hotspot=getPropertiesServer file=1]`getPropertiesServer()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server individually and stores them into the `properties` placeholder. After all properties are received, shutdowns the [hotspot=closeConnection file=1]`channel` and returns the placeholder. Because the rpc call is asynchronous, use a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` to synchronize the streaming flow.
 
 // static guide instruction
 ifndef::cloud-hosted[]
@@ -371,7 +371,7 @@ The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` method implement
 
 
 // Replace PropertiesResource
-Update the `PropertiesResource` class to implement of `/query/properties/user` endpoint of the query service.
+Update the `PropertiesResource` class to implement `/query/properties/user` endpoint of the query service.
 
 [role="code_command hotspot file=1", subs="quotes"]
 ----
@@ -385,7 +385,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-After a connection is created between the two services, call the [hotspot=getPropertiesClient file=1]`client.getPropertiesClient()` method to get a `stream`, collect the properties started with [hotspot=collectUserProperties file=1]`user.`, create a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually, and send the message to the server through by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, finish the streaming by calling the [hotspot=clientCompleted1 file=1]`onCompleted()`. Again, use a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` to synchronize the streaming flow.
+After a connection is created between the two services, call the [hotspot=getPropertiesClient file=1]`client.getPropertiesClient()` method to get a `stream`, collect the properties with property names prefixed by [hotspot=collectUserProperties file=1]`user.`, create a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually, and send the message to the server through by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, finish the streaming by calling the [hotspot=clientCompleted1 file=1]`onCompleted()`. Again, use a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` to synchronize the streaming flow.
 
 // static guide instruction
 ifndef::cloud-hosted[]
@@ -421,8 +421,7 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` method implements bidirectional streaming rpc call. This method returns an instance of the [hotspot=streamObserverBidirectional file=0]`StreamObserver` interface. Its [hotspot=receiveBidirectionalProperties file=0]`onNext()` method receives the messages from the client individually, creates a [hotspot=systemPropertyMessage file=0]`SystemProperty` message with the property name and value, and sends the message back to the client by the [hotspot=serverNext2 file=0]`onNext()` method. When the client streaming is completed, close the server streaming by calling the [hotspot=bidirectionalCompleted file=0]`onCompleted()` method.
-
+The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` method implements bidirectional streaming rpc call. This method returns an instance of the [hotspot=streamObserverBidirectional file=0]`StreamObserver` interface. Its [hotspot=receiveBidirectionalProperties file=0]`onNext()` method receives the messages from the client individually, creates a [hotspot=systemPropertyMessage file=0]`SystemProperty` message with the property name and value, and sends the message back to the client by the [hotspot=serverNext2 file=0]`onNext()` method. When the client streaming is completed, closes the server streaming by calling the [hotspot=bidirectionalCompleted file=0]`onCompleted()` method.
 
 Update the `PropertiesResource` class to implement of `/query/properties/java` endpoint of the query service.
 
@@ -479,8 +478,9 @@ The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `/quer
 
 The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `/query/properties/java` endpoint and confirms that a response is received. 
 
-[role=command]
-include::{common-includes}/devmode-test.adoc[]
+=== Running the tests
+
+Because you started Open Liberty in dev mode, you can run the tests by pressing the `enter/return` key from the command-line session where you started the `query` service.
 
 [source, role="no_copy"]
 ----
