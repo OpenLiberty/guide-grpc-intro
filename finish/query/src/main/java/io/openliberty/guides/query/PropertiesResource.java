@@ -240,9 +240,9 @@ public class PropertiesResource {
                     @Override
                     public void onNext(SystemProperty value) {
                         System.out.println("bidirectional streaming received: "
-                            + value.getPropertyPrefix() + "=" 
+                            + value.getPropertyPrefix() + "="
                             + value.getPropertyValue());
-                        properties.put(value.getPropertyPrefix(), 
+                        properties.put(value.getPropertyPrefix(),
                                        value.getPropertyValue());
                     }
                     // end::onNext2[]
