@@ -19,7 +19,7 @@ import io.grpc.stub.StreamObserver;
 // tag::importGrpcClasses[]
 import io.openliberty.guides.systemproto.SystemProperties;
 import io.openliberty.guides.systemproto.SystemProperty;
-import io.openliberty.guides.systemproto.SystemPropertyPrefix;
+import io.openliberty.guides.systemproto.SystemPropertyName;
 import io.openliberty.guides.systemproto.SystemPropertyValue;
 import io.openliberty.guides.systemproto.SystemServiceGrpc;
 // end::importGrpcClasses[]
@@ -34,13 +34,13 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     // tag::getProperty[]
     @Override
     public void getProperty(
-        SystemPropertyPrefix request, StreamObserver<SystemPropertyValue> observer) {
+        SystemPropertyName request, StreamObserver<SystemPropertyValue> observer) {
 
-        // tag::pPrefix[]
-        String pPrefix = request.getPropertyPrefix();
-        // end::pPrefix[]
+        // tag::pName[]
+        String pName = request.getPropertyName();
+        // end::pName[]
         // tag::pValue[]
-        String pValue = System.getProperty(pPrefix);
+        String pValue = System.getProperty(pName);
         // end::pValue[]
         // tag::response[]
         SystemPropertyValue value = SystemPropertyValue
@@ -78,7 +78,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                   // tag::serverMessage[]
                   SystemProperty value = SystemProperty
                       .newBuilder()
-                      .setPropertyPrefix(name)
+                      .setPropertyName(name)
                       .setPropertyValue(pValue)
                       .build();
                   // end::serverMessage[]
@@ -96,11 +96,11 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 
     // tag::getPropertiesClient[]
     @Override
-    public StreamObserver<SystemPropertyPrefix> getPropertiesClient(
+    public StreamObserver<SystemPropertyName> getPropertiesClient(
         StreamObserver<SystemProperties> observer) {
 
         // tag::streamObserverClient[]
-        return new StreamObserver<SystemPropertyPrefix>() {
+        return new StreamObserver<SystemPropertyName>() {
 
             // tag::clientStreamingMap[]
             private Map<String, String> properties = new HashMap<String, String>();
@@ -108,11 +108,11 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 
             // tag::receivingProperties[]
             @Override
-            public void onNext(SystemPropertyPrefix spn) {
-                String pPrefix = spn.getPropertyPrefix();
-                String pValue = System.getProperty(pPrefix);
-                System.out.println("client streaming received property: " + pPrefix);
-                properties.put(pPrefix, pValue);
+            public void onNext(SystemPropertyName spn) {
+                String pName = spn.getPropertyName();
+                String pValue = System.getProperty(pName);
+                System.out.println("client streaming received property: " + pName);
+                properties.put(pName, pValue);
             }
             // end::receivingProperties[]
 
@@ -139,20 +139,20 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 
     // tag::getPropertiesBidirect[]
     @Override
-    public StreamObserver<SystemPropertyPrefix> getPropertiesBidirect(
+    public StreamObserver<SystemPropertyName> getPropertiesBidirect(
         StreamObserver<SystemProperty> observer) {
 
         // tag::streamObserverBidirectional[]
-        return new StreamObserver<SystemPropertyPrefix>() {
+        return new StreamObserver<SystemPropertyName>() {
             // tag::receiveBidirectionalProperties[]
             @Override
-            public void onNext(SystemPropertyPrefix spn) {
-                String pPrefix = spn.getPropertyPrefix();
-                String pValue = System.getProperty(pPrefix);
-                System.out.println("bi-directional streaming received: " + pPrefix);
+            public void onNext(SystemPropertyName spn) {
+                String pName = spn.getPropertyName();
+                String pValue = System.pName);
+                System.out.println("bi-directional streaming received: " + pName);
                 // tag::systemPropertyMessage[]
                 SystemProperty value = SystemProperty.newBuilder()
-                                           .setPropertyPrefix(pPrefix)
+                                           .setPropertyName(pName)
                                            .setPropertyValue(pValue)
                                            .build();
                 // end::systemPropertyMessage[]
