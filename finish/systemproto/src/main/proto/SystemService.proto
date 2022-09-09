@@ -44,7 +44,7 @@ message SystemPropertyName {
 // end::SystemPropertyName[]
 
 message SystemPropertyPrefix {
-    string propertyPrefix = 1;
+    string propertyWithPrefix = 1;
 }
 
 // tag::SystemPropertyValue[]

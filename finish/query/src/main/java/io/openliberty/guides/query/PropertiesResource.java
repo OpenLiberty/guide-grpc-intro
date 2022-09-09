@@ -55,9 +55,9 @@ public class PropertiesResource {
 
     // tag::unary[]
     @GET
-    @Path("/{propertyName}")
+    @Path("/{property}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String getPropertiesString(@PathParam("propertyName") String propertyName) {
+    public String getPropertiesString(@PathParam("property") String property) {
 
         // tag::createChannel1[]
         ManagedChannel channel = ManagedChannelBuilder
@@ -68,7 +68,7 @@ public class PropertiesResource {
         SystemServiceBlockingStub client = SystemServiceGrpc.newBlockingStub(channel);
         // end::createClient1[]
         SystemPropertyName request = SystemPropertyName.newBuilder()
-                                             .setPropertyName(propertyName).build();
+                                             .setPropertyName(property).build();
         SystemPropertyValue response = client.getProperty(request);
         channel.shutdownNow();
         return response.getPropertyValue();
@@ -95,7 +95,7 @@ public class PropertiesResource {
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch1[]
         SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
-                                         .setPropertyPrefix("os.").build();
+                                         .setPropertyWithPrefix("os.").build();
         // tag::getPropertiesServer[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
 
