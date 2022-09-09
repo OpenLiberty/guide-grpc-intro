@@ -148,7 +148,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             @Override
             public void onNext(SystemPropertyName spn) {
                 String pName = spn.getPropertyName();
-                String pValue = System.pName);
+                String pValue = System.getProperty(pName);
                 System.out.println("bi-directional streaming received: " + pName);
                 // tag::systemPropertyMessage[]
                 SystemProperty value = SystemProperty.newBuilder()
