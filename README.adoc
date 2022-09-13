@@ -156,7 +156,7 @@ The first few lines define the [hotspot=basicConfig file=0]`syntax`, [hotspot=ba
 
 The [hotspot=getProperty file=0]`getProperty` rpc defines the unary call. In this call, the client side sends a `SystemPropertyName` message to the server side that returns back a `SystemPropertyValue` message with the property value. The [hotspot=SystemPropertyName file=0]`SystemPropertyName` and [hotspot=SystemPropertyValue file=0]`SystemPropertyValue` message types define that the `propertyName` and `propertyValue` must be string.
 
-The [hotspot=getPropertiesServer file=0]`getPropertiesServer` rpc defines the server streaming call. The client side sends a `SystemPropertyName` message to the server side. The server returns back a stream of `SystemProperty` messages. Each [hotspot=SystemProperty file=0]`SystemProperty` message contains a `propertyName` and a `propertyValue` strings.
+The [hotspot=getPropertiesServer file=0]`getPropertiesServer` rpc defines the server streaming call. The client side sends a `SystemPropertyPrefix` message to the server side. The server returns back a stream of `SystemProperty` messages. Each [hotspot=SystemProperty file=0]`SystemProperty` message contains a `propertyName` and a `propertyValue` strings.
 
 The [hotspot=getPropertiesClient file=0]`getPropertiesClient` rpc defines the client streaming call. The client side streams `SystemPropertyName` messages to the server side. The server returns back a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
 
@@ -313,7 +313,7 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` method implements server streaming rpc call. Use the [hotspot=prefix file=0]`getPropertiesWithPrefix()` getter method to retrieve the property prefix from the client. Filter out the properties that starts with the [hotspot=filter file=0]`prefix`. For each property, build a [hotspot=serverMessage file=0]`SystemProperty` message and stream the message to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, finish the streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
+The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` method implements server streaming rpc call. Use the [hotspot=prefix file=0]`getPropertyPrefix()` getter method to retrieve the property prefix from the client. Filter out the properties that starts with the [hotspot=filter file=0]`prefix`. For each property, build a [hotspot=serverMessage file=0]`SystemProperty` message and stream the message to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, finish the streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
 
 Update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
 

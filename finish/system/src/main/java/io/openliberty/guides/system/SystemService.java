@@ -66,7 +66,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
         SystemPropertyPrefix request, StreamObserver<SystemProperty> observer) {
 
         // tag::prefix[]
-        String prefix = request.getPropertyWithPrefix();
+        String prefix = request.getPropertyPrefix();
         // end::prefix[]
         System.getProperties()
               .stringPropertyNames()

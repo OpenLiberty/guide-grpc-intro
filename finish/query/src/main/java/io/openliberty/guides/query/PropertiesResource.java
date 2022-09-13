@@ -96,7 +96,7 @@ public class PropertiesResource {
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch1[]
         SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
-                                         .setPropertyWithPrefix("os.").build();
+                                         .setPropertyPrefix("os.").build();
         // tag::getPropertiesServer[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
 
