@@ -24,7 +24,7 @@ service SystemService {
     // end::getProperty[]
 
     // tag::getPropertiesServer[]
-    rpc getPropertiesServer (SystemPropertyName) returns (stream SystemProperty) {}
+    rpc getPropertiesServer (SystemPropertyPrefix) returns (stream SystemProperty) {}
     // end::getPropertiesServer[]
 
     // tag::getPropertiesClient[]
@@ -42,6 +42,10 @@ message SystemPropertyName {
     string propertyName = 1;
 }
 // end::SystemPropertyName[]
+
+message SystemPropertyPrefix {
+    string propertyPrefix = 1;
+}
 
 // tag::SystemPropertyValue[]
 message SystemPropertyValue {

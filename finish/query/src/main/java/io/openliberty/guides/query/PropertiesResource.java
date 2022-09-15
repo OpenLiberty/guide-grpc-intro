@@ -35,6 +35,7 @@ import io.grpc.stub.StreamObserver;
 import io.openliberty.guides.systemproto.SystemProperties;
 import io.openliberty.guides.systemproto.SystemProperty;
 import io.openliberty.guides.systemproto.SystemPropertyName;
+import io.openliberty.guides.systemproto.SystemPropertyPrefix;
 import io.openliberty.guides.systemproto.SystemPropertyValue;
 import io.openliberty.guides.systemproto.SystemServiceGrpc;
 import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceBlockingStub;
@@ -55,19 +56,20 @@ public class PropertiesResource {
 
     // tag::unary[]
     @GET
-    @Path("/{propertyName}")
+    @Path("/{property}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String getPropertiesString(@PathParam("propertyName") String propertyName) {
+    public String getPropertiesString(@PathParam("property") String property) {
 
         // tag::createChannel1[]
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                     .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         // end::createChannel1[]
         // tag::createClient1[]
         SystemServiceBlockingStub client = SystemServiceGrpc.newBlockingStub(channel);
         // end::createClient1[]
         SystemPropertyName request = SystemPropertyName.newBuilder()
-                                             .setPropertyName(propertyName).build();
+                                             .setPropertyName(property).build();
         SystemPropertyValue response = client.getProperty(request);
         channel.shutdownNow();
         return response.getPropertyValue();
@@ -81,7 +83,8 @@ public class PropertiesResource {
     public Properties getOSProperties() {
 
         // tag::createChannel2[]
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                     .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         // end::createChannel2[]
         // tag::createClient2[]
@@ -92,8 +95,8 @@ public class PropertiesResource {
         // tag::countDownLatch1[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch1[]
-        SystemPropertyName request = SystemPropertyName.newBuilder()
-                                         .setPropertyName("os.").build();
+        SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
+                                         .setPropertyPrefix("os.").build();
         // tag::getPropertiesServer[]
         client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
 
@@ -145,7 +148,8 @@ public class PropertiesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Properties getUserProperties() {
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                     .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                      .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
         // tag::countDownLatch4[]
@@ -159,7 +163,7 @@ public class PropertiesResource {
 
                 @Override
                 public void onNext(SystemProperties value) {
-                    System.out.println("client streaming received a map that has " 
+                    System.out.println("client streaming received a map that has "
                         + value.getPropertiesCount() + " properties");
                     properties.putAll(value.getPropertiesMap());
                 }
@@ -219,7 +223,8 @@ public class PropertiesResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Properties getJavaProperties() {
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(SYSTEM_HOST, SYSTEM_PORT)
+        ManagedChannel channel = ManagedChannelBuilder
+                                      .forAddress(SYSTEM_HOST, SYSTEM_PORT)
                                       .usePlaintext().build();
         SystemServiceStub client = SystemServiceGrpc.newStub(channel);
         Properties properties = new Properties();
@@ -236,7 +241,8 @@ public class PropertiesResource {
                     public void onNext(SystemProperty value) {
                         System.out.println("bidirectional streaming received: "
                             + value.getPropertyName() + "=" + value.getPropertyValue());
-                        properties.put(value.getPropertyName(), value.getPropertyValue());
+                        properties.put(value.getPropertyName(),
+                                       value.getPropertyValue());
                     }
                     // end::onNext2[]
 
