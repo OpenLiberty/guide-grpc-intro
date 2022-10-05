@@ -250,7 +250,7 @@ system/server.xml
 include::finish/system/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=1]`grpc` feature to the Liberty server configuration file. This feature enables compatibility between gRPC server and the Liberty server. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about `grpc` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
+Add the [hotspot=grpc file=1]`grpc` feature to the Liberty server configuration file. This feature enables compatibility between the gRPC server and the Liberty server. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about `grpc` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
 
 Next, implement the RESTful endpoint in the `query` service.
 
