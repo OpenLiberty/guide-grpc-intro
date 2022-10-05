@@ -84,7 +84,7 @@ mvn -pl query liberty:run
 
 // static guide instruction
 ifndef::cloud-hosted[]
-Wait until you the `The defaultServer server is ready to run a smarter planet` message in your consoles. Then, point your browser to the http://localhost:9081/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out the corresponding streaming rpc call: 
+Wait until you see the `The defaultServer server is ready to run a smarter planet` message in your consoles. Then, point your browser to the http://localhost:9081/query/properties/os.name URL to test out the basic unary service. You will see your operating system name. Next, point your browser to the following URLs to try out the corresponding streaming rpc call: 
 
 * Visit http://localhost:9081/query/properties/os to test out the server streaming. The details of your localhost operating system are displayed.
 
