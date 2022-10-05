@@ -431,7 +431,7 @@ The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` method imple
 Update the `PropertiesResource` class to implement of `/query/properties/java` endpoint of the query service.
 
 // Replace PropertiesResource
-[role="code_command hotspot file=0", subs="quotes"]
+[role="code_command hotspot file=1", subs="quotes"]
 ----
 #Replace the `PropertiesResource` class.#
 `query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
