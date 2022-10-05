@@ -407,7 +407,7 @@ endif::[]
 // Implementing bidirectional streaming call
 // ===============================================================================================
 
-== Implementing bidirectional streaming call
+== Implementing the bidirectional streaming call
 
 In the bidirectional streaming call, the `query` client service provides the `/query/properties/java` endpoint, which streams the property names that start with `java.` to the `system` server service. The `system` service streams the property values back to the `query` service.
 
