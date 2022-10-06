@@ -287,11 +287,11 @@ Because you are running the `system` and `query` services in dev mode, the chang
 
 // static guide instruction
 ifndef::cloud-hosted[]
-Point your browser to the http://localhost:9081/query/properties/os.name URL to test out the unary service. Your operating system name is displayed. You can try out the URL with other property name.
+Point your browser to the http://localhost:9081/query/properties/os.name URL to test out the unary service. Your operating system name is displayed.
 endif::[]
 // cloud hosted instruction
 ifdef::cloud-hosted[]
-Click the following button to visit the ***/query/properties/os.name*** endpoint to test out the unary service. Your operating system name is displayed. You can also try out the URL with other property names.
+Click the following button to visit the ***/query/properties/os.name*** endpoint to test out the unary service. Your operating system name is displayed. 
 
 ::startApplication{port="9081" display="external" name="/query/properties/os.name" route="/query/properties/os.name"}
 endif::[]
