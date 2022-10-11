@@ -302,7 +302,7 @@ endif::[]
 
 == Implementing the server streaming call
 
-In the server streaming call, the `query` client service provides the `/query/properties/os` endpoint that sends a message to the `system` server service. The `system` service streams the properties started with `os.` back to the `query` service. A channel is created between the `query` and the `system` services to stream messages. The channel is closed by the `system` service only after sending the last message to the `query` service. 
+In the server streaming call, the `query` client service provides the `/query/properties/os` endpoint that sends a message to the `system` server service. The `system` service streams any properties that start with `os.` back to the `query` service. A channel is created between the `query` and the `system` services to stream messages. The channel is closed by the `system` service only after sending the last message to the `query` service. 
 
 // Commands for system service
 Update the `SystemService` class to implement the server streaming rpc call.
