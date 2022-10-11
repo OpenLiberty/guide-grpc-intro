@@ -357,7 +357,7 @@ endif::[]
 
 In the client streaming call, the `query` client service provides the `/query/properties/user` endpoint, which streams the user properties to the `system` server service. The `system` service returns a map of user properties with their values.
 
-Update the `SystemService` class to implement the client streaming rpc call.
+Update the `SystemService` class to implement the client streaming RPC call.
 
 // Replace SystemService
 [role="code_command hotspot file=0", subs="quotes"]
