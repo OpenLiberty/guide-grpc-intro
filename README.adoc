@@ -318,7 +318,7 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` method implements server streaming rpc call. The [hotspot=prefix file=0]`getPropertyPrefix()` getter method retrieves the property prefix from the client. Properties that start with the [hotspot=filter file=0]`prefix` are filtered out. For each property, a [hotspot=serverMessage file=0]`SystemProperty` message is built and streamed to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, the service stops streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
+The [hotspot=getPropertiesServer file=0]`getPropertiesServer()` method implements the server streaming RPC call. The [hotspot=prefix file=0]`getPropertyPrefix()` getter method retrieves the property prefix from the client. Properties that start with the [hotspot=filter file=0]`prefix` are filtered out. For each property, a [hotspot=serverMessage file=0]`SystemProperty` message is built and streamed to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, the service stops streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
 
 Update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
 
