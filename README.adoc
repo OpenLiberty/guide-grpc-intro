@@ -372,7 +372,7 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` method implements client streaming rpc call. This method returns an instance of the [hotspot=streamObserverClient file=0]`StreamObserver` interface. Its [hotspot=receivingProperties file=0]`onNext()` method receives the messages from the client individually and stores the property values into the [hotspot=clientStreamingMap file=0]`properties` map placeholder. When the streaming is completed, the `properties` placeholder is sent back to the client by the [hotspot=clientStreamingCompleted file=0]`onCompleted()` method.
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` method implements client streaming RPC call. This method returns an instance of the [hotspot=streamObserverClient file=0]`StreamObserver` interface. Its [hotspot=receivingProperties file=0]`onNext()` method receives the messages from the client individually and stores the property values into the [hotspot=clientStreamingMap file=0]`properties` map placeholder. When the streaming is completed, the `properties` placeholder is sent back to the client by the [hotspot=clientStreamingCompleted file=0]`onCompleted()` method.
 
 
 // Replace PropertiesResource
@@ -426,7 +426,7 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` method implements bidirectional streaming rpc call. This method returns an instance of the [hotspot=streamObserverBidirectional file=0]`StreamObserver` interface. Its [hotspot=receiveBidirectionalProperties file=0]`onNext()` method receives the messages from the client individually, creates a [hotspot=systemPropertyMessage file=0]`SystemProperty` message with the property name and value, and sends the message back to the client. When the client streaming is completed, the method closes the server streaming by calling the [hotspot=bidirectionalCompleted file=0]`onCompleted()` method.
+The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect()` method implements bidirectional streaming RPC call. This method returns an instance of the [hotspot=streamObserverBidirectional file=0]`StreamObserver` interface. Its [hotspot=receiveBidirectionalProperties file=0]`onNext()` method receives the messages from the client individually, creates a [hotspot=systemPropertyMessage file=0]`SystemProperty` message with the property name and value, and sends the message back to the client. When the client streaming is completed, the method closes the server streaming by calling the [hotspot=bidirectionalCompleted file=0]`onCompleted()` method.
 
 Update the `PropertiesResource` class to implement of `/query/properties/java` endpoint of the query service.
 
