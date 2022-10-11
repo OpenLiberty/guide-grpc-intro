@@ -43,7 +43,7 @@ You will learn how to create gRPC services and their clients by using protocol b
 The application that you will build in this guide consists of the `systemproto` model project, the `query` client service, and the `system` server service. The `query` service implements four RESTful APIs by using four different gRPC streaming methods.
 
 * Unary RPC: The client sends a single request and recieves a single response.
-* Server streaming RPC: The client sends and single request and the server returns a stream of messages.
+* Server streaming RPC: The client sends a single request and the server returns a stream of messages.
 * Client streaming RPC: The client sends a stream of messages and the server responds with a single message.
 * Bidirectional RPC: Both client and server sned a stream of messages and the client and server can read and write messages in any order.
 
