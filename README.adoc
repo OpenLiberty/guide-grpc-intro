@@ -45,7 +45,7 @@ The application that you will build in this guide consists of the `systemproto` 
 * Unary RPC: The client sends a single request and recieves a single response.
 * Server streaming RPC: The client sends a single request and the server returns a stream of messages.
 * Client streaming RPC: The client sends a stream of messages and the server responds with a single message.
-* Bidirectional RPC: Both client and server sned a stream of messages and the client and server can read and write messages in any order.
+* Bidirectional RPC: Both client and server send a stream of messages. The client and server can read and write messages in any order.
 
 image::architecture.png[gRPC application architecture that the system service provides gRPC server and the query service makes different gRPC streaming calls, align="center"]
 
