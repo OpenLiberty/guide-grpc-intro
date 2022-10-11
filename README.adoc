@@ -163,7 +163,7 @@ The [hotspot=getProperty file=0]`getProperty` rpc defines the unary call. In thi
 
 The [hotspot=getPropertiesServer file=0]`getPropertiesServer` RPC defines the server streaming call. The client side sends a `SystemPropertyPrefix` message to the server side. The server returns a stream of `SystemProperty` messages. Each [hotspot=SystemProperty file=0]`SystemProperty` message contains `propertyName` and `propertyValue` strings.
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient` rpc defines the client streaming call. The client side streams `SystemPropertyName` messages to the server side. The server returns a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
+The [hotspot=getPropertiesClient file=0]`getPropertiesClient` RPC defines the client streaming call. The client side streams `SystemPropertyName` messages to the server side. The server returns a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
 
 
 The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect` rpc defines the bidirectional streaming call. In this service, the client side streams `SystemPropertyName` messages to the server side. The server returns a stream of [hotspot=SystemProperty file=0]`SystemProperty` messages.
