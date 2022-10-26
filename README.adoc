@@ -8,7 +8,7 @@
 //
 :projectid: grpc-intro
 :page-layout: guide-multipane
-:page-duration: 25 minutes
+:page-duration: 30 minutes
 :page-releasedate: 2022-09-08
 :page-description: Learn how to use gRPC unary calls, server streaming, client streaming, and bidirectional streaming to communicate between client and server services in Open Liberty.
 :page-related-guides: ['microprofile-rest-client-async']
@@ -40,7 +40,9 @@ Protocol buffers allow cross-project support through the `.proto` file. As a res
 
 You will learn how to create gRPC services and their clients by using protocol buffers and how to implement them with Open Liberty. You will use Maven to generate the gRPC stubs, deploy the services, and to interact with the running Liberty server.
 
-The application that you will build in this guide consists of the `systemproto` model project, the `query` client service, and the `system` server service. The `query` service implements four RESTful APIs by using four different gRPC streaming methods.
+The application that you will build in this guide consists of three projects, the `systemproto` model project, the `query` client service project, and the `system` server service project. 
+
+The `query` service implements four RESTful APIs by using four different gRPC streaming methods.
 
 * Unary RPC: The client sends a single request and recieves a single response.
 * Server streaming RPC: The client sends a single request and the server returns a stream of messages.
