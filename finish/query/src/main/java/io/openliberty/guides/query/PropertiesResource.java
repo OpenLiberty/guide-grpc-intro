@@ -100,8 +100,8 @@ public class PropertiesResource {
         // end::countDownLatch1[]
         SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
                                          .setPropertyPrefix("os.").build();
-        // tag::getPropertiesServer[]
-        client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
+        // tag::getServerStreamingProperties[]
+        client.getServerStreamingProperties(request, new StreamObserver<SystemProperty>() {
 
             // tag::onNext1[]
             @Override
@@ -125,7 +125,7 @@ public class PropertiesResource {
                 // end::countDownLatch2[]
             }
         });
-        // end::getPropertiesServer[]
+        // end::getServerStreamingProperties[]
 
 
         // wait until completed

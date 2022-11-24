@@ -23,9 +23,9 @@ service SystemService {
     rpc getProperty (SystemPropertyName) returns (SystemPropertyValue) {}
     // end::getProperty[]
 
-    // tag::getPropertiesServer[]
-    rpc getPropertiesServer (SystemPropertyPrefix) returns (stream SystemProperty) {}
-    // end::getPropertiesServer[]
+    // tag::getServerStreamingProperties[]
+    rpc getServerStreamingProperties (SystemPropertyPrefix) returns (stream SystemProperty) {}
+    // end::getServerStreamingProperties[]
 
     // tag::getPropertiesClient[]
     rpc getPropertiesClient (stream SystemPropertyName) returns (SystemProperties) {}

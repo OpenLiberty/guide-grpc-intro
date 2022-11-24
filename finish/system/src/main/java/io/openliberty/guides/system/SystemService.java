@@ -30,7 +30,7 @@ import io.openliberty.guides.systemproto.SystemServiceGrpc;
 public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 // end::extends[]
 
-    private static Logger logger = Logger.getLogger(SystemClient.class.getName());
+    private static Logger logger = Logger.getLogger(SystemService.class.getName());
 
     public SystemService() {
     }
@@ -63,9 +63,9 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     }
     // end::getProperty[]
 
-    // tag::getPropertiesServer[]
+    // tag::getServerStreamingProperties[]
     @Override
-    public void getPropertiesServer(
+    public void getServerStreamingProperties(
         SystemPropertyPrefix request, StreamObserver<SystemProperty> observer) {
 
         // tag::prefix[]
@@ -96,7 +96,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
         // end::serverComplete[]
         logger.info("server streaming was completed!");
     }
-    // end::getPropertiesServer[]
+    // end::getServerStreamingProperties[]
 
     // tag::getPropertiesClient[]
     @Override
