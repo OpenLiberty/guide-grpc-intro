@@ -235,8 +235,8 @@ public class PropertiesResource {
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch7[]
 
-        // tag::getPropertiesBidirect[]
-        StreamObserver<SystemPropertyName> stream = client.getPropertiesBidirect(
+        // tag::getBidirectProperties[]
+        StreamObserver<SystemPropertyName> stream = client.getBidirectProperties(
                 new StreamObserver<SystemProperty>() {
 
                     // tag::onNext2[]
@@ -262,7 +262,7 @@ public class PropertiesResource {
                         // end::countDownLatch8[]
                     }
                 });
-        // end::getPropertiesBidirect[]
+        // end::getBidirectProperties[]
 
         // collect the property names starting with java
         // tag::collectJavaProperties[]

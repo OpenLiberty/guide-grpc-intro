@@ -31,9 +31,9 @@ service SystemService {
     rpc getClientStreamingProperties (stream SystemPropertyName) returns (SystemProperties) {}
     // end::getClientStreamingProperties[]
 
-    // tag::getPropertiesBidirect[]
-    rpc getPropertiesBidirect (stream SystemPropertyName) returns (stream SystemProperty) {}
-    // end::getPropertiesBidirect[]
+    // tag::getBidirectProperties[]
+    rpc getBidirectProperties (stream SystemPropertyName) returns (stream SystemProperty) {}
+    // end::getBidirectProperties[]
 }
 // end::SystemService[]
 
