@@ -165,7 +165,7 @@ The [hotspot=getProperty file=0]`getProperty` rpc defines the unary call. In thi
 
 The [hotspot=getServerStreamingProperties file=0]`getServerStreamingProperties` RPC defines the server streaming call. The client side sends a `SystemPropertyPrefix` message to the server side. The server returns a stream of `SystemProperty` messages. Each [hotspot=SystemProperty file=0]`SystemProperty` message contains `propertyName` and `propertyValue` strings.
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient` RPC defines the client streaming call. The client side streams `SystemPropertyName` messages to the server side. The server returns a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
+The [hotspot=getClientStreamingProperties file=0]`getClientStreamingProperties` RPC defines the client streaming call. The client side streams `SystemPropertyName` messages to the server side. The server returns a [hotspot=SystemProperties file=0]`SystemProperties` message that contains a map of the properties with their respective values.
 
 
 The [hotspot=getPropertiesBidirect file=0]`getPropertiesBidirect` RPC defines the bidirectional streaming call. In this service, the client side streams `SystemPropertyName` messages to the server side. The server returns a stream of [hotspot=SystemProperty file=0]`SystemProperty` messages.
@@ -230,7 +230,7 @@ Start by implementing the first service call, the unary call. In this service ca
 ----
 
 SystemService.java
-[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getServerStreamingProperties,getPropertiesClient,getPropertiesBidirect"]
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getServerStreamingProperties,getClientStreamingProperties,getPropertiesBidirect"]
 ----
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
@@ -315,7 +315,7 @@ Update the `SystemService` class to implement the server streaming rpc call.
 `system/src/main/java/io/openliberty/guides/system/SystemService.java`
 ----
 SystemService.java
-[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getPropertiesClient,getPropertiesBidirect"]
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getClientStreamingProperties,getPropertiesBidirect"]
 ----
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
@@ -374,7 +374,7 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=getPropertiesClient file=0]`getPropertiesClient()` method implements client streaming RPC call. This method returns an instance of the [hotspot=streamObserverClient file=0]`StreamObserver` interface. Its [hotspot=receivingProperties file=0]`onNext()` method receives the messages from the client individually and stores the property values into the [hotspot=clientStreamingMap file=0]`properties` map placeholder. When the streaming is completed, the `properties` placeholder is sent back to the client by the [hotspot=clientStreamingCompleted file=0]`onCompleted()` method.
+The [hotspot=getClientStreamingProperties file=0]`getClientStreamingProperties()` method implements client streaming RPC call. This method returns an instance of the [hotspot=streamObserverClient file=0]`StreamObserver` interface. Its [hotspot=receivingProperties file=0]`onNext()` method receives the messages from the client individually and stores the property values into the [hotspot=clientStreamingMap file=0]`properties` map placeholder. When the streaming is completed, the `properties` placeholder is sent back to the client by the [hotspot=clientStreamingCompleted file=0]`onCompleted()` method.
 
 
 // Replace PropertiesResource
@@ -392,7 +392,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-After a connection is created between the two services, the [hotspot=getPropertiesClient file=1]`client.getPropertiesClient()` method is called to get a `stream` and collect the properties with property names that are prefixed by [hotspot=collectUserProperties file=1]`user.`. The method creates a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually and sends the message to the server by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, the [hotspot=clientCompleted1 file=1]`onCompleted()` method is called to finish the streaming. Again, a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+After a connection is created between the two services, the [hotspot=getClientStreamingProperties file=1]`client.getClientStreamingProperties()` method is called to get a `stream` and collect the properties with property names that are prefixed by [hotspot=collectUserProperties file=1]`user.`. The method creates a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually and sends the message to the server by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, the [hotspot=clientCompleted1 file=1]`onCompleted()` method is called to finish the streaming. Again, a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` instance synchronizes the streaming flow.
 
 // static guide instruction
 ifndef::cloud-hosted[]

@@ -98,9 +98,9 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     }
     // end::getServerStreamingProperties[]
 
-    // tag::getPropertiesClient[]
+    // tag::getClientStreamingProperties[]
     @Override
-    public StreamObserver<SystemPropertyName> getPropertiesClient(
+    public StreamObserver<SystemPropertyName> getClientStreamingProperties(
         StreamObserver<SystemProperties> observer) {
 
         // tag::streamObserverClient[]
@@ -139,7 +139,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
         };
         // end::streamObserverClient[]
     }
-    // end::getPropertiesClient[]
+    // end::getClientStreamingProperties[]
 
     // tag::getPropertiesBidirect[]
     @Override

@@ -160,8 +160,8 @@ public class PropertiesResource {
         // end::countDownLatch4[]
         Properties properties = new Properties();
 
-        // tag::getPropertiesClient[]
-        StreamObserver<SystemPropertyName> stream = client.getPropertiesClient(
+        // tag::getClientStreamingProperties[]
+        StreamObserver<SystemPropertyName> stream = client.getClientStreamingProperties(
             new StreamObserver<SystemProperties>() {
 
                 @Override
@@ -184,7 +184,7 @@ public class PropertiesResource {
                     // end::countDownLatch5[]
                 }
             });
-        // end::getPropertiesClient[]
+        // end::getClientStreamingProperties[]
 
         // collect the property names starting with user.
         // tag::collectUserProperties[]
