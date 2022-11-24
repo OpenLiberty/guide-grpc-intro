@@ -17,6 +17,7 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -45,6 +46,8 @@ import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceStub;
 @ApplicationScoped
 @Path("/properties")
 public class PropertiesResource {
+
+    private static Logger logger = Logger.getLogger(PropertiesResource.class.getName());
 
     @Inject
     @ConfigProperty(name = "system.hostname", defaultValue = "localhost")
@@ -103,7 +106,7 @@ public class PropertiesResource {
             // tag::onNext1[]
             @Override
             public void onNext(SystemProperty value) {
-                System.out.println("server streaming received: "
+                logger.info("server streaming received: "
                    + value.getPropertyName() + "=" + value.getPropertyValue());
                 properties.put(value.getPropertyName(), value.getPropertyValue());
             }
@@ -116,7 +119,7 @@ public class PropertiesResource {
 
             @Override
             public void onCompleted() {
-                System.out.println("server streaming completed");
+                logger.info("server streaming completed");
                 // tag::countDownLatch2[]
                 countDown.countDown();
                 // end::countDownLatch2[]
@@ -163,7 +166,7 @@ public class PropertiesResource {
 
                 @Override
                 public void onNext(SystemProperties value) {
-                    System.out.println("client streaming received a map that has "
+                    logger.info("client streaming received a map that has "
                         + value.getPropertiesCount() + " properties");
                     properties.putAll(value.getPropertiesMap());
                 }
@@ -175,7 +178,7 @@ public class PropertiesResource {
 
                 @Override
                 public void onCompleted() {
-                    System.out.println("client streaming completed");
+                    logger.info("client streaming completed");
                     // tag::countDownLatch5[]
                     countDown.countDown();
                     // end::countDownLatch5[]
@@ -239,7 +242,7 @@ public class PropertiesResource {
                     // tag::onNext2[]
                     @Override
                     public void onNext(SystemProperty value) {
-                        System.out.println("bidirectional streaming received: "
+                        logger.info("bidirectional streaming received: "
                             + value.getPropertyName() + "=" + value.getPropertyValue());
                         properties.put(value.getPropertyName(),
                                        value.getPropertyValue());
@@ -253,7 +256,7 @@ public class PropertiesResource {
 
                     @Override
                     public void onCompleted() {
-                        System.out.println("bidirectional streaming completed");
+                        logger.info("bidirectional streaming completed");
                         // tag::countDownLatch8[]
                         countDown.countDown();
                         // end::countDownLatch8[]

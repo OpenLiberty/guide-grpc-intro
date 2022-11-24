@@ -18,4 +18,6 @@
     <applicationManager autoExpand="true"/>
 
     <webApplication contextRoot="/" location="guide-grpc-intro-query.war"/>
+
+    <logging consoleLogLevel="INFO"/>
 </server>

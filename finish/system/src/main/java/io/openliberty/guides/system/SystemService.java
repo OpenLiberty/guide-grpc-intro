@@ -14,6 +14,7 @@ package io.openliberty.guides.system;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import io.grpc.stub.StreamObserver;
 // tag::importGrpcClasses[]
@@ -28,6 +29,8 @@ import io.openliberty.guides.systemproto.SystemServiceGrpc;
 // tag::extends[]
 public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
 // end::extends[]
+
+    private static Logger logger = Logger.getLogger(SystemClient.class.getName());
 
     public SystemService() {
     }
@@ -86,12 +89,12 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                   // tag::serverNext1[]
                   observer.onNext(value);
                   // end::serverNext1[]
-                  System.out.println("server streaming sent property: " + name);
+                  logger.info("server streaming sent property: " + name);
                });
         // tag::serverComplete[]
         observer.onCompleted();
         // end::serverComplete[]
-        System.out.println("server streaming was completed!");
+        logger.info("server streaming was completed!");
     }
     // end::getPropertiesServer[]
 
@@ -112,7 +115,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             public void onNext(SystemPropertyName spn) {
                 String pName = spn.getPropertyName();
                 String pValue = System.getProperty(pName);
-                System.out.println("client streaming received property: " + pName);
+                logger.info("client streaming received property: " + pName);
                 properties.put(pName, pValue);
             }
             // end::receivingProperties[]
@@ -130,7 +133,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
                                              .build();
                 observer.onNext(value);
                 observer.onCompleted();
-                System.out.println("client streaming was completed!");
+                logger.info("client streaming was completed!");
             }
             // end::clientStreamingCompleted[]
         };
@@ -150,7 +153,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             public void onNext(SystemPropertyName spn) {
                 String pName = spn.getPropertyName();
                 String pValue = System.getProperty(pName);
-                System.out.println("bi-directional streaming received: " + pName);
+                logger.info("bi-directional streaming received: " + pName);
                 // tag::systemPropertyMessage[]
                 SystemProperty value = SystemProperty.newBuilder()
                                            .setPropertyName(pName)
@@ -172,7 +175,7 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
             @Override
             public void onCompleted() {
                 observer.onCompleted();
-                System.out.println("bi-directional streaming was completed!");
+                logger.info("bi-directional streaming was completed!");
             }
             // end::bidirectionalCompleted[]
         };
