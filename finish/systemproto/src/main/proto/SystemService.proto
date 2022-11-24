@@ -19,21 +19,21 @@ option java_multiple_files = true;
 
 // tag::SystemService[]
 service SystemService {
-    // tag::getProperty[]
-    rpc getProperty (SystemPropertyName) returns (SystemPropertyValue) {}
-    // end::getProperty[]
+  // tag::getProperty[]
+  rpc getProperty (SystemPropertyName) returns (SystemPropertyValue) {}
+  // end::getProperty[]
 
-    // tag::getServerStreamingProperties[]
-    rpc getServerStreamingProperties (SystemPropertyPrefix) returns (stream SystemProperty) {}
-    // end::getServerStreamingProperties[]
+  // tag::getServerStreamingProperties[]
+  rpc getServerStreamingProperties (SystemPropertyPrefix) returns (stream SystemProperty) {}
+  // end::getServerStreamingProperties[]
 
-    // tag::getClientStreamingProperties[]
-    rpc getClientStreamingProperties (stream SystemPropertyName) returns (SystemProperties) {}
-    // end::getClientStreamingProperties[]
+  // tag::getClientStreamingProperties[]
+  rpc getClientStreamingProperties (stream SystemPropertyName) returns (SystemProperties) {}
+  // end::getClientStreamingProperties[]
 
-    // tag::getBidirectProperties[]
-    rpc getBidirectProperties (stream SystemPropertyName) returns (stream SystemProperty) {}
-    // end::getBidirectProperties[]
+  // tag::getBidirectProperties[]
+  rpc getBidirectProperties (stream SystemPropertyName) returns (stream SystemProperty) {}
+  // end::getBidirectProperties[]
 }
 // end::SystemService[]
 
