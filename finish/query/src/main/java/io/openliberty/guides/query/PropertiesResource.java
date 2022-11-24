@@ -101,7 +101,8 @@ public class PropertiesResource {
         SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
                                          .setPropertyPrefix("os.").build();
         // tag::getServerStreamingProperties[]
-        client.getServerStreamingProperties(request, new StreamObserver<SystemProperty>() {
+        client.getServerStreamingProperties(
+            request, new StreamObserver<SystemProperty>() {
 
             // tag::onNext1[]
             @Override
