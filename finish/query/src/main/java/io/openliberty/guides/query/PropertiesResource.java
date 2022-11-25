@@ -17,6 +17,7 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -45,6 +46,8 @@ import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceStub;
 @ApplicationScoped
 @Path("/properties")
 public class PropertiesResource {
+
+    private static Logger logger = Logger.getLogger(PropertiesResource.class.getName());
 
     @Inject
     @ConfigProperty(name = "system.hostname", defaultValue = "localhost")
@@ -97,13 +100,14 @@ public class PropertiesResource {
         // end::countDownLatch1[]
         SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
                                          .setPropertyPrefix("os.").build();
-        // tag::getPropertiesServer[]
-        client.getPropertiesServer(request, new StreamObserver<SystemProperty>() {
+        // tag::getServerStreamingProperties[]
+        client.getServerStreamingProperties(
+            request, new StreamObserver<SystemProperty>() {
 
             // tag::onNext1[]
             @Override
             public void onNext(SystemProperty value) {
-                System.out.println("server streaming received: "
+                logger.info("server streaming received: "
                    + value.getPropertyName() + "=" + value.getPropertyValue());
                 properties.put(value.getPropertyName(), value.getPropertyValue());
             }
@@ -116,13 +120,13 @@ public class PropertiesResource {
 
             @Override
             public void onCompleted() {
-                System.out.println("server streaming completed");
+                logger.info("server streaming completed");
                 // tag::countDownLatch2[]
                 countDown.countDown();
                 // end::countDownLatch2[]
             }
         });
-        // end::getPropertiesServer[]
+        // end::getServerStreamingProperties[]
 
 
         // wait until completed
@@ -157,13 +161,13 @@ public class PropertiesResource {
         // end::countDownLatch4[]
         Properties properties = new Properties();
 
-        // tag::getPropertiesClient[]
-        StreamObserver<SystemPropertyName> stream = client.getPropertiesClient(
+        // tag::getClientStreamingProperties[]
+        StreamObserver<SystemPropertyName> stream = client.getClientStreamingProperties(
             new StreamObserver<SystemProperties>() {
 
                 @Override
                 public void onNext(SystemProperties value) {
-                    System.out.println("client streaming received a map that has "
+                    logger.info("client streaming received a map that has "
                         + value.getPropertiesCount() + " properties");
                     properties.putAll(value.getPropertiesMap());
                 }
@@ -175,13 +179,13 @@ public class PropertiesResource {
 
                 @Override
                 public void onCompleted() {
-                    System.out.println("client streaming completed");
+                    logger.info("client streaming completed");
                     // tag::countDownLatch5[]
                     countDown.countDown();
                     // end::countDownLatch5[]
                 }
             });
-        // end::getPropertiesClient[]
+        // end::getClientStreamingProperties[]
 
         // collect the property names starting with user.
         // tag::collectUserProperties[]
@@ -232,14 +236,14 @@ public class PropertiesResource {
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch7[]
 
-        // tag::getPropertiesBidirect[]
-        StreamObserver<SystemPropertyName> stream = client.getPropertiesBidirect(
+        // tag::getBidirectProperties[]
+        StreamObserver<SystemPropertyName> stream = client.getBidirectProperties(
                 new StreamObserver<SystemProperty>() {
 
                     // tag::onNext2[]
                     @Override
                     public void onNext(SystemProperty value) {
-                        System.out.println("bidirectional streaming received: "
+                        logger.info("bidirectional streaming received: "
                             + value.getPropertyName() + "=" + value.getPropertyValue());
                         properties.put(value.getPropertyName(),
                                        value.getPropertyValue());
@@ -253,13 +257,13 @@ public class PropertiesResource {
 
                     @Override
                     public void onCompleted() {
-                        System.out.println("bidirectional streaming completed");
+                        logger.info("bidirectional streaming completed");
                         // tag::countDownLatch8[]
                         countDown.countDown();
                         // end::countDownLatch8[]
                     }
                 });
-        // end::getPropertiesBidirect[]
+        // end::getBidirectProperties[]
 
         // collect the property names starting with java
         // tag::collectJavaProperties[]
