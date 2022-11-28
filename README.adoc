@@ -478,7 +478,7 @@ QueryIT.java
 ----
 include::finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java[]
 ----
-Each test case tests one type of the gRPC calls that have been implemented.
+Each test case tests one type of the gRPC calls that you implemented.
 
 The [hotspot=getPropertiesString file=0]`testGetPropertiesString()` tests the `/query/properties/os.name` endpoint and confirms that a response is received. 
 
