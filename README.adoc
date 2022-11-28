@@ -49,7 +49,7 @@ The `query` service implements four RESTful APIs by using four different gRPC st
 * Client streaming RPC: The client sends a stream of messages and the server responds with a single message.
 * Bidirectional RPC: Both client and server send a stream of messages. The client and server can read and write messages in any order.
 
-image::architecture.png[Application architecture of the gRPC application covered in guide where a system service acts as the gRPC server and a query service acts a client that makes different gRPC streaming calls, align="center"]
+image::architecture.png[Application architecture of the gRPC application covered in guide, where a system service acts as the gRPC server and a query service acts a client that makes different gRPC streaming calls, align="center"]
 
 // ===============================================================================================
 // Getting Started
