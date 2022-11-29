@@ -65,7 +65,7 @@ public class QueryIT {
                      "Incorrect response code from " + target.getUri().getPath());
         JsonObject obj = response.readEntity(JsonObject.class);
         assertFalse(obj.getString("os.name").isEmpty(),
-        		    "os.name should not be empty.");
+                    "os.name should not be empty.");
         response.close();
     }
     // end::getOSProperties[]

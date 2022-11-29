@@ -80,7 +80,7 @@ systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/sy
 SystemServiceGrpc.java
 [source, java, linenums, role='code_column', file=2]
 ----
-include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java[]
+include::assets/SystemServiceGrpc.txt[]
 ----
 
 Replace the [hotspot=generated file=0]`@javax.annotation.Generated` annotation by the `@jakarta.annotation.Generated` annotation.
@@ -213,7 +213,7 @@ systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/sy
 SystemServiceGrpc.java
 [source, java, linenums, role='code_column', file=2]
 ----
-include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java[]
+include::assets/SystemServiceGrpc.txt[]
 ----
 
 Replace the [hotspot=generated file=2]`@javax.annotation.Generated` annotation by the `@jakarta.annotation.Generated` annotation.
