@@ -23,7 +23,6 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,6 @@ public class QueryIT {
     @BeforeAll
     private static void setup() {
         client = ClientBuilder.newClient();
-        client.register(JsrJsonpProvider.class);
     }
 
     @AfterAll
