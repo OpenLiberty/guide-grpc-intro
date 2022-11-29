@@ -69,16 +69,17 @@ cd finish
 mvn -pl systemproto protobuf:compile protobuf:compile-custom
 ----
 
+Update the generated `SystemServiceGrpc` class in the `target` directory.
+
 [role="code_command hotspot file=0", subs="quotes"]
 ----
-#Update the generated `SystemServiceGrpc` class in the `target` directory.#
 `systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java`
 ----
 
 SystemServiceGrpc.java
 [source, yaml, linenums, role='code_column', file=1]
 ----
-include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java]
+include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java[]
 ----
 
 Replace [hotspot=generated file=0]`@javax.annotation.Generated` annotation to `@jakarta.annotation.Generated` annotation.
@@ -204,14 +205,13 @@ Because the application in this guide uses JakartaEE 9, you need to update the `
 
 [role="code_command hotspot file=1", subs="quotes"]
 ----
-#Update the generated `SystemServiceGrpc` class in the `target` directory.#
 `systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java`
 ----
 
 SystemServiceGrpc.java
 [source, yaml, linenums, role='code_column', file=1]
 ----
-include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java]
+include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java[]
 ----
 
 Replace [hotspot=generated file=1]`@javax.annotation.Generated` annotation to `@jakarta.annotation.Generated` annotation.
