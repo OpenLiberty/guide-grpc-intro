@@ -66,7 +66,8 @@ To try out the application, first go to the `finish` directory and run the follo
 [role='command']
 ----
 cd finish
-mvn -pl systemproto protobuf:compile protobuf:compile-custom
+mvn -pl systemproto protobuf:compile
+mvn -pl systemproto protobuf:compile-custom
 ----
 
 Update the generated `SystemServiceGrpc` class in the `target` directory.
@@ -77,12 +78,12 @@ Update the generated `SystemServiceGrpc` class in the `target` directory.
 ----
 
 SystemServiceGrpc.java
-[source, yaml, linenums, role='code_column', file=1]
+[source, java, linenums, role='code_column', file=1]
 ----
 include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java[]
 ----
 
-Replace [hotspot=generated file=0]`@javax.annotation.Generated` annotation to `@jakarta.annotation.Generated` annotation.
+Replace the [hotspot=generated file=0]`@javax.annotation.Generated` annotation by the `@jakarta.annotation.Generated` annotation.
 
 Run the following command to compile the generated gRPC classes and build the jar file.
 [role='command']
@@ -198,23 +199,24 @@ To compile the `.proto` file, the `pom.xml` Maven configuration file needs the [
 Run the following commands to generate the gRPC classes.
 [role='command']
 ----
-mvn -pl systemproto protobuf:compile protobuf:compile-custom
+mvn -pl systemproto protobuf:compile
+mvn -pl systemproto protobuf:compile-custom
 ----
 
 Because the application in this guide uses JakartaEE 9, you need to update the `SystemServiceGrpc` generated class to use the `@jakarta.annotation.Generated` annotation.
 
-[role="code_command hotspot file=1", subs="quotes"]
+[role="command"]
 ----
 `systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java`
 ----
 
 SystemServiceGrpc.java
-[source, yaml, linenums, role='code_column', file=1]
+[source, java, linenums, role='code_column', file=1]
 ----
 include::finish/systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java[]
 ----
 
-Replace [hotspot=generated file=1]`@javax.annotation.Generated` annotation to `@jakarta.annotation.Generated` annotation.
+Replace the [hotspot=generated file=1]`@javax.annotation.Generated` annotation by the `@jakarta.annotation.Generated` annotation.
 
 Run the following command to compile the generated gRPC classes and build the jar file.
 [role='command']
