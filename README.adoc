@@ -175,11 +175,19 @@ The [hotspot=getBidirectProperties file=0]`getBidirectProperties` RPC defines th
 
 To compile the `.proto` file, the `pom.xml` Maven configuration file needs the [hotspot=grpc file=1]`grpc-protobuf` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies, and the [hotspot=protobufmavenplugin file=1]`protobuf-maven-plugin` plugin. To install the correct version of the Protobuf compiler automatically, the [hotspot=osmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
 
-Run the following command to generate the gRPC classes.
-// run mvn install to generate abstract classes
+Run the following commands to generate the gRPC classes.
 [role='command']
 ----
-mvn -pl systemproto install
+mvn -pl systemproto protobuf:compile
+mvn -pl systemproto protobuf:compile-custom
+----
+
+Because the application in this guide uses JakartaEE 9, you need to update the `systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java` generated class by replacing the `@javax.annotation.Generated` annotation to `@jakarta.annotation.Generated` annotation.
+
+Run the following command to compile the generated gRPC classes and build the jar file.
+[role='command']
+----
+mvn -pl systemproto compile package install
 ----
 
 // ===============================================================================================
