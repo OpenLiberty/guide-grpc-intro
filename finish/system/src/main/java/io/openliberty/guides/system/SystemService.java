@@ -141,9 +141,9 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
     }
     // end::getClientStreamingProperties[]
 
-    // tag::getBidirectProperties[]
+    // tag::getBidirectionalProperties[]
     @Override
-    public StreamObserver<SystemPropertyName> getBidirectProperties(
+    public StreamObserver<SystemPropertyName> getBidirectionalProperties(
         StreamObserver<SystemProperty> observer) {
 
         // tag::streamObserverBidirectional[]
@@ -181,5 +181,5 @@ public class SystemService extends SystemServiceGrpc.SystemServiceImplBase {
         };
         // end::streamObserverBidirectional[]
     }
-    // end::getBidirectProperties[]
+    // end::getBidirectionalProperties[]
 }
