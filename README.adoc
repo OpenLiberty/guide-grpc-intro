@@ -257,7 +257,7 @@ include::finish/system/src/main/liberty/config/server.xml[]
 
 Add the [hotspot=grpc file=1]`grpc` feature to the Liberty server configuration file. This feature enables applications running on Liberty to provide gRPC services. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about configuration for the `grpc` feature, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
 
-Next, implement the correspoding REST endpoint in the `query` service.
+Next, implement the corresponding REST endpoint in the `query` service.
 
 // Create PropertiesResource
 [role="code_command hotspot file=2", subs="quotes"]
