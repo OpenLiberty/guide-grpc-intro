@@ -9,7 +9,7 @@
 :projectid: grpc-intro
 :page-layout: guide-multipane
 :page-duration: 30 minutes
-:page-releasedate: 2022-12-07
+:page-releasedate: 2022-12-08
 :page-description: Learn how to create gRPC server and client services using Java with Open Liberty.
 :page-related-guides: ['microprofile-rest-client-async']
 :page-permalink: /guides/{projectid}
