@@ -5,7 +5,8 @@ name: Trigger Conversion
 on:
   push:
     branches:
-      - 'draft'
+      - 'prod'
+      - 'staging'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,5 +27,5 @@ jobs:
           workflow: DraftConverterV3
           repo: OpenLiberty/cloud-hosted-guides
           token: ${{ secrets.GUIDECONVERSIONTOOL_PASSWORD }}
-          inputs: '{ "branch": "refs/heads/draft", "guide_name": "${{ github.event.repository.name }}", "cloud_hosted_name": "cloud-hosted-guide-grpc-intro" }'
+          inputs: '{ "branch": "${{ github.ref }}", "guide_name": "${{ github.event.repository.name }}", "cloud_hosted_name": "cloud-hosted-guide-grpc-intro" }'
           ref: "refs/heads/prod"
