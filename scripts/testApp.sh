@@ -13,15 +13,15 @@ mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl query -q clean package liberty:create liberty:install-feature liberty:deploy
 
-mvn -ntp -pl system -ntp liberty:start
-mvn -ntp -pl query -ntp liberty:start
+mvn -ntp -pl system liberty:start
+mvn -ntp -pl query liberty:start
 
 mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
-    -pl query -ntp failsafe:integration-test
+    -pl query failsafe:integration-test
 
-mvn -ntp -pl query -ntp failsafe:verify
+mvn -ntp -pl query failsafe:verify
 
-mvn -ntp -pl system -ntp liberty:stop
-mvn -ntp -pl query -ntp liberty:stop
+mvn -ntp -pl system liberty:stop
+mvn -ntp -pl query liberty:stop
