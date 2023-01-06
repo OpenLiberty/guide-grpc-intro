@@ -86,8 +86,12 @@ public class SystemIT {
     @Test
     public void testGetServerStreamingProperties() throws Exception {
 
-        SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder().setPropertyPrefix("os.").build();
-        Iterator<SystemProperty> response = blockingStub.getServerStreamingProperties(request);
+        SystemPropertyPrefix request = SystemPropertyPrefix
+                                        .newBuilder()
+                                        .setPropertyPrefix("os.")
+                                        .build();
+        Iterator<SystemProperty> response = 
+            blockingStub.getServerStreamingProperties(request);
 
         while(response.hasNext()) {
             SystemProperty systemProperty = response.next();
@@ -102,9 +106,12 @@ public class SystemIT {
         @SuppressWarnings("unchecked")
         StreamObserver<SystemProperties> responseObserver =
             (StreamObserver<SystemProperties>) mock(StreamObserver.class);
-        SystemServiceGrpc.SystemServiceStub stub = SystemServiceGrpc.newStub(inProcessChannel);
-        ArgumentCaptor<SystemProperties> systemPropertiesCaptor = ArgumentCaptor.forClass(SystemProperties.class);
-        StreamObserver<SystemPropertyName> requestObserver = stub.getClientStreamingProperties(responseObserver);
+        SystemServiceGrpc.SystemServiceStub stub = 
+            SystemServiceGrpc.newStub(inProcessChannel);
+        ArgumentCaptor<SystemProperties> systemPropertiesCaptor = 
+            ArgumentCaptor.forClass(SystemProperties.class);
+        StreamObserver<SystemPropertyName> requestObserver = 
+            stub.getClientStreamingProperties(responseObserver);
 
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith("user."))
@@ -133,8 +140,10 @@ public class SystemIT {
         @SuppressWarnings("unchecked")
         StreamObserver<SystemProperty> responseObserver =
             (StreamObserver<SystemProperty>) mock(StreamObserver.class);
-        SystemServiceGrpc.SystemServiceStub stub = SystemServiceGrpc.newStub(inProcessChannel);
-        StreamObserver<SystemPropertyName> requestObserver = stub.getBidirectionalProperties(responseObserver);
+        SystemServiceGrpc.SystemServiceStub stub = 
+            SystemServiceGrpc.newStub(inProcessChannel);
+        StreamObserver<SystemPropertyName> requestObserver = 
+            stub.getBidirectionalProperties(responseObserver);
         verify(responseObserver, never()).onNext(any(SystemProperty.class));
 
         List<String> keys = System.getProperties().stringPropertyNames().stream()
@@ -142,12 +151,18 @@ public class SystemIT {
                                   .collect(Collectors.toList());
 
         for (int i = 0; i < keys.size(); i++) {
-            SystemPropertyName spn = SystemPropertyName.newBuilder().setPropertyName(keys.get(i)).build();
+            SystemPropertyName spn = SystemPropertyName
+                                        .newBuilder()
+                                        .setPropertyName(keys.get(i))
+                                        .build();
             requestObserver.onNext(spn);
-            ArgumentCaptor<SystemProperty> systemPropertyCaptor = ArgumentCaptor.forClass(SystemProperty.class);
-            verify(responseObserver, timeout(100).times(++timesOnNext)).onNext(systemPropertyCaptor.capture());
+            ArgumentCaptor<SystemProperty> systemPropertyCaptor = 
+                ArgumentCaptor.forClass(SystemProperty.class);
+            verify(responseObserver, timeout(100).times(++timesOnNext))
+                .onNext(systemPropertyCaptor.capture());
             SystemProperty systemProperty = systemPropertyCaptor.getValue();
-            assertEquals(System.getProperty(systemProperty.getPropertyName()), systemProperty.getPropertyValue());
+            assertEquals(System.getProperty(systemProperty.getPropertyName()), 
+                         systemProperty.getPropertyValue());
         }
 
         requestObserver.onCompleted();
