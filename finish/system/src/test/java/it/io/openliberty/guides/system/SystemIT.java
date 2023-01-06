@@ -90,12 +90,12 @@ public class SystemIT {
                                         .newBuilder()
                                         .setPropertyPrefix("os.")
                                         .build();
-        Iterator<SystemProperty> response = 
+        Iterator<SystemProperty> response =
             blockingStub.getServerStreamingProperties(request);
 
-        while(response.hasNext()) {
+        while (response.hasNext()) {
             SystemProperty systemProperty = response.next();
-            assertEquals(System.getProperty(systemProperty.getPropertyName()), 
+            assertEquals(System.getProperty(systemProperty.getPropertyName()),
                          systemProperty.getPropertyValue());
         }
     }
@@ -106,11 +106,11 @@ public class SystemIT {
         @SuppressWarnings("unchecked")
         StreamObserver<SystemProperties> responseObserver =
             (StreamObserver<SystemProperties>) mock(StreamObserver.class);
-        SystemServiceGrpc.SystemServiceStub stub = 
+        SystemServiceGrpc.SystemServiceStub stub =
             SystemServiceGrpc.newStub(inProcessChannel);
-        ArgumentCaptor<SystemProperties> systemPropertiesCaptor = 
+        ArgumentCaptor<SystemProperties> systemPropertiesCaptor =
             ArgumentCaptor.forClass(SystemProperties.class);
-        StreamObserver<SystemPropertyName> requestObserver = 
+        StreamObserver<SystemPropertyName> requestObserver =
             stub.getClientStreamingProperties(responseObserver);
 
         List<String> keys = System.getProperties().stringPropertyNames().stream()
@@ -125,7 +125,7 @@ public class SystemIT {
 
         SystemProperties systemProperties = systemPropertiesCaptor.getValue();
         systemProperties.getPropertiesMap()
-               .forEach((propertyName, propertyValue) -> 
+               .forEach((propertyName, propertyValue) ->
                assertEquals(System.getProperty(propertyName), propertyValue));
 
         verify(responseObserver, timeout(100)).onCompleted();
@@ -140,9 +140,9 @@ public class SystemIT {
         @SuppressWarnings("unchecked")
         StreamObserver<SystemProperty> responseObserver =
             (StreamObserver<SystemProperty>) mock(StreamObserver.class);
-        SystemServiceGrpc.SystemServiceStub stub = 
+        SystemServiceGrpc.SystemServiceStub stub =
             SystemServiceGrpc.newStub(inProcessChannel);
-        StreamObserver<SystemPropertyName> requestObserver = 
+        StreamObserver<SystemPropertyName> requestObserver =
             stub.getBidirectionalProperties(responseObserver);
         verify(responseObserver, never()).onNext(any(SystemProperty.class));
 
@@ -156,12 +156,12 @@ public class SystemIT {
                                         .setPropertyName(keys.get(i))
                                         .build();
             requestObserver.onNext(spn);
-            ArgumentCaptor<SystemProperty> systemPropertyCaptor = 
+            ArgumentCaptor<SystemProperty> systemPropertyCaptor =
                 ArgumentCaptor.forClass(SystemProperty.class);
             verify(responseObserver, timeout(100).times(++timesOnNext))
                 .onNext(systemPropertyCaptor.capture());
             SystemProperty systemProperty = systemPropertyCaptor.getValue();
-            assertEquals(System.getProperty(systemProperty.getPropertyName()), 
+            assertEquals(System.getProperty(systemProperty.getPropertyName()),
                          systemProperty.getPropertyValue());
         }
 
