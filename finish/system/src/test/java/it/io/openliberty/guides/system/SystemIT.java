@@ -1,3 +1,15 @@
+// tag::copyright[]
+/*******************************************************************************
+ * Copyright (c) 2023 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - Initial implementation
+ *******************************************************************************/
+// end::copyright[]
 package it.io.openliberty.guides.system;
 
 import java.util.Iterator;
@@ -48,19 +60,24 @@ public class SystemIT {
         String serverName = InProcessServerBuilder.generateName();
 
         grpcCleanup.register(InProcessServerBuilder
-            .forName(serverName).directExecutor().addService(new SystemService()).build().start());
+            .forName(serverName).directExecutor()
+            .addService(new SystemService()).build().start());
 
         blockingStub = SystemServiceGrpc.newBlockingStub(
-            grpcCleanup.register(InProcessChannelBuilder.forName(serverName).directExecutor().build()));
+            grpcCleanup.register(InProcessChannelBuilder
+                .forName(serverName).directExecutor().build()));
 
-        inProcessChannel = grpcCleanup.register(
-            InProcessChannelBuilder.forName(serverName).directExecutor().build());
+        inProcessChannel = grpcCleanup.register(InProcessChannelBuilder
+            .forName(serverName).directExecutor().build());
     }
 
     @Test
     public void testGetProperty() throws Exception {
 
-        SystemPropertyName request = SystemPropertyName.newBuilder().setPropertyName("os.name").build();
+        SystemPropertyName request = SystemPropertyName
+                                        .newBuilder()
+                                        .setPropertyName("os.name")
+                                        .build();
         SystemPropertyValue response = blockingStub.getProperty(request);
 
         assertEquals(System.getProperty("os.name"), response.getPropertyValue());
