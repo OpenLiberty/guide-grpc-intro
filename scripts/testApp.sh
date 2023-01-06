@@ -20,6 +20,11 @@ mvn -pl query liberty:start
 mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
+    -pl system failsafe:integration-test
+
+mvn -Dhttp.keepAlive=false \
+    -Dmaven.wagon.http.pool=false \
+    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl query failsafe:integration-test
 
 mvn -pl query failsafe:verify
