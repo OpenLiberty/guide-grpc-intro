@@ -169,5 +169,5 @@ public class SystemIT {
         verify(responseObserver, timeout(100)).onCompleted();
         verify(responseObserver, never()).onError(any(Throwable.class));
     }
-    
+
 }
