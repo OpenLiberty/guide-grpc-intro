@@ -498,24 +498,6 @@ The [hotspot=testGetClientStreamingProperties file=0]`testGetClientStreamingProp
 
 The [hotspot=testGetBidirectionalProperties file=0]`testGetBidirectionalProperties()` tests the [hotspot=getBidirectionalProperties file=1]`getBidirectionalProperties()` bidirectional streaming RPC call and confirms that a response is received. 
 
-#Running the tests#
-
-Because you started Open Liberty in dev mode, you can run the tests by pressing the `enter/return` key from the command-line session where you started the system service.
-
-[source, role="no_copy"]
-----
--------------------------------------------------------
- T E S T S
--------------------------------------------------------
-Running it.io.openliberty.guides.system.SystemIT
-...
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.527 s - in it.io.openliberty.guides.system.SystemIT
-
-Results:
-
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
-----
-
 === Creating tests for the query service
 
 // Create QueryIT.java
@@ -540,9 +522,31 @@ The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `/quer
 
 The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `/query/properties/java` endpoint and confirms that a response is received. 
 
-#Running the tests#
+*Running the tests*
 
-Because you started Open Liberty in dev mode, you can run the tests by pressing the `enter/return` key from the command-line session where you started the query service.
+Because you started Open Liberty in dev mode, you can run the tests by pressing the `enter/return` key from the command-line session where you started dev mode.
+
+Press the `enter/return` key to run the test from the command-line session where you started the system service.
+
+If the tests are successful, you'll see a similar output to the following example:
+
+[source, role="no_copy"]
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running it.io.openliberty.guides.system.SystemIT
+...
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.527 s - in it.io.openliberty.guides.system.SystemIT
+
+Results:
+
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+----
+
+Next, press the `enter/return` key to run the test from the command-line session where you started the query service.
+
+If the tests are successful, you'll see a similar output to the following example:
 
 [source, role="no_copy"]
 ----
