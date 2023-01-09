@@ -72,6 +72,7 @@ public class SystemIT {
     }
 
     @Test
+    // tag::testGetProperty[]
     public void testGetProperty() throws Exception {
 
         SystemPropertyName request = SystemPropertyName
@@ -82,8 +83,10 @@ public class SystemIT {
 
         assertEquals(System.getProperty("os.name"), response.getPropertyValue());
     }
+    // end::testGetProperty[]
 
     @Test
+    // tag::testGetServerStreamingProperties[]
     public void testGetServerStreamingProperties() throws Exception {
 
         SystemPropertyPrefix request = SystemPropertyPrefix
@@ -99,8 +102,10 @@ public class SystemIT {
                          systemProperty.getPropertyValue());
         }
     }
+    // end::testGetServerStreamingProperties[]
 
     @Test
+    // tag::testGetClientStreamingProperties[]
     public void testGetClientStreamingProperties() {
 
         @SuppressWarnings("unchecked")
@@ -131,8 +136,10 @@ public class SystemIT {
         verify(responseObserver, timeout(100)).onCompleted();
         verify(responseObserver, never()).onError(any(Throwable.class));
     }
+    // end::testGetClientStreamingProperties[]
 
     @Test
+    // tag::testGetBidirectionalProperties[]
     public void testGetBidirectionalProperties() {
 
         int timesOnNext = 0;
@@ -169,5 +176,6 @@ public class SystemIT {
         verify(responseObserver, timeout(100)).onCompleted();
         verify(responseObserver, never()).onError(any(Throwable.class));
     }
+    // end::testGetBidirectionalProperties[]
 
 }

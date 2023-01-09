@@ -478,7 +478,7 @@ QueryIT.java
 ----
 include::finish/query/src/test/java/it/io/openliberty/guides/query/QueryIT.java[]
 ----
-Each test case tests one type of the gRPC calls that you implemented.
+Each test case tests one type of the gRPC calls that you implemented via the RESTful APIs.
 
 The [hotspot=getPropertiesString file=0]`testGetPropertiesString()` tests the `/query/properties/os.name` endpoint and confirms that a response is received. 
 
@@ -487,6 +487,35 @@ The [hotspot=getOSProperties file=0]`testGetOSProperties()` tests the `/query/pr
 The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `/query/properties/user` endpoint and confirms that a response is received. 
 
 The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `/query/properties/java` endpoint and confirms that a response is received. 
+
+// Create SystemIT.java
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Create the `SystemIT` class.#
+`system/src/test/java/it/io/openliberty/guides/system/SystemIT.java`
+----
+
+SystemIT.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/system/src/test/java/it/io/openliberty/guides/system/SystemIT.java[]
+----
+
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
+
+Each test case tests one type of the gRPC servers that you implemented by making calls with the client through a real stub using the in-process channel.
+
+The [hotspot=testGetProperty file=1]`testGetProperty()` tests the [hotspot=getProperty file=2]`getProperty()` unary RPC call and confirms that a response is received. 
+
+The [hotspot=testGetServerStreamingProperties file=1]`testGetServerStreamingProperties()` tests the [hotspot=getServerStreamingProperties file=2]`getServerStreamingProperties()` server streaming RPC call and confirms that a response is received. 
+
+The [hotspot=testGetClientStreamingProperties file=1]`testGetClientStreamingProperties()` tests the [hotspot=getClientStreamingProperties file=2]`getClientStreamingProperties()` client streaming RPC call and confirms that a response is received. 
+
+The [hotspot=testGetBidirectionalProperties file=1]`testGetBidirectionalProperties()` tests the [hotspot=getBidirectionalProperties file=2]`getBidirectionalProperties()` bidirectional streaming RPC call and confirms that a response is received. 
 
 === Running the tests
 
