@@ -137,7 +137,7 @@ Navigate to the `start` directory to begin.
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
 ```bash
-cd /home/project/draft-guide-grpc-intro/start
+cd /home/project/guide-grpc-intro/start
 ```
 endif::[]
 
@@ -193,7 +193,7 @@ Navigate to the `start` directory.
 // cloud-hosted guide instructions:
 ifdef::cloud-hosted[]
 ```bash
-cd /home/project/draft-guide-grpc-intro/start
+cd /home/project/guide-grpc-intro/start
 ```
 endif::[]
 

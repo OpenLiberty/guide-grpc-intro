@@ -1,23 +1,22 @@
 #!/bin/bash
 set -euxo pipefail
 
-mvn -pl systemproto -q clean install
+mvn -ntp -pl systemproto -q clean install
 
-
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl system -q clean package liberty:create liberty:install-feature liberty:deploy
 
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl query -q clean package liberty:create liberty:install-feature liberty:deploy
 
-mvn -pl system liberty:start
-mvn -pl query liberty:start
+mvn -ntp -pl system liberty:start
+mvn -ntp -pl query liberty:start
 
-mvn -Dhttp.keepAlive=false \
+mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl system failsafe:integration-test
@@ -27,7 +26,7 @@ mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl query failsafe:integration-test
 
-mvn -pl query failsafe:verify
+mvn -ntp -pl query failsafe:verify
 
-mvn -pl system liberty:stop
-mvn -pl query liberty:stop
+mvn -ntp -pl system liberty:stop
+mvn -ntp -pl query liberty:stop
