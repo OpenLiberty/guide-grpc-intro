@@ -21,27 +21,29 @@
             <scope>provided</scope>
         </dependency>
         <!-- grpc compile dependencies; provided by Liberty at runtime -->
-        <!-- tag::grpc[] -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
             <version>1.51.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- end::grpc[] -->
-        <!-- tag::grpc-stub[] -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
             <version>1.51.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- end::grpc-stub[] -->
+        <!-- grpc compile dependencies for Jakarta EE 9+ -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-annotations-api</artifactId>
+            <version>9.0.70</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
-        <!-- tag::protobufmavenplugin[] -->
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
@@ -49,7 +51,6 @@
                 <version>1.7.0</version>
             </extension>
         </extensions>
-        <!-- end::protobufmavenplugin[] -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -65,24 +66,14 @@
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.51.0:exe:${os.detected.classifier}</pluginArtifact>
                 </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>build-helper-maven-plugin</artifactId>
-              <executions>
-                <execution>
-                  <phase>generate-sources</phase>
-                  <goals>
-                    <goal>add-source</goal>
-                  </goals>
-                  <configuration>
-                    <sources>
-                      <source>${project.build.directory}/generated-sources/protobuf/java</source>
-                      <source>${project.build.directory}/generated-sources/protobuf/grpc-java</source>
-                    </sources>
-                  </configuration>
-                </execution>
-              </executions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,4 +1,4 @@
-// Copyright (c) 2022 IBM Corporation and others.
+// Copyright (c) 2022, 2023 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 // https://creativecommons.org/licenses/by-nd/4.0/
@@ -66,28 +66,6 @@ To try out the application, first go to the `finish` directory and run the follo
 [role='command']
 ----
 cd finish
-mvn -pl systemproto protobuf:compile
-mvn -pl systemproto protobuf:compile-custom
-----
-
-Update the generated `SystemServiceGrpc` class in the `target` directory.
-
-[role="command"]
-----
-systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java
-----
-
-SystemServiceGrpc.java
-[source, java, linenums, role='code_column', file=2]
-----
-include::assets/SystemServiceGrpc.txt[]
-----
-
-Replace the [hotspot=generated file=0]`@javax.annotation.Generated` annotation by the `@jakarta.annotation.Generated` annotation.
-
-Run the following command to compile the generated gRPC classes and build the jar file.
-[role='command']
-----
 mvn -pl systemproto install
 ----
 
@@ -196,29 +174,8 @@ The [hotspot=getBidirectionalProperties file=0]`getBidirectionalProperties` RPC 
 
 To compile the `.proto` file, the `pom.xml` Maven configuration file needs the [hotspot=grpc file=1]`grpc-protobuf` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies, and the [hotspot=protobufmavenplugin file=1]`protobuf-maven-plugin` plugin. To install the correct version of the Protobuf compiler automatically, the [hotspot=osmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
 
-Run the following commands to generate the gRPC classes.
-[role='command']
-----
-mvn -pl systemproto protobuf:compile
-mvn -pl systemproto protobuf:compile-custom
-----
-
-Because the application in this guide uses JakartaEE 9, you need to update the `SystemServiceGrpc` generated class to use the `@jakarta.annotation.Generated` annotation.
-
-[role="command"]
-----
-systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java
-----
-
-SystemServiceGrpc.java
-[source, java, linenums, role='code_column', file=2]
-----
-include::assets/SystemServiceGrpc.txt[]
-----
-
-Replace the [hotspot=generated file=2]`@javax.annotation.Generated` annotation by the `@jakarta.annotation.Generated` annotation.
-
-Run the following command to compile the generated gRPC classes and build the jar file.
+Run the following command to generate the gRPC classes.
+// run mvn install to generate abstract classes
 [role='command']
 ----
 mvn -pl systemproto install
