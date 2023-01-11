@@ -1,4 +1,4 @@
-// Copyright (c) 2022, 2023 IBM Corporation and others.
+// Copyright (c) 2022 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 // https://creativecommons.org/licenses/by-nd/4.0/
@@ -63,6 +63,7 @@ The `finish` directory in the root of this guide contains the finished applicati
 
 To try out the application, first go to the `finish` directory and run the following Maven goal to generate all the gRPC abstract classes defined in the `.proto` file. 
 
+// generate gRPC classes
 [role='command']
 ----
 cd finish

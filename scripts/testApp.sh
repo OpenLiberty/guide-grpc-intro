@@ -1,13 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
-mvn -ntp -pl systemproto -q clean 
-mvn -ntp -pl systemproto -q protobuf:compile
-mvn -ntp -pl systemproto -q protobuf:compile-custom
-
-sed -i  "s;javax.;jakarta.;g" systemproto/target/generated-sources/protobuf/grpc-java/io/openliberty/guides/systemproto/SystemServiceGrpc.java
-
-mvn -ntp -pl systemproto compile package install
+mvn -ntp -pl systemproto -q clean install
 
 mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
