@@ -1,4 +1,4 @@
-// Copyright (c) 2022 IBM Corporation and others.
+// Copyright (c) 2022, 2023 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 // https://creativecommons.org/licenses/by-nd/4.0/
@@ -194,7 +194,7 @@ The [hotspot=getClientStreamingProperties file=0]`getClientStreamingProperties` 
 The [hotspot=getBidirectionalProperties file=0]`getBidirectionalProperties` RPC defines the bidirectional streaming call. In this service, the client service streams `SystemPropertyName` messages to the server service. The server service returns a stream of [hotspot=SystemProperty file=0]`SystemProperty` messages.
 
 
-To compile the `.proto` file, the `pom.xml` Maven configuration file needs the [hotspot=grpc file=1]`grpc-protobuf` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies, and the [hotspot=protobufmavenplugin file=1]`protobuf-maven-plugin` plugin. To install the correct version of the Protobuf compiler automatically, the [hotspot=osmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
+To compile the `.proto` file, the `pom.xml` Maven configuration file needs the [hotspot=grpc file=1]`grpc-protobuf`, [hotspot=grpc-stub file=1]`grpc-stub`, [hotspot=javax file=1]`javax.annotation-api` dependencies, and the [hotspot=protobufmavenplugin file=1]`protobuf-maven-plugin` plugin. To install the correct version of the Protobuf compiler automatically, the [hotspot=osmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
 
 Run the following commands to generate the gRPC classes.
 [role='command']

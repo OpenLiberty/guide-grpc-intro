@@ -20,7 +20,7 @@
             <version>9.1.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- grpc compile dependencies; provided by Liberty at runtime -->
+        <!-- grpc compile dependencies -->
         <!-- tag::grpc[] -->
         <dependency>
             <groupId>io.grpc</groupId>
@@ -37,6 +37,14 @@
             <scope>provided</scope>
         </dependency>
         <!-- end::grpc-stub[] -->
+        <!-- tag::javax[] -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- end::javax[] -->
     </dependencies>
 
     <build>
