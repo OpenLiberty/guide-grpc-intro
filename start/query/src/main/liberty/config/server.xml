@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<server description="new server">
+<server description="query service">
 
     <featureManager>
-        <feature>jaxrs-2.1</feature>
-        <feature>cdi-2.0</feature>
-        <feature>mpConfig-2.0</feature>
+        <feature>restfulWS-3.0</feature>
+        <feature>jsonp-2.0</feature>
+        <feature>jsonb-2.0</feature>
+        <feature>cdi-3.0</feature>
+        <feature>mpConfig-3.0</feature>
     </featureManager>
 
     <variable defaultValue="9081" name="default.http.port"/>
