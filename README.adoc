@@ -173,7 +173,7 @@ The [hotspot=getClientStreamingProperties file=0]`getClientStreamingProperties` 
 The [hotspot=getBidirectionalProperties file=0]`getBidirectionalProperties` RPC defines the bidirectional streaming call. In this service, the client service streams `SystemPropertyName` messages to the server service. The server service returns a stream of [hotspot=SystemProperty file=0]`SystemProperty` messages.
 
 
-To compile the `.proto` file, the `pom.xml` Maven configuration file needs the [hotspot=grpc file=1]`grpc-protobuf` and [hotspot=grpc-stub file=1]`grpc-stub` dependencies, and the [hotspot=protobufmavenplugin file=1]`protobuf-maven-plugin` plugin. To install the correct version of the Protobuf compiler automatically, the [hotspot=osmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
+To compile the `.proto` file, the `pom.xml` Maven configuration file needs the [hotspot=grpc file=1]`grpc-protobuf`, [hotspot=grpc-stub file=1]`grpc-stub`, [hotspot=javax file=1]`javax.annotation-api` dependencies, and the [hotspot=protobufmavenplugin file=1]`protobuf-maven-plugin` plugin. To install the correct version of the Protobuf compiler automatically, the [hotspot=osmavenplugin file=1]`os-maven-plugin` extension is required in the `build` configuration.
 
 Run the following command to generate the gRPC classes.
 // run mvn install to generate abstract classes
@@ -589,6 +589,6 @@ endif::[]
 
 == Great work! You're done!
 
-You just developed a Java application that implements four types of gRPC calls with Open Liberty. For more information, see https://openliberty.io/docs/latest/grpc-services.html[Provide and consume gRPC services on Open Liberty] in the Open Liberty docs.
+You just developed a Java application that implements four types of gRPC calls with Open Liberty. For more information, see https://openliberty.io/docs/latest/grpc-services.html[Provide and consume gRPC services on Open Liberty^] in the Open Liberty docs.
 
 include::{common-includes}/attribution.adoc[subs="attributes"]
