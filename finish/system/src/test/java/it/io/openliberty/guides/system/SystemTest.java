@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
@@ -33,47 +32,43 @@ import io.openliberty.guides.systemproto.SystemPropertyValue;
 import io.openliberty.guides.systemproto.SystemServiceGrpc;
 import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceBlockingStub;
 
-import io.grpc.testing.GrpcCleanupRule;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
+import io.grpc.Server;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
 public class SystemTest {
 
-    @Rule
-    public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
-
+    private String serverName = InProcessServerBuilder.generateName();
     private SystemServiceBlockingStub blockingStub;
-    private ManagedChannel inProcessChannel;
 
-    @Before
-    public void setup() throws Exception {
-        String serverName = InProcessServerBuilder.generateName();
+    private final Server inProcessServer = InProcessServerBuilder
+      .forName(serverName).addService(new SystemService()).directExecutor().build();
+    private final ManagedChannel inProcessChannel =
+        InProcessChannelBuilder.forName(serverName).directExecutor().build();
 
-        grpcCleanup.register(InProcessServerBuilder
-            .forName(serverName).directExecutor()
-            .addService(new SystemService()).build().start());
-
-        blockingStub = SystemServiceGrpc.newBlockingStub(
-            grpcCleanup.register(InProcessChannelBuilder
-                .forName(serverName).directExecutor().build()));
-
-        inProcessChannel = grpcCleanup.register(InProcessChannelBuilder
-            .forName(serverName).directExecutor().build());
+    @BeforeEach
+    public void setUp() throws Exception {
+        inProcessServer.start();
+        blockingStub = SystemServiceGrpc.newBlockingStub(inProcessChannel);
+    }
+    
+    @AfterEach
+    public void tearDown() {
+        inProcessChannel.shutdownNow();
+        inProcessServer.shutdownNow();
     }
 
     @Test
     // tag::testGetProperty[]
     public void testGetProperty() throws Exception {
-
         SystemPropertyName request = SystemPropertyName
                                         .newBuilder()
                                         .setPropertyName("os.name")
@@ -87,7 +82,6 @@ public class SystemTest {
     @Test
     // tag::testGetServerStreamingProperties[]
     public void testGetServerStreamingProperties() throws Exception {
-
         SystemPropertyPrefix request = SystemPropertyPrefix
                                         .newBuilder()
                                         .setPropertyPrefix("os.")
