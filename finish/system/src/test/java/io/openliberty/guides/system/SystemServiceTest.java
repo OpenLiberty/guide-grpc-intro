@@ -31,6 +31,7 @@ import io.openliberty.guides.systemproto.SystemPropertyPrefix;
 import io.openliberty.guides.systemproto.SystemPropertyValue;
 import io.openliberty.guides.systemproto.SystemServiceGrpc;
 import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceBlockingStub;
+import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceStub;
 
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
@@ -44,22 +45,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class SystemTest {
+public class SystemServiceTest {
 
     private String serverName = InProcessServerBuilder.generateName();
     private SystemServiceBlockingStub blockingStub;
+    private SystemServiceStub asyncStub;
 
     private final Server inProcessServer = InProcessServerBuilder
       .forName(serverName).addService(new SystemService()).directExecutor().build();
+    // tag::inProcessChannel[]
     private final ManagedChannel inProcessChannel =
         InProcessChannelBuilder.forName(serverName).directExecutor().build();
+    // end::inProcessChannel[]
 
     @BeforeEach
     public void setUp() throws Exception {
         inProcessServer.start();
         blockingStub = SystemServiceGrpc.newBlockingStub(inProcessChannel);
+        asyncStub = SystemServiceGrpc.newStub(inProcessChannel);
     }
-    
+
     @AfterEach
     public void tearDown() {
         inProcessChannel.shutdownNow();
@@ -104,12 +109,10 @@ public class SystemTest {
         @SuppressWarnings("unchecked")
         StreamObserver<SystemProperties> responseObserver =
             (StreamObserver<SystemProperties>) mock(StreamObserver.class);
-        SystemServiceGrpc.SystemServiceStub stub =
-            SystemServiceGrpc.newStub(inProcessChannel);
         ArgumentCaptor<SystemProperties> systemPropertiesCaptor =
             ArgumentCaptor.forClass(SystemProperties.class);
         StreamObserver<SystemPropertyName> requestObserver =
-            stub.getClientStreamingProperties(responseObserver);
+            asyncStub.getClientStreamingProperties(responseObserver);
 
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith("user."))
@@ -140,10 +143,8 @@ public class SystemTest {
         @SuppressWarnings("unchecked")
         StreamObserver<SystemProperty> responseObserver =
             (StreamObserver<SystemProperty>) mock(StreamObserver.class);
-        SystemServiceGrpc.SystemServiceStub stub =
-            SystemServiceGrpc.newStub(inProcessChannel);
         StreamObserver<SystemPropertyName> requestObserver =
-            stub.getBidirectionalProperties(responseObserver);
+            asyncStub.getBidirectionalProperties(responseObserver);
         verify(responseObserver, never()).onNext(any(SystemProperty.class));
 
         List<String> keys = System.getProperties().stringPropertyNames().stream()

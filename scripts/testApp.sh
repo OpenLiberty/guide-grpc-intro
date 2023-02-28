@@ -26,6 +26,7 @@ mvn -Dhttp.keepAlive=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl query failsafe:integration-test
 
+mvn -ntp -pl system surefire:test
 mvn -ntp -pl query failsafe:verify
 
 mvn -ntp -pl system liberty:stop
