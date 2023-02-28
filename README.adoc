@@ -488,7 +488,7 @@ The [hotspot=grpc-testing file=0]`grpc-testing` dependency provides utilities fo
 // Create SystemServiceTest.java
 [role="code_command hotspot file=1", subs="quotes"]
 ----
-#Create the `SystemTest` class.#
+#Create the `SystemServiceTest` class.#
 `system/src/test/java/it/io/openliberty/guides/system/SystemTest.java`
 ----
 
