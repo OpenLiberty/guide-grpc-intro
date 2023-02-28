@@ -469,8 +469,6 @@ endif::[]
 
 === Creating unit tests for gRPC server
 
-// update the first paragraph to make clear, here is doing unit test for gRPC server and describe the 2 dependencies grpc-testing and mockito-core
-
 // file 0
 system/pom.xml
 [source, xml, linenums, indent=0, role="code_column hide_tags=copyright"]
