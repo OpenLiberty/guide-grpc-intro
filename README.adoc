@@ -501,15 +501,17 @@ SystemService.java
 include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
 ----
 
-The [hotspot=inProcessChannel file=1]`inProcessChannel` creates a direct in-process channel that connects to the server running in the same JVM process as the test. This means that the unit test is able to make calls to the gRPC server by using the same method signatures and functionality as the gRPC client, even though they are using different channels to create their respective stubs.
+In the `setUp()` static method, create and start the [hotspot=inProcessServer file=1]`inProcessServer` in-process gRPC server. Then, create the [hotspot=inProcessChannel file=1]`inProcessChannel` in-process channel that connects to the `inProcessServer` server running in the same JVM process. The unit tests can make calls to the gRPC server by using the same method signatures and functionalities as the gRPC client, even though they use different [hotspot=blockingStub file=1]`blockingStub` or [hotspot=asyncStub file=1]`asyncStub` stubs through the same channel.
 
-The [hotspot=testGetProperty file=1]`testGetProperty()` tests the unary RPC call to retrieve a single system property value.
+In the [hotspot=tearDown file=1]`tearDown()` static method, shutdown the `inProcessChannel` in-process channel and then the `inProcessServer` in-process gRPC server.
 
-The [hotspot=testGetServerStreamingProperties file=1]`testGetServerStreamingProperties()` tests the server streaming RPC call to retrieve multiple system property values with a given prefix.
+The [hotspot=testGetProperty file=1]`testGetProperty()` tests the unary call to retrieve a single System property value.
 
-The [hotspot=testGetClientStreamingProperties file=1]`testGetClientStreamingProperties()` tests the client streaming RPC call to retrieve multiple system property values with given names.
+The [hotspot=testGetServerStreamingProperties file=1]`testGetServerStreamingProperties()` tests the server streaming call to retrieve multiple System property values with a given property prefix.
 
-The [hotspot=testGetBidirectionalProperties file=1]`testGetBidirectionalProperties()` tests the bidirectional streaming RPC call to retrieve multiple system property values with given names.
+The [hotspot=testGetClientStreamingProperties file=1]`testGetClientStreamingProperties()` tests the client streaming call to retrieve multiple System property values with given property names.
+
+The [hotspot=testGetBidirectionalProperties file=1]`testGetBidirectionalProperties()` tests the bidirectional streaming call to retrieve multiple system property values with given property names.
 
 *Running the tests*
 
@@ -520,9 +522,9 @@ Because you started Open Liberty in dev mode, you can run the tests by pressing 
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running it.io.openliberty.guides.system.SystemServiceTest
+Running io.openliberty.guides.system.SystemServiceTest
 
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.527 s - in it.io.openliberty.guides.system.SystemServiceTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.527 s - in io.openliberty.guides.system.SystemServiceTest
 
 Results:
 
@@ -530,9 +532,9 @@ Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 
-=== Creating integration tests
+=== Creating integration tests for the query service
 
-In this section, you'll write integration tests using RESTful APIs to test your gRPC application.
+In this section, you'll write integration tests using JAX-RS client APIs to test the `query` service.
 
 // Create QueryIT.java
 [role="code_command hotspot file=0", subs="quotes"]
