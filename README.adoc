@@ -467,7 +467,9 @@ endif::[]
 
 == Testing the application
 
-=== Creating unit tests for gRPC server
+In this section, you'll create unit tests for the gRPC server service by using JUnit and Mockito, and integration tests for the `query` service.
+
+=== Creating unit tests for the gRPC server service
 
 // file 0
 system/pom.xml
@@ -476,11 +478,7 @@ system/pom.xml
 include::finish/system/pom.xml[]
 ----
 
-Unit testing is a critical part of any software development process. With gRPC, you can easily create unit tests for your server application. In this section, you can learn how to create unit tests for your gRPC server by using JUnit and Mockito.
-
-The [hotspot file=0]`pom.xml` file lists the [hotspot=grpc-testing file=0]`grpc-testing` and [hotspot=mockito-core file=0]`mockito-core` dependencies.
-
-The [hotspot=grpc-testing file=0]`grpc-testing` dependency provides utilities for testing gRPC services and is used for creating a mock gRPC server for simulating client-server communication during testing. The [hotspot=mockito-core file=0]`mockito-core` dependency is needed to enable the use of Mockito.
+The required dependencies are already added to the `pom.xml` Maven configuration file for you, including JUnit5, [hotspot=grpc-testing file=0]`grpc-testing`, and [hotspot=mockito-core file=0]`mockito-core` libraries. The `grpc-testing` dependency provides utilities for testing gRPC services and is used for creating a mock gRPC server for simulating client-server communication during testing. The `mockito-core` dependency is needed to enable the use of Mockito.
 
 // file 1
 // Create SystemServiceTest.java
