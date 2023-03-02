@@ -467,9 +467,9 @@ endif::[]
 
 == Testing the application
 
-In this section, you'll create unit tests for the gRPC server service by using JUnit and Mockito, and integration tests for the `query` service.
+In this section, you'll create unit tests for the gRPC server service and integration tests for the `query` service.
 
-=== Creating unit tests for the gRPC server service
+=== Implementing unit tests for the gRPC server service
 
 // file 0
 system/pom.xml
@@ -503,7 +503,7 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 
 In the `setUp()` static method, create and start the [hotspot=inProcessServer file=1]`inProcessServer` in-process gRPC server. Then, create the [hotspot=inProcessChannel file=1]`inProcessChannel` in-process channel that connects to the `inProcessServer` server running in the same JVM process. The unit tests can make calls to the gRPC server by using the same method signatures and functionalities as the gRPC client, even though they use different [hotspot=blockingStub file=1]`blockingStub` or [hotspot=asyncStub file=1]`asyncStub` stubs through the same channel.
 
-In the [hotspot=tearDown file=1]`tearDown()` static method, shutdown the `inProcessChannel` in-process channel and then the `inProcessServer` in-process gRPC server.
+In the [hotspot=tearDown file=1]`tearDown()` static method, shutdown the `inProcessChannel` in-process channel and the `inProcessServer` in-process gRPC server.
 
 The [hotspot=testGetProperty file=1]`testGetProperty()` tests the unary call to retrieve a single System property value.
 
@@ -532,7 +532,7 @@ Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ----
 
 
-=== Creating integration tests for the query service
+=== Implementing integration tests for the query service
 
 In this section, you'll write integration tests using JAX-RS client APIs to test the `query` service.
 
