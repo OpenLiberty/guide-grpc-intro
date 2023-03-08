@@ -48,7 +48,7 @@ import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceStub;
 public class SystemServiceTest {
 
     private static final String SERVER_NAME = "system";
-	
+
     private static Server inProcessServer;
     private static ManagedChannel inProcessChannel;
     private static SystemServiceBlockingStub blockingStub;
