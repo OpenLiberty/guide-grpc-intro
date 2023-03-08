@@ -534,7 +534,7 @@ Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 
 === Implementing integration tests for the query service
 
-In this section, you'll write integration tests using JAX-RS client APIs to test the `query` service.
+In this section, you'll write integration tests using Jakarta Restful Web Services Client APIs to test the `query` service.
 
 // Create QueryIT.java
 [role="code_command hotspot file=0", subs="quotes"]
