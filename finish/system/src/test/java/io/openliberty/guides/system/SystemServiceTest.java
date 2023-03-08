@@ -12,14 +12,18 @@
 package io.openliberty.guides.system;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
@@ -43,7 +47,7 @@ import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceStub;
 
 public class SystemServiceTest {
 
-	private final static String SERVER_NAME = "system";
+    private final static String SERVER_NAME = "system";
     private static Server inProcessServer;
     private static ManagedChannel inProcessChannel;
     private static SystemServiceBlockingStub blockingStub;
@@ -52,16 +56,16 @@ public class SystemServiceTest {
     @BeforeAll
     public static void setUp() throws Exception {
         // tag::inProcessServer[]
-    	inProcessServer = InProcessServerBuilder.forName(SERVER_NAME)
-    			              .addService(new SystemService())
-    			              .directExecutor()
-    			              .build();
+        inProcessServer = InProcessServerBuilder.forName(SERVER_NAME)
+                              .addService(new SystemService())
+                              .directExecutor()
+                              .build();
         inProcessServer.start();
         // end::inProcessServer[]
         // tag::inProcessChannel[]
         inProcessChannel = InProcessChannelBuilder.forName(SERVER_NAME)
-        		               .directExecutor()
-        		               .build();
+                               .directExecutor()
+                               .build();
         // end::inProcessChannel[]
         // tag::blockingStub[]
         blockingStub = SystemServiceGrpc.newBlockingStub(inProcessChannel);
@@ -93,16 +97,37 @@ public class SystemServiceTest {
     @Test
     // tag::testGetServerStreamingProperties[]
     public void testGetServerStreamingProperties() throws Exception {
+
         SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
                                            .setPropertyPrefix("os.")
                                            .build();
-        Iterator<SystemProperty> response =
-            blockingStub.getServerStreamingProperties(request);
+        final CountDownLatch countDown = new CountDownLatch(1);
+        List<SystemProperty> properties = new ArrayList<SystemProperty>();
+        StreamObserver<SystemProperty> responseObserver =
+            new StreamObserver<SystemProperty>() {
+                @Override
+                public void onNext(SystemProperty property) {
+                    properties.add(property);
+                }
 
-        while (response.hasNext()) {
-            SystemProperty systemProperty = response.next();
-            assertEquals(System.getProperty(systemProperty.getPropertyName()),
-                         systemProperty.getPropertyValue());
+                @Override
+                public void onError(Throwable t) {
+                    fail(t.getMessage());
+                }
+
+                @Override
+                public void onCompleted() {
+                    countDown.countDown();
+                }
+            };
+
+        asyncStub.getServerStreamingProperties(request, responseObserver);
+        assertTrue(countDown.await(10, TimeUnit.SECONDS));
+
+        for (SystemProperty property : properties) {
+            String propertName = property.getPropertyName();
+            assertEquals(System.getProperty(propertName),
+                property.getPropertyValue(), propertName + " is incorrect");
         }
     }
     // end::testGetServerStreamingProperties[]
@@ -116,16 +141,15 @@ public class SystemServiceTest {
             (StreamObserver<SystemProperties>) mock(StreamObserver.class);
         ArgumentCaptor<SystemProperties> systemPropertiesCaptor =
             ArgumentCaptor.forClass(SystemProperties.class);
+
         StreamObserver<SystemPropertyName> requestObserver =
             asyncStub.getClientStreamingProperties(responseObserver);
-
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith("user."))
                                   .collect(Collectors.toList());
         keys.stream()
             .map(k -> SystemPropertyName.newBuilder().setPropertyName(k).build())
             .forEach(requestObserver::onNext);
-
         requestObserver.onCompleted();
         verify(responseObserver, timeout(100)).onNext(systemPropertiesCaptor.capture());
 
@@ -133,7 +157,6 @@ public class SystemServiceTest {
         systemProperties.getPropertiesMap()
             .forEach((propertyName, propertyValue) ->
             assertEquals(System.getProperty(propertyName), propertyValue));
-
         verify(responseObserver, timeout(100)).onCompleted();
         verify(responseObserver, never()).onError(any(Throwable.class));
     }
@@ -150,6 +173,7 @@ public class SystemServiceTest {
             (StreamObserver<SystemProperty>) mock(StreamObserver.class);
         StreamObserver<SystemPropertyName> requestObserver =
             asyncStub.getBidirectionalProperties(responseObserver);
+
         verify(responseObserver, never()).onNext(any(SystemProperty.class));
 
         List<String> keys = System.getProperties().stringPropertyNames().stream()
