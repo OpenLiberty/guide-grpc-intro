@@ -3,6 +3,8 @@ set -euxo pipefail
 
 mvn -ntp -pl systemproto -q clean install
 
+mvn -ntp -pl system verify
+
 mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
@@ -19,14 +21,8 @@ mvn -ntp -pl query liberty:start
 mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
-    -pl system failsafe:integration-test
-
-mvn -Dhttp.keepAlive=false \
-    -Dmaven.wagon.http.pool=false \
-    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
     -pl query failsafe:integration-test
 
-mvn -ntp -pl system surefire:test
 mvn -ntp -pl query failsafe:verify
 
 mvn -ntp -pl system liberty:stop
