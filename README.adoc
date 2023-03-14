@@ -274,11 +274,11 @@ include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemSer
 
 The `SystemServiceClient` class provides client code that interact with the `system` service server. 
 
-The [hotspot=constructor file=2]`SystemServiceClient` constructor takes in a `hostname` and `port` as arguments and uses them to create a `ManagedChannel` with plaintext communication. This channel is used to initialize both a blocking and asynchronous stub for the `system` service. Having both stubs allows the client to support different types of calls, such as unary and different streaming calls, providing more flexibility and options for the client's interaction with the server.
+The [hotspot=constructor file=2]`SystemServiceClient` constructor takes in a `hostname` and `port` as arguments and uses them to create a `ManagedChannel` with plaintext communication. This channel is used to initialize both a blocking and asynchronous stub for the `system` service. For this sample application, having both stubs allows the client to support different types of calls, such as unary and different streaming calls, providing more flexibility and options for the client's interaction with the server.
 
 The [hotspot=shutdown file=2]`shutdown()` method simply shuts down the gRPC channel that is created in the constructor.
 
-The [hotspot=unary file=2]`getProperty()` method uses a unary service call to retrieve the property value from the `system` service. It calls the [hotspot=getProperty file=2]`SystemService.getProperty()` method on the `blockingStub` client object and returns the response value from the `system` service.
+The [hotspot=unary file=2]`getProperty()` method uses the unary service call to retrieve the property value from the `system` service. It calls the [hotspot=getProperty file=2]`SystemService.getProperty()` method on the `blockingStub` client object and returns the response value from the `system` service.
 
 // Create PropertiesResource
 [role="code_command hotspot file=3", subs="quotes"]
