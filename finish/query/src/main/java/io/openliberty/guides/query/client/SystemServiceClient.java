@@ -42,8 +42,8 @@ public class SystemServiceClient {
     private final SystemServiceStub asyncStub;
 
     // tag::constructor[]
-    public SystemServiceClient(String host, int port) {
-        channel = ManagedChannelBuilder.forAddress(host, port)
+    public SystemServiceClient(String hostname, int port) {
+        channel = ManagedChannelBuilder.forAddress(hostname, port)
                                        .usePlaintext()
                                        .build();
         blockingStub = SystemServiceGrpc.newBlockingStub(channel);
@@ -58,10 +58,10 @@ public class SystemServiceClient {
     // end::shutdown[]
 
     // tag::unary[]
-    public String getPropertiesString(String property) {
+    public String getProperty(String propertyName) {
 
         SystemPropertyName request = SystemPropertyName.newBuilder()
-                                        .setPropertyName(property).build();
+                                        .setPropertyName(propertyName).build();
         // tag::getProperty[]
         SystemPropertyValue response = blockingStub.getProperty(request);
         // end::getProperty[]
@@ -71,14 +71,14 @@ public class SystemServiceClient {
     // end::unary[]
 
     // tag::serverStreaming[]
-    public Properties getOSProperties() {
+    public Properties getServerStreamingProperties(String propertyPrefix) {
 
         Properties properties = new Properties();
         // tag::countDownLatch1[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch1[]
         SystemPropertyPrefix request = SystemPropertyPrefix.newBuilder()
-                                         .setPropertyPrefix("os.").build();
+                                         .setPropertyPrefix(propertyPrefix).build();
         // tag::getServerStreamingProperties[]
         asyncStub.getServerStreamingProperties(
             request, new StreamObserver<SystemProperty>() {
@@ -121,7 +121,7 @@ public class SystemServiceClient {
     // end::serverStreaming[]
 
     // tag::clientStreaming[]
-    public Properties getUserProperties() {
+    public Properties getClientStreamingProperties(String propertyPrefix) {
 
         // tag::countDownLatch4[]
         CountDownLatch countDown = new CountDownLatch(1);
@@ -160,7 +160,7 @@ public class SystemServiceClient {
         // collect the property names starting with user.
         // tag::collectUserProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
-                                  .filter(k -> k.startsWith("user."))
+                                  .filter(k -> k.startsWith(propertyPrefix))
                                   .collect(Collectors.toList());
         // end::collectUserProperties[]
 
@@ -190,7 +190,7 @@ public class SystemServiceClient {
     // end::clientStreaming[]
 
     // tag::bidirectionalStreaming[]
-    public Properties getJavaProperties() {
+    public Properties getBidirectionalProperties(String propertyPrefix) {
 
         Properties properties = new Properties();
         // tag::countDownLatch7[]
@@ -232,7 +232,7 @@ public class SystemServiceClient {
         // collect the property names starting with java
         // tag::collectJavaProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
-                                  .filter(k -> k.startsWith("java."))
+                                  .filter(k -> k.startsWith(propertyPrefix))
                                   .collect(Collectors.toList());
         // end::collectJavaProperties[]
 

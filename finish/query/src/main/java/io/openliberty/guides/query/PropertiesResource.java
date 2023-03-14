@@ -46,7 +46,10 @@ public class PropertiesResource {
         SystemServiceClient client = new SystemServiceClient(SYSTEM_HOST, SYSTEM_PORT);
         // end::createClient1[]
         try {
-            return client.getPropertiesString(property);
+            return client.getProperty(property);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.toString();
         } finally {
             client.shutdown();
         }
@@ -61,11 +64,15 @@ public class PropertiesResource {
         // tag::createClient2[]
         SystemServiceClient client = new SystemServiceClient(SYSTEM_HOST, SYSTEM_PORT);
         // end::createClient2[]
+        Properties properties = new Properties();
         try {
-            return client.getOSProperties();
+            properties = client.getServerStreamingProperties("os.");
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             client.shutdown();
         }
+        return properties;
     }
     // end::serverStreaming[]
 
@@ -77,11 +84,15 @@ public class PropertiesResource {
         // tag::createClient3[]
         SystemServiceClient client = new SystemServiceClient(SYSTEM_HOST, SYSTEM_PORT);
         // end::createClient3[]
+        Properties properties = new Properties();
         try {
-            return client.getUserProperties();
+            return client.getClientStreamingProperties("user.");
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             client.shutdown();
         }
+        return properties;
     }
     // end::clientStreaming[]
 
@@ -93,11 +104,15 @@ public class PropertiesResource {
         // tag::createClient4[]
         SystemServiceClient client = new SystemServiceClient(SYSTEM_HOST, SYSTEM_PORT);
         // end::createClient4[]
+        Properties properties = new Properties();
         try {
-            return client.getJavaProperties();
+            return client.getBidirectionalProperties("java.");
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             client.shutdown();
         }
+        return properties;
     }
     // end::bidirectionalStreaming[]
 }
