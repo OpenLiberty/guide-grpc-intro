@@ -73,7 +73,9 @@ public class SystemServiceClient {
     // tag::serverStreaming[]
     public Properties getServerStreamingProperties(String propertyPrefix) {
 
+        // tag::placeholder[]
         Properties properties = new Properties();
+        // end::placeholder[]
         // tag::countDownLatch1[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch1[]
@@ -88,7 +90,9 @@ public class SystemServiceClient {
             public void onNext(SystemProperty value) {
                 logger.info("server streaming received: "
                    + value.getPropertyName() + "=" + value.getPropertyValue());
+                // tag::storeInPlaceholder[]
                 properties.put(value.getPropertyName(), value.getPropertyValue());
+                // end::storeInPlaceholder[]
             }
             // end::onNext1[]
 

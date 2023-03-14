@@ -362,7 +362,7 @@ SystemServiceClient.java
 include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
 ----
 
-This [hotspot=serverStreaming file=1]`getServerStreamingProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`SystemService.getServerStreamingProperties()` method on the `asyncStub` client object with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+This [hotspot=serverStreaming file=1]`getServerStreamingProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method of the `asyncStub` client object with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the [hotspot=placeholder hotspot=storeInPlaceholder file=1]`properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
 
 Then, update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
 
