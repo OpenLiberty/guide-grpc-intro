@@ -51,9 +51,11 @@ public class SystemServiceClient {
     }
     // end::constructor[]
 
+    // tag::shutdown[]
     public void shutdown() {
         channel.shutdownNow();
     }
+    // end::shutdown[]
 
     // tag::unary[]
     public String getPropertiesString(String property) {
@@ -127,7 +129,7 @@ public class SystemServiceClient {
         Properties properties = new Properties();
 
         // tag::getClientStreamingProperties[]
-        StreamObserver<SystemPropertyName> stream = 
+        StreamObserver<SystemPropertyName> stream =
             // tag::clientStreamingAsyncStub[]
             asyncStub.getClientStreamingProperties(
             // end::clientStreamingAsyncStub[]
@@ -196,7 +198,7 @@ public class SystemServiceClient {
         // end::countDownLatch7[]
 
         // tag::getBidirectionalProperties[]
-        StreamObserver<SystemPropertyName> stream = 
+        StreamObserver<SystemPropertyName> stream =
             // tag::getJavaPropertiesAsyncStub[]
             asyncStub.getBidirectionalProperties(
             // end::getJavaPropertiesAsyncStub[]

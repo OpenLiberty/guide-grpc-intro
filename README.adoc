@@ -276,6 +276,8 @@ The `SystemServiceClient` class provides client code that interact with the `sys
 
 The [hotspot=constructor file=2]`SystemServiceClient` constructor takes in a `host` and `port` as arguments and uses them to create a `ManagedChannel` with plaintext communication. This channel is used to create a blocking and asynchronous stub for the `system` service.
 
+The [hotspot=shutdown file=2]`shutdown()` method simply shuts down the gRPC channel that was created in the constructor.
+
 The [hotspot=unary file=2]`getPropertiesString()` method uses a unary service call to retrieve the property value from the `system` service. It calls the [hotspot=getProperty file=2]`getProperty()` method on the `blockingStub` client object and returns the response value from the `system` service.
 
 // Create PropertiesResource
@@ -321,73 +323,73 @@ Click the following button to visit the ***/query/properties/os.name*** endpoint
 ::startApplication{port="9081" display="external" name="/query/properties/os.name" route="/query/properties/os.name"}
 endif::[]
 
-// // ===============================================================================================
-// // Implementing server streaming call
-// // ===============================================================================================
+// ===============================================================================================
+// Implementing server streaming call
+// ===============================================================================================
 
-// == Implementing the server streaming call
+== Implementing the server streaming call
 
-// In the server streaming call, the `getOSProperties()` method of the `SystemServiceClient` class initiates a server streaming call to the `system` server service, requesting properties that start with `os.`. The `system` service streams the properties back to the client service over a channel, which is closed by the `system` service only after sending the last message to the `SystemServiceClient` client service. Finally, the `getOSProperties()` method returns the received properties.
+In the server streaming call, the `getOSProperties()` method of the `SystemServiceClient` class initiates a server streaming call to the `system` server service, requesting properties that start with `os.`. The `system` service streams the properties back to the client service over a channel, which is closed by the `system` service only after sending the last message to the `SystemServiceClient` client service. Finally, the `getOSProperties()` method returns the received properties.
 
-// Update the `SystemService` class to implement the server streaming RPC call.
+Update the `SystemService` class to implement the server streaming RPC call.
 
-// // Replace SystemService
-// [role="code_command hotspot file=0", subs="quotes"]
-// ----
-// #Replace the `SystemService` class.#
-// `system/src/main/java/io/openliberty/guides/system/SystemService.java`
-// ----
-// SystemService.java
-// [source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getClientStreamingProperties,getBidirectionalProperties"]
-// ----
-// include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
-// ----
+// Replace SystemService
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Replace the `SystemService` class.#
+`system/src/main/java/io/openliberty/guides/system/SystemService.java`
+----
+SystemService.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getClientStreamingProperties,getBidirectionalProperties"]
+----
+include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.java[]
+----
 
-// The [hotspot=getServerStreamingProperties file=0]`getServerStreamingProperties()` method implements the server streaming RPC call. The [hotspot=prefix file=0]`getPropertyPrefix()` getter method retrieves the property prefix from the client. Properties that start with the [hotspot=filter file=0]`prefix` are filtered out. For each property, a [hotspot=serverMessage file=0]`SystemProperty` message is built and streamed to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, the service stops streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
+The [hotspot=getServerStreamingProperties file=0]`getServerStreamingProperties()` method implements the server streaming RPC call. The [hotspot=prefix file=0]`getPropertyPrefix()` getter method retrieves the property prefix from the client. Properties that start with the [hotspot=filter file=0]`prefix` are filtered out. For each property, a [hotspot=serverMessage file=0]`SystemProperty` message is built and streamed to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, the service stops streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
 
-// Update the `SystemServiceClient` class to implement the `getOSProperties()` method.
+Update the `SystemServiceClient` class to implement the `getOSProperties()` method.
 
-// [role="code_command hotspot file=1", subs="quotes"]
-// ----
-// #Replace the `SystemServiceClient` class.#
-// `query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
-// ----
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemServiceClient` class.#
+`query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
+----
 
-// SystemServiceClient.java
-// [source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
-// ----
-// include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
-// ----
+SystemServiceClient.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
+----
 
-// This [hotspot=serverStreaming file=1]`getOSProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+This [hotspot=serverStreaming file=1]`getOSProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
 
-// Then, update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
+Then, update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
 
-// // Replace PropertiesResource
-// [role="code_command hotspot file=2", subs="quotes"]
-// ----
-// #Replace the `PropertiesResource` class.#
-// `query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
-// ----
+// Replace PropertiesResource
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Replace the `PropertiesResource` class.#
+`query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
+----
 
-// PropertiesResource.java
-// [source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
-// ----
-// include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
-// ----
+PropertiesResource.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
+----
 
-// The endpoint creates a [hotspot=createChannel2 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to collect system properties that start with `os.`, shuts down the channel, and displays the values from the `system` service response.
+The endpoint creates a [hotspot=createChannel2 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to collect system properties that start with `os.`, shuts down the channel, and displays the values from the `system` service response.
 
-// // static guide instruction
-// ifndef::cloud-hosted[]
-// Point your browser to the http://localhost:9081/query/properties/os URL to test out the server streaming call. The `os.` properties from the `system` service are displayed. Observe the output from the consoles running the `system` and `query` services.
-// endif::[]
-// // cloud hosted instruction
-// ifdef::cloud-hosted[]
-// Click the following button to visit the ***/query/properties/os*** endpoint to test out the server streaming call. The ***os.*** properties from the ***system*** service are displayed. Observe the output from the consoles running the ***system*** and ***query*** services.
+// static guide instruction
+ifndef::cloud-hosted[]
+Point your browser to the http://localhost:9081/query/properties/os URL to test out the server streaming call. The `os.` properties from the `system` service are displayed. Observe the output from the consoles running the `system` and `query` services.
+endif::[]
+// cloud hosted instruction
+ifdef::cloud-hosted[]
+Click the following button to visit the ***/query/properties/os*** endpoint to test out the server streaming call. The ***os.*** properties from the ***system*** service are displayed. Observe the output from the consoles running the ***system*** and ***query*** services.
 
-// ::startApplication{port="9081" display="external" name="/query/properties/os" route="/query/properties/os"}
-// endif::[]
+::startApplication{port="9081" display="external" name="/query/properties/os" route="/query/properties/os"}
+endif::[]
 
 // // ===============================================================================================
 // // Implementing client streaming call
