@@ -88,7 +88,9 @@ public class PropertiesResource {
         // end::createClient3[]
         Properties properties = new Properties();
         try {
+            // tag::userProperties[]
             return client.getClientStreamingProperties("user.");
+            // end::userProperties[]
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

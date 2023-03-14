@@ -128,6 +128,7 @@ public class SystemServiceClient {
     // tag::propertyPrefix[]
     public Properties getClientStreamingProperties(String propertyPrefix) {
     // end::propertyPrefix[]
+
         // tag::countDownLatch4[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch4[]
