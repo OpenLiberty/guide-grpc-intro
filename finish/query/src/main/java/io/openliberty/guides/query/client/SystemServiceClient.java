@@ -125,8 +125,9 @@ public class SystemServiceClient {
     // end::serverStreaming[]
 
     // tag::clientStreaming[]
+    // tag::propertyPrefix[]
     public Properties getClientStreamingProperties(String propertyPrefix) {
-
+    // end::propertyPrefix[]
         // tag::countDownLatch4[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch4[]
@@ -161,12 +162,12 @@ public class SystemServiceClient {
             });
         // end::getClientStreamingProperties[]
 
-        // collect the property names starting with user.
-        // tag::collectUserProperties[]
+        // collect the property names starting with propertyPrefix.
+        // tag::collectProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith(propertyPrefix))
                                   .collect(Collectors.toList());
-        // end::collectUserProperties[]
+        // end::collectProperties[]
 
         // send messages to the server
         keys.stream()
