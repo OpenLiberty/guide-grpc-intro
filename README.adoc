@@ -223,7 +223,7 @@ After you see the following message, your Liberty instances are ready in dev mod
 
 Dev mode holds your command-line session to listen for file changes. Open another command-line session and navigate to the `start` directory to continue, or open the project in your editor.
 
-Start by implementing the first service call, the unary call. In this service call, the `query` client service sends a property to the `system` server service, which returns the property value. This type of service call resembles a RESTful API. 
+Start by implementing the first service call, the unary call. In this service call, the `SystemServiceClient` client service sends a property to the `system` server service, which returns the property value. This type of service call resembles a RESTful API. 
 
 // Create SystemService
 [role="code_command hotspot file=0", subs="quotes"]
@@ -257,10 +257,29 @@ include::finish/system/src/main/liberty/config/server.xml[]
 
 Add the [hotspot=grpc file=1]`grpc` feature to the Liberty server configuration file. This feature enables applications running on Liberty to provide gRPC services. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about configuration for the `grpc` feature, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
 
-Next, implement the corresponding REST endpoint in the `query` service.
+Next, implement the client code that makes the unary RPC calls to the server in the `query` service.
+
+// Create SystemServiceClient
+[role="code_command hotspot file=2", subs="quotes"]
+----
+#Create the `SystemServiceClient` class.#
+`query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
+----
+
+SystemServiceClient.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,serverStreaming,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
+----
+
+The `SystemServiceClient` class provides client code that interact with the `system` service server. 
+
+The [hotspot=constructor file=2]`SystemServiceClient` constructor takes in a `host` and `port` as arguments and uses them to create a `ManagedChannel` with plaintext communication. This channel is used to create a blocking and asynchronous stub for the `system` service.
+
+The [hotspot=unary file=2]`getPropertiesString()` method uses a unary service call to retrieve the property value from the `system` service. It calls the [hotspot=getProperty file=2]`getProperty()` method on the `blockingStub` client object and returns the response value from the `system` service.
 
 // Create PropertiesResource
-[role="code_command hotspot file=2", subs="quotes"]
+[role="code_command hotspot file=3", subs="quotes"]
 ----
 #Create the `PropertiesResource` class.#
 `query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
@@ -271,10 +290,11 @@ PropertiesResource.java
 ----
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
-The `PropertiesResource` class provides RESTful endpoints to interact with the `system` service. The [hotspot=unary file=2]`/query/properties/${property}` endpoint uses the unary service call to get the property value from the `system` service. The endpoint creates a [hotspot=createChannel1 file=2]`channel`, which it uses to create a client by the [hotspot=createClient1 file=2]`SystemServiceGrpc.newBlockingStub()` API. The endpoint then uses the client to get the property value, shuts down the channel, and immediately returns the value from the `system` service response.
+
+The `PropertiesResource` class provides RESTful endpoints to use the [hotspot file=2]`SystemServiceClient` to interact with the `system` service and display the results. The [hotspot=unary file=3]`/query/properties/${property}` endpoint creates a [hotspot=createChannel1 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to get the property value, shuts down the channel, and displays the value from the `system` service response.
 
 // update server.xml
-[role='code_command hotspot file=3', subs="quotes"]
+[role='code_command hotspot file=4', subs="quotes"]
 ----
 #Replace the `query` server configuration file.#
 `query/src/main/liberty/config/server.xml`
@@ -286,9 +306,9 @@ query/server.xml
 include::finish/query/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=3]`grpc` and [hotspot=grpcClient file=3]`grpcClient` features to the Liberty server configuration file for the `query` service. These two features enable gRPC server and client support on Liberty respectively. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` feature with the `headersToPropagate` and `target` attributes. If you want to learn more about `grpcClient` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
+Add the [hotspot=grpc file=4]`grpc` and [hotspot=grpcClient file=4]`grpcClient` features to the Liberty server configuration file for the `query` service. These two features enable gRPC server and client support on Liberty respectively. Configure the [hotspot=grpcClientConfig file=4]`grpcClient` feature with the `headersToPropagate` and `target` attributes. If you want to learn more about `grpcClient` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
 
-Because you are running the `system` and `query` services in dev mode, the changes that you made are automatically picked up. You’re now ready to check out your application in your browser.
+Because you are running the `system` and `query` services in dev mode, the changes that you made are automatically picked up. You're now ready to check out your application in your browser.
 
 // static guide instruction
 ifndef::cloud-hosted[]
@@ -307,10 +327,10 @@ endif::[]
 
 == Implementing the server streaming call
 
-In the server streaming call, the `query` client service provides the `/query/properties/os` endpoint that sends a message to the `system` server service. The `system` service streams any properties that start with `os.` back to the `query` service. A channel is created between the `query` and the `system` services to stream messages. The channel is closed by the `system` service only after sending the last message to the `query` service. 
+In the server streaming call, the `getOSProperties()` method of the `SystemServiceClient` class initiates a server streaming call to the `system` server service, requesting properties that start with `os.`. The `system` service streams the properties back to the client service over a channel, which is closed by the `system` service only after sending the last message to the `SystemServiceClient` client service. Finally, the `getOSProperties()` method returns the received properties.
 
-// Commands for system service
 Update the `SystemService` class to implement the server streaming RPC call.
+
 // Replace SystemService
 [role="code_command hotspot file=0", subs="quotes"]
 ----
@@ -325,10 +345,26 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 
 The [hotspot=getServerStreamingProperties file=0]`getServerStreamingProperties()` method implements the server streaming RPC call. The [hotspot=prefix file=0]`getPropertyPrefix()` getter method retrieves the property prefix from the client. Properties that start with the [hotspot=filter file=0]`prefix` are filtered out. For each property, a [hotspot=serverMessage file=0]`SystemProperty` message is built and streamed to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, the service stops streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
 
-Update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
+Update the `SystemServiceClient` class to implement the `getOSProperties()` method.
+
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemServiceClient` class.#
+`query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
+----
+
+SystemServiceClient.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
+----
+
+This [hotspot=serverStreaming file=1]`getOSProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+
+Then, update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
 
 // Replace PropertiesResource
-[role="code_command hotspot file=1", subs="quotes"]
+[role="code_command hotspot file=2", subs="quotes"]
 ----
 #Replace the `PropertiesResource` class.#
 `query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
@@ -340,7 +376,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createChannel2 file=1]`channel` to the `system` service and a [hotspot=createClient2 file=1]`client` by using the `SystemServiceGrpc.newStub()` API. Then, it calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service shuts down the [hotspot=closeConnection file=1]`channel` and returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+The endpoint creates a [hotspot=createChannel2 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to collect system properties that start with `os.`, shuts down the channel, and displays the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]
@@ -360,7 +396,7 @@ endif::[]
 
 == Implementing the client streaming call
 
-In the client streaming call, the `query` client service provides the `/query/properties/user` endpoint, which streams the user properties to the `system` server service. The `system` service returns a map of user properties with their values.
+In the client streaming call, the `SystemServiceClient` client service provides the `getUserProperties()` method, which streams the user properties to the `system` server service. The `system` service returns a map of user properties with their values.
 
 Update the `SystemService` class to implement the client streaming RPC call.
 
@@ -379,11 +415,26 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 
 The [hotspot=getClientStreamingProperties file=0]`getClientStreamingProperties()` method implements client streaming RPC call. This method returns an instance of the [hotspot=streamObserverClient file=0]`StreamObserver` interface. Its [hotspot=receivingProperties file=0]`onNext()` method receives the messages from the client individually and stores the property values into the [hotspot=clientStreamingMap file=0]`properties` map placeholder. When the streaming is completed, the `properties` placeholder is sent back to the client by the [hotspot=clientStreamingCompleted file=0]`onCompleted()` method.
 
-
-// Replace PropertiesResource
-Update the `PropertiesResource` class to implement the `/query/properties/user` endpoint of the query service.
+Update the `SystemServiceClient` class to implement the `getUserProperties()` method.
 
 [role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemServiceClient` class.#
+`query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
+----
+
+SystemServiceClient.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
+----
+
+The [hotspot=clientStreaming file=1]`getUserProperties()` method calls the [hotspot=getClientStreamingProperties file=1]`getClientStreamingProperties()` method on the [hotspot=clientStreamingAsyncStub file=1]`asyncStub` client to get a `stream` and collect the properties with property names that are prefixed by [hotspot=collectUserProperties file=1]`user.`. It then creates a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually and sends the message to the server by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, the [hotspot=clientCompleted1 file=1]`onCompleted()` method is called to finish the streaming. Again, a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+
+// Replace PropertiesResource
+Then, update the `PropertiesResource` class to implement the `/query/properties/user` endpoint of the `query` service.
+
+[role="code_command hotspot file=2", subs="quotes"]
 ----
 #Replace the `PropertiesResource` class.#
 `query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
@@ -395,7 +446,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-After a connection is created between the two services, the [hotspot=getClientStreamingProperties file=1]`client.getClientStreamingProperties()` method is called to get a `stream` and collect the properties with property names that are prefixed by [hotspot=collectUserProperties file=1]`user.`. The method creates a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually and sends the message to the server by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, the [hotspot=clientCompleted1 file=1]`onCompleted()` method is called to finish the streaming. Again, a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+The endpoint creates a [hotspot=createChannel3 file=2]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to collect system properties that start with `user.`, shuts down the channel, and displays the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]
@@ -414,7 +465,7 @@ endif::[]
 
 == Implementing the bidirectional streaming call
 
-In the bidirectional streaming call, the `query` client service provides the `/query/properties/java` endpoint, which streams the property names that start with `java.` to the `system` server service. The `system` service streams the property values back to the `query` service.
+In the bidirectional streaming call, the `SystemServiceClient` client service provides the `getJavaProperties()` method, which streams the property names that start with `java.` to the `system` server service. The `system` service streams the property values back to the `SystemServiceClient` client.
 
 Update the `SystemService` class to implement the bidirectional streaming RPC call.
 
@@ -433,10 +484,27 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 
 The [hotspot=getBidirectionalProperties file=0]`getBidirectionalProperties()` method implements bidirectional streaming RPC call. This method returns an instance of the [hotspot=streamObserverBidirectional file=0]`StreamObserver` interface. Its [hotspot=receiveBidirectionalProperties file=0]`onNext()` method receives the messages from the client individually, creates a [hotspot=systemPropertyMessage file=0]`SystemProperty` message with the property name and value, and sends the message back to the client. When the client streaming is completed, the method closes the server streaming by calling the [hotspot=bidirectionalCompleted file=0]`onCompleted()` method.
 
+Update the `SystemServiceClient` class to implement the `getJavaProperties()` method.
+
+// Replace SystemServiceClient
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemServiceClient` class.#
+`query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
+----
+
+SystemServiceClient.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
+----
+
+The [hotspot=bidirectionalStreaming file=1]`getJavaProperties()` method calls the [hotspot=getBidirectionalProperties file=1]`getBidirectionalProperties()` method on the [hotspot=getJavaPropertiesAsyncStub file=1]`asyncStub` client with an implementation of the `StreamObserver` interface. The [hotspot=onNext2 file=1]`onNext()` method receives messages that are streaming from the server individually and stores them into the `properties` placeholder. Then, collect the properties. For each property name that starts with [hotspot=collectJavaProperties file=1]`java.`, a [hotspot=clientMessage2 file=1]`SystemPropertyName` message is created and sent to the server by the [hotspot=streamOnNext2 file=1]`stream::onNext` action. When all property names are sent, the streaming is ended by calling the [hotspot=clientCompleted2 file=1]`onCompleted()` method. Again, a [hotspot=countDownLatch7 hotspot=countDownLatch8 hotspot=countDownLatch9 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+
 Update the `PropertiesResource` class to implement of `/query/properties/java` endpoint of the query service.
 
 // Replace PropertiesResource
-[role="code_command hotspot file=1", subs="quotes"]
+[role="code_command hotspot file=2", subs="quotes"]
 ----
 #Replace the `PropertiesResource` class.#
 `query/src/main/java/io/openliberty/guides/query/PropertiesResource.java`
@@ -448,7 +516,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-After a connection is created between the two services, the [hotspot=getBidirectionalProperties file=1]`client.getBidirectionalProperties()` method is called with an implementation of the `StreamObserver` interface. The [hotspot=onNext2 file=1]`onNext()` method receives messages that are streaming from the server individually and stores them into the `properties` placeholder. Then, collect the properties . For each property name that starts with [hotspot=collectJavaProperties file=1]`java.`, a [hotspot=clientMessage2 file=1]`SystemPropertyName` message is created and sent to the server by the [hotspot=streamOnNext2 file=1]`stream::onNext` action. When all property names are sent, the streaming is ended by calling the [hotspot=clientCompleted2 file=1]`onCompleted()` method. Again, a [hotspot=countDownLatch7 hotspot=countDownLatch8 hotspot=countDownLatch9 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+The endpoint creates a [hotspot=createChannel4 file=2]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to collect system properties that start with `java.`, shuts down the channel, and displays the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]
