@@ -49,7 +49,7 @@ public class PropertiesResource {
             return client.getProperty(property);
         } catch (Exception e) {
             e.printStackTrace();
-            return e.toString();
+            return "";
         } finally {
             client.shutdown();
         }
