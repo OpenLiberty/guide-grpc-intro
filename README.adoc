@@ -519,7 +519,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createClient4 file=2]`SystemServiceClient` and uses the client to collect system properties that start with `java.`, shuts down the channel, and returns the values from the `system` service response.
+The endpoint creates a [hotspot=createClient4 file=2]`SystemServiceClient` client object, uses the client to collect system [hotspot=javaProperties file=2]`java.` properties, shuts down the client, and returns the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]

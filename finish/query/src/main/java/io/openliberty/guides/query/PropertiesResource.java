@@ -110,7 +110,9 @@ public class PropertiesResource {
         // end::createClient4[]
         Properties properties = new Properties();
         try {
+            // tag::javaProperties[]
             return client.getBidirectionalProperties("java.");
+            // end::javaProperties[]
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
