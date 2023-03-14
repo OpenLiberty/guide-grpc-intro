@@ -34,7 +34,8 @@ import io.openliberty.guides.systemproto.SystemServiceGrpc.SystemServiceStub;
 // end::grpcImports[]
 
 public class SystemServiceClient {
-    private static Logger logger = Logger.getLogger(SystemServiceClient.class.getName());
+    private static Logger logger = Logger.getLogger(
+        SystemServiceClient.class.getName());
 
     private final ManagedChannel channel;
     private final SystemServiceBlockingStub blockingStub;
@@ -126,9 +127,10 @@ public class SystemServiceClient {
         Properties properties = new Properties();
 
         // tag::getClientStreamingProperties[]
-        // tag::clientStreamingAsyncStub[]
-        StreamObserver<SystemPropertyName> stream = asyncStub.getClientStreamingProperties(
-        // end::clientStreamingAsyncStub[]
+        StreamObserver<SystemPropertyName> stream = 
+            // tag::clientStreamingAsyncStub[]
+            asyncStub.getClientStreamingProperties(
+            // end::clientStreamingAsyncStub[]
             new StreamObserver<SystemProperties>() {
 
                 @Override
@@ -194,9 +196,10 @@ public class SystemServiceClient {
         // end::countDownLatch7[]
 
         // tag::getBidirectionalProperties[]
-        // tag::getJavaPropertiesAsyncStub[]
-        StreamObserver<SystemPropertyName> stream = asyncStub.getBidirectionalProperties(
-        // end::getJavaPropertiesAsyncStub[]
+        StreamObserver<SystemPropertyName> stream = 
+            // tag::getJavaPropertiesAsyncStub[]
+            asyncStub.getBidirectionalProperties(
+            // end::getJavaPropertiesAsyncStub[]
             new StreamObserver<SystemProperty>() {
 
                 // tag::onNext2[]
