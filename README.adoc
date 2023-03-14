@@ -348,21 +348,21 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 
 The [hotspot=getServerStreamingProperties file=0]`getServerStreamingProperties()` method implements the server streaming RPC call. The [hotspot=prefix file=0]`getPropertyPrefix()` getter method retrieves the property prefix from the client. Properties that start with the [hotspot=filter file=0]`prefix` are filtered out. For each property, a [hotspot=serverMessage file=0]`SystemProperty` message is built and streamed to the client through the `StreamObserver` by using its [hotspot=serverNext1 file=0]`onNext()` method. When all properties are streamed, the service stops streaming by calling the [hotspot=serverComplete file=0]`onComplete()` method.
 
-// Update the `SystemServiceClient` class to implement the `getOSProperties()` method.
+Update the `SystemServiceClient` class to implement the `getOSProperties()` method.
 
-// [role="code_command hotspot file=1", subs="quotes"]
-// ----
-// #Replace the `SystemServiceClient` class.#
-// `query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
-// ----
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Replace the `SystemServiceClient` class.#
+`query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java`
+----
 
-// SystemServiceClient.java
-// [source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
-// ----
-// include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
-// ----
+SystemServiceClient.java
+[source, Java, linenums, indent=0, role="code_column hide_tags=copyright,clientStreaming,bidirectionalStreaming"]
+----
+include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
+----
 
-// This [hotspot=serverStreaming file=1]`getOSProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+This [hotspot=serverStreaming file=1]`getOSProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
 
 // Then, update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
 
