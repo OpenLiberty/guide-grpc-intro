@@ -66,7 +66,9 @@ public class PropertiesResource {
         // end::createClient2[]
         Properties properties = new Properties();
         try {
+            // tag::osProperties[]
             properties = client.getServerStreamingProperties("os.");
+            // end::osProperties[]
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
