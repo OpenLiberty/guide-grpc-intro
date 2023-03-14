@@ -293,7 +293,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The `PropertiesResource` class provides RESTful endpoints to use the [hotspot file=2]`SystemServiceClient` to interact with the `system` service and display the results. The [hotspot=unary file=3]`/query/properties/${property}` endpoint creates a [hotspot=createChannel1 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to get the property value, shuts down the channel, and displays the value from the `system` service response.
+The `PropertiesResource` class provides RESTful endpoints to use the [hotspot file=2]`SystemServiceClient` to interact with the `system` service and display the results. The [hotspot=unary file=3]`/query/properties/${property}` endpoint creates a [hotspot=createClient1 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to get the property value, shuts down the channel, and displays the value from the `system` service response.
 
 // update server.xml
 [role='code_command hotspot file=4', subs="quotes"]
@@ -339,6 +339,7 @@ Update the `SystemService` class to implement the server streaming RPC call.
 #Replace the `SystemService` class.#
 `system/src/main/java/io/openliberty/guides/system/SystemService.java`
 ----
+
 SystemService.java
 [source, Java, linenums, indent=0, role="code_column hide_tags=copyright,getClientStreamingProperties,getBidirectionalProperties"]
 ----
@@ -378,7 +379,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createChannel2 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to collect system properties that start with `os.`, shuts down the channel, and displays the values from the `system` service response.
+The endpoint creates a [hotspot=createClient2 file=3]`SystemServiceClient` using the injected `SYSTEM_HOST` and `SYSTEM_PORT` values. It then uses the client to collect system properties that start with `os.`, shuts down the channel, and displays the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]
