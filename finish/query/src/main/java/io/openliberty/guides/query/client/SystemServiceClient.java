@@ -125,9 +125,9 @@ public class SystemServiceClient {
     // end::serverStreaming[]
 
     // tag::clientStreaming[]
-    // tag::propertyPrefix[]
+    // tag::clientPropertyPrefix[]
     public Properties getClientStreamingProperties(String propertyPrefix) {
-    // end::propertyPrefix[]
+    // end::clientPropertyPrefix[]
 
         // tag::countDownLatch4[]
         CountDownLatch countDown = new CountDownLatch(1);
@@ -164,11 +164,11 @@ public class SystemServiceClient {
         // end::getClientStreamingProperties[]
 
         // collect the property names starting with propertyPrefix.
-        // tag::collectProperties[]
+        // tag::clientCollectProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith(propertyPrefix))
                                   .collect(Collectors.toList());
-        // end::collectProperties[]
+        // end::clientCollectProperties[]
 
         // send messages to the server
         keys.stream()
@@ -196,7 +196,9 @@ public class SystemServiceClient {
     // end::clientStreaming[]
 
     // tag::bidirectionalStreaming[]
+    // tag::bidiPropertyPrefix[]
     public Properties getBidirectionalProperties(String propertyPrefix) {
+    // end::bidiPropertyPrefix[]
 
         Properties properties = new Properties();
         // tag::countDownLatch7[]
@@ -235,12 +237,12 @@ public class SystemServiceClient {
             });
         // end::getBidirectionalProperties[]
 
-        // collect the property names starting with java
-        // tag::collectJavaProperties[]
+        // collect the property names starting with propertyPrefix
+        // tag::bidiCollectProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith(propertyPrefix))
                                   .collect(Collectors.toList());
-        // end::collectJavaProperties[]
+        // end::bidiCollectProperties[]
 
         // post messages to the server
         keys.stream()
