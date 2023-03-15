@@ -73,7 +73,9 @@ public class SystemServiceClient {
     // tag::serverStreaming[]
     public Properties getServerStreamingProperties(String propertyPrefix) {
 
+        // tag::placeholder[]
         Properties properties = new Properties();
+        // end::placeholder[]
         // tag::countDownLatch1[]
         CountDownLatch countDown = new CountDownLatch(1);
         // end::countDownLatch1[]
@@ -88,7 +90,9 @@ public class SystemServiceClient {
             public void onNext(SystemProperty value) {
                 logger.info("server streaming received: "
                    + value.getPropertyName() + "=" + value.getPropertyValue());
+                // tag::storeInPlaceholder[]
                 properties.put(value.getPropertyName(), value.getPropertyValue());
+                // end::storeInPlaceholder[]
             }
             // end::onNext1[]
 
@@ -121,7 +125,9 @@ public class SystemServiceClient {
     // end::serverStreaming[]
 
     // tag::clientStreaming[]
+    // tag::clientPropertyPrefix[]
     public Properties getClientStreamingProperties(String propertyPrefix) {
+    // end::clientPropertyPrefix[]
 
         // tag::countDownLatch4[]
         CountDownLatch countDown = new CountDownLatch(1);
@@ -157,12 +163,12 @@ public class SystemServiceClient {
             });
         // end::getClientStreamingProperties[]
 
-        // collect the property names starting with user.
-        // tag::collectUserProperties[]
+        // collect the property names starting with propertyPrefix.
+        // tag::clientCollectProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith(propertyPrefix))
                                   .collect(Collectors.toList());
-        // end::collectUserProperties[]
+        // end::clientCollectProperties[]
 
         // send messages to the server
         keys.stream()
@@ -190,7 +196,9 @@ public class SystemServiceClient {
     // end::clientStreaming[]
 
     // tag::bidirectionalStreaming[]
+    // tag::bidiPropertyPrefix[]
     public Properties getBidirectionalProperties(String propertyPrefix) {
+    // end::bidiPropertyPrefix[]
 
         Properties properties = new Properties();
         // tag::countDownLatch7[]
@@ -229,12 +237,12 @@ public class SystemServiceClient {
             });
         // end::getBidirectionalProperties[]
 
-        // collect the property names starting with java
-        // tag::collectJavaProperties[]
+        // collect the property names starting with propertyPrefix
+        // tag::bidiCollectProperties[]
         List<String> keys = System.getProperties().stringPropertyNames().stream()
                                   .filter(k -> k.startsWith(propertyPrefix))
                                   .collect(Collectors.toList());
-        // end::collectJavaProperties[]
+        // end::bidiCollectProperties[]
 
         // post messages to the server
         keys.stream()

@@ -66,7 +66,9 @@ public class PropertiesResource {
         // end::createClient2[]
         Properties properties = new Properties();
         try {
+            // tag::osProperties[]
             properties = client.getServerStreamingProperties("os.");
+            // end::osProperties[]
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -86,7 +88,9 @@ public class PropertiesResource {
         // end::createClient3[]
         Properties properties = new Properties();
         try {
+            // tag::userProperties[]
             return client.getClientStreamingProperties("user.");
+            // end::userProperties[]
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -106,7 +110,9 @@ public class PropertiesResource {
         // end::createClient4[]
         Properties properties = new Properties();
         try {
+            // tag::javaProperties[]
             return client.getBidirectionalProperties("java.");
+            // end::javaProperties[]
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -362,7 +362,7 @@ SystemServiceClient.java
 include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
 ----
 
-This [hotspot=serverStreaming file=1]`getServerStreamingProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`SystemService.getServerStreamingProperties()` method on the `asyncStub` client object with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the `properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+This [hotspot=serverStreaming file=1]`getServerStreamingProperties()` method calls the [hotspot=getServerStreamingProperties file=1]`getServerStreamingProperties()` method of the `asyncStub` client object with an implementation of the `StreamObserver` interface. The [hotspot=onNext1 file=1]`onNext()` method receives messages streaming from the server service individually and stores them into the [hotspot=placeholder hotspot=storeInPlaceholder file=1]`properties` placeholder. After all properties are received, the `system` service returns the placeholder. Because the RPC call is asynchronous, a [hotspot=countDownLatch1 hotspot=countDownLatch2 hotspot=countDownLatch3 file=1]`CountDownLatch` instance synchronizes the streaming flow.
 
 Then, update the `PropertiesResource` class to implement the `/query/properties/os` endpoint of the `query` service.
 
@@ -379,7 +379,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createClient2 file=2]`SystemServiceClient` and uses the client to collect system properties that start with `os.`, shuts down the channel, and returns the values from the `system` service response.
+The endpoint creates a [hotspot=createClient2 file=2]`SystemServiceClient` client object, uses the client to collect system [hotspot=osProperties file=2]`os.` properties, shuts down the client, and returns the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]
@@ -432,7 +432,7 @@ SystemServiceClient.java
 include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
 ----
 
-The [hotspot=clientStreaming file=1]`getClientStreamingProperties()` method calls the [hotspot=getClientStreamingProperties file=1]`SystemService.getClientStreamingProperties()` method on the `asyncStub` client object to get a `stream` and collect the properties with property names that are prefixed by [hotspot=collectUserProperties file=1]`user.`. It then creates a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually and sends the message to the server by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, the [hotspot=clientCompleted1 file=1]`onCompleted()` method is called to finish the streaming. Again, a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+The [hotspot=clientStreaming file=1]`getClientStreamingProperties()` method calls the [hotspot=getClientStreamingProperties file=1]`getClientStreamingProperties()` method of the `asyncStub` client object to get a `stream` and collect the properties with property names that are prefixed by [hotspot=clientPropertyPrefix hotspot=clientCollectProperties file=1]`propertyPrefix` argument. It then creates a [hotspot=clientMessage1 file=1]`SystemPropertyName` message individually and sends the message to the server by the [hotspot=streamOnNext1 file=1]`stream::onNext` action. When all property names are sent, the [hotspot=clientCompleted1 file=1]`onCompleted()` method is called to finish the streaming. Again, a [hotspot=countDownLatch4 hotspot=countDownLatch5 hotspot=countDownLatch6 file=1]`CountDownLatch` instance synchronizes the streaming flow.
 
 // Replace PropertiesResource
 Then, update the `PropertiesResource` class to implement the `/query/properties/user` endpoint of the `query` service.
@@ -449,7 +449,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createClient3 file=2]`SystemServiceClient` and uses the client to collect system properties that start with `user.`, shuts down the channel, and returns the values from the `system` service response.
+The endpoint creates a [hotspot=createClient3 file=2]`SystemServiceClient` client object, uses the client to collect system [hotspot=userProperties file=2]`user.` properties, shuts down the client, and returns the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]
@@ -502,7 +502,7 @@ SystemServiceClient.java
 include::finish/query/src/main/java/io/openliberty/guides/query/client/SystemServiceClient.java[]
 ----
 
-The [hotspot=bidirectionalStreaming file=1]`getBidirectionalProperties()` method calls the [hotspot=getBidirectionalProperties file=1]`SystemService.getBidirectionalProperties()` method on the `asyncStub` client object with an implementation of the `StreamObserver` interface. The [hotspot=onNext2 file=1]`onNext()` method receives messages that are streaming from the server individually and stores them into the `properties` placeholder. Then, collect the properties. For each property name that starts with [hotspot=collectJavaProperties file=1]`java.`, a [hotspot=clientMessage2 file=1]`SystemPropertyName` message is created and sent to the server by the [hotspot=streamOnNext2 file=1]`stream::onNext` action. When all property names are sent, the streaming is ended by calling the [hotspot=clientCompleted2 file=1]`onCompleted()` method. Again, a [hotspot=countDownLatch7 hotspot=countDownLatch8 hotspot=countDownLatch9 file=1]`CountDownLatch` instance synchronizes the streaming flow.
+The [hotspot=bidirectionalStreaming file=1]`getBidirectionalProperties()` method calls the [hotspot=getBidirectionalProperties file=1]`getBidirectionalProperties()` method of the `asyncStub` client object with an implementation of the `StreamObserver` interface. The [hotspot=onNext2 file=1]`onNext()` method receives messages that are streaming from the server individually and stores them into the `properties` placeholder. Then, collect the properties. For each property name that starts with [hotspot=bidiPropertyPrefix hotspot=bidiCollectProperties file=1]`propertyPrefix` argument, a [hotspot=clientMessage2 file=1]`SystemPropertyName` message is created and sent to the server by the [hotspot=streamOnNext2 file=1]`stream::onNext` action. When all property names are sent, the streaming is ended by calling the [hotspot=clientCompleted2 file=1]`onCompleted()` method. Again, a [hotspot=countDownLatch7 hotspot=countDownLatch8 hotspot=countDownLatch9 file=1]`CountDownLatch` instance synchronizes the streaming flow.
 
 Update the `PropertiesResource` class to implement of `/query/properties/java` endpoint of the `query` service.
 
@@ -519,7 +519,7 @@ PropertiesResource.java
 include::finish/query/src/main/java/io/openliberty/guides/query/PropertiesResource.java[]
 ----
 
-The endpoint creates a [hotspot=createClient4 file=2]`SystemServiceClient` and uses the client to collect system properties that start with `java.`, shuts down the channel, and returns the values from the `system` service response.
+The endpoint creates a [hotspot=createClient4 file=2]`SystemServiceClient` client object, uses the client to collect system [hotspot=javaProperties file=2]`java.` properties, shuts down the client, and returns the values from the `system` service response.
 
 // static guide instruction
 ifndef::cloud-hosted[]
