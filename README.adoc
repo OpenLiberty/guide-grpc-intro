@@ -485,7 +485,7 @@ The required dependencies are already added to the `pom.xml` Maven configuration
 [role="code_command hotspot file=1", subs="quotes"]
 ----
 #Create the `SystemServiceTest` class.#
-`system/src/test/java/it/io/openliberty/guides/system/SystemTest.java`
+`system/src/test/java/it/io/openliberty/guides/system/SystemServiceTest.java`
 ----
 
 SystemServiceTest.java
