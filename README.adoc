@@ -507,7 +507,7 @@ In the [hotspot=tearDown file=1]`tearDown()` static method, shut down the `inPro
 
 The [hotspot=testGetProperty file=1]`testGetProperty()` tests the unary call to retrieve a single System property value.
 
-The [hotspot=testGetServerStreamingProperties file=1]`testGetServerStreamingProperties()` tests the server streaming call to retrieve multiple System property values with a given property prefix.
+The [hotspot=testGetServerStreamingProperties file=1]`testGetServerStreamingProperties()` tests the server streaming call to retrieve multiple system property values with a given property prefix.
 
 The [hotspot=testGetClientStreamingProperties file=1]`testGetClientStreamingProperties()` tests the client streaming call to retrieve multiple System property values with given property names.
 
