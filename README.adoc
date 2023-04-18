@@ -467,7 +467,7 @@ endif::[]
 
 == Testing the application
 
-You can test your application manually, but automated tests ensure code quality because they trigger a failure whenever a code change introduces a defect. In this section, you'll create unit tests for the gRPC server service and integration tests for the `query` service.
+Although you can test your application manually, automated tests ensure consistent code quality by triggering a failure whenever a code change introduces a defect. In this section, you'll create unit tests for the gRPC server service and integration tests for the `query` service.
 
 === Implementing unit tests for the gRPC server service
 
