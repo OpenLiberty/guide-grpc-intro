@@ -478,7 +478,7 @@ system/pom.xml
 include::finish/system/pom.xml[]
 ----
 
-The required dependencies are already added to the `pom.xml` Maven configuration file for you, including JUnit5, [hotspot=grpc-testing file=0]`grpc-testing`, and [hotspot=mockito-core file=0]`mockito-core` libraries. The `grpc-testing` dependency provides utilities for testing gRPC services and is used for creating a mock gRPC server for simulating client-server communication during testing. The `mockito-core` dependency is needed to enable the use of Mockito.
+The `pom.xml` Maven configuration file already specifies the required dependencies, including JUnit5, [hotspot=grpc-testing file=0]`grpc-testing`, and [hotspot=mockito-core file=0]`mockito-core` libraries. The `grpc-testing` dependency provides utilities for testing gRPC services and creates a mock gRPC server that simulates client-server communication during testing. The `mockito-core` dependency enables the Mockito mocking framework.
 
 // file 1
 // Create SystemServiceTest.java
