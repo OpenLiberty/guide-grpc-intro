@@ -503,7 +503,7 @@ include::finish/system/src/main/java/io/openliberty/guides/system/SystemService.
 
 In the `setUp()` static method, create and start the [hotspot=inProcessServer file=1]`inProcessServer` in-process gRPC server. Then, create the [hotspot=inProcessChannel file=1]`inProcessChannel` in-process channel that connects to the `inProcessServer` server running in the same JVM process. The unit tests can make calls to the gRPC server by using the same method signatures and functionalities as the gRPC client, even though they use different [hotspot=blockingStub file=1]`blockingStub` or [hotspot=asyncStub file=1]`asyncStub` stubs through the same channel.
 
-In the [hotspot=tearDown file=1]`tearDown()` static method, shutdown the `inProcessChannel` in-process channel and the `inProcessServer` in-process gRPC server.
+In the [hotspot=tearDown file=1]`tearDown()` static method, shut down the `inProcessChannel` in-process channel and the `inProcessServer` in-process gRPC server.
 
 The [hotspot=testGetProperty file=1]`testGetProperty()` tests the unary call to retrieve a single System property value.
 
