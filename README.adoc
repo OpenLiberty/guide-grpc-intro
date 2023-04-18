@@ -513,7 +513,8 @@ The [hotspot=testGetClientStreamingProperties file=1]`testGetClientStreamingProp
 
 The [hotspot=testGetBidirectionalProperties file=1]`testGetBidirectionalProperties()` tests the bidirectional streaming call to retrieve multiple system property values with given property names.
 
-*Running the tests*
+
+=== Running unit tests for the gRPC server service
 
 Because you started Open Liberty in dev mode, you can run the tests by pressing the `enter/return` key from the command-line session where you started the `system` service.
 
@@ -557,7 +558,8 @@ The [hotspot=getUserProperties file=0]`testGetUserProperties()` tests the `/quer
 
 The [hotspot=getJavaProperties file=0]`testGetJavaProperties()` tests the `/query/properties/java` endpoint and confirms that a response is received. 
 
-*Running the tests*
+
+=== Running integration tests for the query service
 
 Because you started Open Liberty in dev mode, you can run the tests by pressing the `enter/return` key from the command-line session where you started the `query` service.
 
