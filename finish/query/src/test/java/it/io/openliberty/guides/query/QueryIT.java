@@ -33,12 +33,12 @@ public class QueryIT {
     private static Client client;
 
     @BeforeAll
-    private static void setup() {
+    public static void setup() {
         client = ClientBuilder.newClient();
     }
 
     @AfterAll
-    private static void teardown() {
+    public static void teardown() {
         client.close();
     }
 
