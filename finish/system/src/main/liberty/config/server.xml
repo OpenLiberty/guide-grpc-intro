@@ -2,7 +2,7 @@
 <server description="system service">
 
     <featureManager>
-        <feature>restfulWS-3.0</feature>
+        <feature>restfulWS-3.1</feature>
         <!-- tag::grpc[] -->
         <feature>grpc-1.0</feature>
         <!-- end::grpc[] -->

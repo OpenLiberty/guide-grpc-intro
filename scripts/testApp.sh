@@ -3,6 +3,8 @@ set -euxo pipefail
 
 mvn -ntp -pl systemproto -q clean install
 
+mvn -ntp -pl system verify
+
 mvn -ntp -Dhttp.keepAlive=false \
     -Dmaven.wagon.http.pool=false \
     -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 \
