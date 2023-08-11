@@ -286,7 +286,7 @@ query/server.xml
 include::finish/query/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=3]`grpc` and [hotspot=grpcClient file=3]`grpcClient` features to the Liberty instance configuration file for the `query` service. These two features enable gRPC server and client support on Liberty respectively. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` feature with the `headersToPropagate` and `target` attributes. If you want to learn more about `grpcClient` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
+Add the [hotspot=grpc file=3]`grpc` and [hotspot=grpcClient file=3]`grpcClient` features to the Liberty's `server.xml` configuration file for the `query` service. These two features enable gRPC server and client support on Liberty respectively. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` feature with the `headersToPropagate` and `target` attributes. If you want to learn more about `grpcClient` feature configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
 
 Because you are running the `system` and `query` services in dev mode, the changes that you made are automatically picked up. You’re now ready to check out your application in your browser.
 
