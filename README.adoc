@@ -19,7 +19,7 @@
 :page-seo-title: Streaming messages between client and server services using gRPC remote procedure calls
 :page-seo-description: A getting started tutorial with examples on how to write gRPC remote procedure call services with unary calls, server streaming, client streaming, and bidirectional streaming using Java with Open Liberty.
 :guide-author: Open Liberty
-= Streaming messages between client and server services using gRPC
+= Streaming messages between client and  services using gRPC
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
@@ -245,7 +245,7 @@ The [hotspot=getProperty file=0]`getProperty()` method implements the unary RPC 
 // update server.xml
 [role='code_command hotspot file=1', subs="quotes"]
 ----
-#Replace the `system` server configuration file.#
+#Replace the system's server.xml configuration file.#
 `system/src/main/liberty/config/server.xml`
 ----
 
@@ -255,7 +255,7 @@ system/server.xml
 include::finish/system/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=1]`grpc` feature to the Liberty instance configuration file. This feature enables applications running on Liberty to provide gRPC services. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about configuration for the `grpc` feature, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
+Add the [hotspot=grpc file=1]`grpc` feature to the Liberty `server.xml` configuration file. This feature enables applications running on Liberty to provide gRPC services. Configure the [hotspot=grpcConfig file=1]`grpc` feature with the `target` attribute. If you want to learn more about configuration for the `grpc` feature, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
 
 Next, implement the corresponding REST endpoint in the `query` service.
 
@@ -276,7 +276,7 @@ The `PropertiesResource` class provides RESTful endpoints to interact with the `
 // update server.xml
 [role='code_command hotspot file=3', subs="quotes"]
 ----
-#Replace the `query` server configuration file.#
+#Replace the query's server.xml configuration file.#
 `query/src/main/liberty/config/server.xml`
 ----
 
