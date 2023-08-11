@@ -19,7 +19,7 @@
 :page-seo-title: Streaming messages between client and server services using gRPC remote procedure calls
 :page-seo-description: A getting started tutorial with examples on how to write gRPC remote procedure call services with unary calls, server streaming, client streaming, and bidirectional streaming using Java with Open Liberty.
 :guide-author: Open Liberty
-= Streaming messages between client and  services using gRPC
+= Streaming messages between client and server services using gRPC
 
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
