@@ -7,9 +7,6 @@
         <feature>jsonb-3.0</feature>
         <feature>cdi-4.0</feature>
         <feature>mpConfig-3.0</feature>
-        <!-- tag::grpc[] -->
-        <feature>grpc-1.0</feature>
-        <!-- end::grpc[] -->
         <!-- tag::grpcClient[] -->
         <feature>grpcClient-1.0</feature>
         <!-- end::grpcClient[] -->
