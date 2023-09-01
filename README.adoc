@@ -255,7 +255,7 @@ system/server.xml
 include::finish/system/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpc file=1]`grpc` feature to the Liberty `server.xml` configuration file. This feature enables applications running on Liberty to provide gRPC services. Configure the [hotspot=grpcConfig file=1]`grpc` element with the `target` attribute. If you want to learn more about configuration for the `grpc` element, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
+Add the [hotspot=grpc file=1]`grpc` feature to the Liberty `server.xml` configuration file. This feature enables applications running on Liberty to provide gRPC services. Configure the [hotspot=grpcConfig file=1]`grpc` element with the `target` attribute to specify the remote gRPC service's endpoint that clients should connect to for communication. For simplicity in this guide, the `target` attribute is set to a wildcard (`*`), accepting any endpoint. If you want to learn more about configuration for the `grpc` element, see the https://openliberty.io/docs/latest/reference/config/grpc.html[GRPC Server Properties^].
 
 Next, implement the corresponding REST endpoint in the `query` service.
 
@@ -286,7 +286,7 @@ query/server.xml
 include::finish/query/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpcClient file=3]`grpcClient` feature to the Liberty `server.xml` configuration file for the `query` service. This feature enables gRPC client support on Liberty. Specify the [hotspot=grpcClientConfig file=3]`grpcClient` element and configure it with the `headersToPropagate` attribute to send security tokens via cookies, and the `host` attribute to specify the remote gRPC service's hostname. For simplicity in this guide, the `host` attribute is set to a wildcard (`*`), accepting any IP address. However, in a production environment, it's recommended to specify the exact hostname. If you want to learn more about `grpcClient` element configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
+Add the [hotspot=grpcClient file=3]`grpcClient` feature to the Liberty `server.xml` configuration file for the `query` service. This feature enables gRPC client support on Liberty. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` element with the `headersToPropagate` attribute to send security tokens via cookies, and the `host` attribute to specify the remote gRPC service's hostname. For simplicity in this guide, the `host` attribute is set to a wildcard (`*`), accepting any IP address. However, in a production environment, it's recommended to specify the exact hostname. If you want to learn more about `grpcClient` element configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
 
 Because you are running the `system` and `query` services in dev mode, the changes that you made are automatically picked up. You’re now ready to check out your application in your browser.
 
