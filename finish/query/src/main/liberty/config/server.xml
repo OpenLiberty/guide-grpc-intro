@@ -21,7 +21,7 @@
                   host="*"/>
 
     <!-- tag::grpcClientConfig[] -->
-    <grpcClient host="*" maxInboundMessageSize="1024"/>
+    <grpcClient host="*" headersToPropagate="Cookie"/>
     <!-- end::grpcClientConfig[] -->
 
     <applicationManager autoExpand="true"/>
