@@ -21,11 +21,7 @@
                   host="*"/>
 
     <!-- tag::grpcClientConfig[] -->
-    <!-- Due to host="*", this configuration will be applied to every gRPC client call
-         that gets made. This configuration registers a ClientInterceptor, and it directs
-         Cookie headers to get forwarded with any outbound RPC calls, in this case, that
-         enables authorization propagation. -->
-    <grpcClient headersToPropagate="Cookie" host="*"/>
+    <grpcClient host="*" maxInboundMessageSize="1024"/>
     <!-- end::grpcClientConfig[] -->
 
     <applicationManager autoExpand="true"/>
