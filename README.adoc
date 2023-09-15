@@ -286,7 +286,7 @@ query/server.xml
 include::finish/query/src/main/liberty/config/server.xml[]
 ----
 
-Add the [hotspot=grpcClient file=3]`grpcClient` feature to the Liberty `server.xml` configuration file for the `query` service. This feature enables gRPC client support on Liberty. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` element with the `headersToPropagate` attribute to propagate cookies. This configuration applies universally to all gRPC client calls that get made, as indicated by the wildcard (`*`) in the `host` attribute. If you want to learn more about `grpcClient` element configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
+Add the [hotspot=grpcClient file=3]`grpcClient` feature to the Liberty `server.xml` configuration file for the `query` service. This feature enables gRPC client support on Liberty. Configure the [hotspot=grpcClientConfig file=3]`grpcClient` element with the `headersToPropagate` attribute to propagate cookies. This configuration applies universally to all gRPC client calls, as indicated by the wildcard (`*`) in the `host` attribute. If you want to learn more about `grpcClient` element configuration, see the https://openliberty.io/docs/latest/reference/config/grpcClient.html[GRPC Client Properties^].
 
 Because you are running the `system` and `query` services in dev mode, the changes that you made are automatically picked up. You’re now ready to check out your application in your browser.
 
