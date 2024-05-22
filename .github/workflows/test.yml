@@ -58,8 +58,10 @@ jobs:
       - name: Post tests
         if: always()
         run: |
-          logsPath=$(find . -name "console.log");
-          < "$logsPath" grep Launching
+          logsPaths=$(find . -name "console.log")
+          for logsPath in $logsPaths; do
+              grep "Launching" "$logsPath"
+          done
       - name: Archive server logs if failed
         if: failure()
         uses: actions/upload-artifact@v2
