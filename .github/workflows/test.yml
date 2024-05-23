@@ -62,8 +62,6 @@ jobs:
           < "$logsPath" grep Launching
           logsPath=$(find . -name "console.log" | grep system);
           < "$logsPath" grep Launching
-          logsPath=$(find . -name "console.log" | grep systemproto);
-          < "$logsPath" grep Launching
       - name: Archive server logs if failed
         if: failure()
         uses: actions/upload-artifact@v2
