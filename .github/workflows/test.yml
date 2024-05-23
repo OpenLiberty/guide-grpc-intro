@@ -58,9 +58,11 @@ jobs:
       - name: Post tests
         if: always()
         run: |
+          logsPath=$(find . -name "console.log" | grep query);
+          < "$logsPath" grep Launching
           logsPath=$(find . -name "console.log" | grep system);
           < "$logsPath" grep Launching
-          logsPath=$(find . -name "console.log" | grep inventory);
+          logsPath=$(find . -name "console.log" | grep systemproto);
           < "$logsPath" grep Launching
       - name: Archive server logs if failed
         if: failure()
