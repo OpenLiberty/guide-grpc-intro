@@ -63,10 +63,15 @@ jobs:
           < "$logsPath" grep Launching
           logsPath=$(find . -name "console.log" | grep system);
           < "$logsPath" grep Launching
-      - name: Archive server logs if failed
+      - name: Archive system server logs if failed
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: server-logs
-          path: finish/target/liberty/wlp/usr/servers/defaultServer/logs/
-
+          name: system-server-logs
+          path: finish/system/target/liberty/wlp/usr/servers/defaultServer/logs/
+      - name: Archive query server logs if failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: system-server-logs
+          path: finish/query/target/liberty/wlp/usr/servers/defaultServer/logs/
