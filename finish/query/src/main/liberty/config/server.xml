@@ -10,7 +10,7 @@
         <feature>cdi</feature>
         <feature>mpConfig</feature>
         <!-- tag::grpcClient[] -->
-        <feature>grpcClient</feature>
+        <feature>grpcClient-1.0</feature>
         <!-- end::grpcClient[] -->
     </featureManager>
 
