@@ -73,5 +73,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: system-server-logs
+          name: query-server-logs
           path: finish/query/target/liberty/wlp/usr/servers/defaultServer/logs/
