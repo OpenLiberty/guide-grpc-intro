@@ -70,7 +70,7 @@
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-testing</artifactId>
-            <version>1.68.2</version>
+            <version>1.69.0</version>
             <scope>test</scope>
         </dependency>
         <!-- end::grpc-testing[] -->
