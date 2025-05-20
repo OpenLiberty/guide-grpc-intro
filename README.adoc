@@ -274,7 +274,6 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role='command']
 ```
-cd finish
 mvnw.cmd -pl systemproto install
 ```
 --
@@ -283,7 +282,6 @@ mvnw.cmd -pl systemproto install
 --
 [role='command']
 ```
-cd finish
 ./mvnw -pl systemproto install
 ```
 --
@@ -292,7 +290,6 @@ cd finish
 --
 [role='command']
 ```
-cd finish
 ./mvnw -pl systemproto install
 ```
 --
