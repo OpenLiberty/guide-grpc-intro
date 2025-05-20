@@ -350,7 +350,7 @@ include::{common-includes}/os-tabs.adoc[]
 --
 [role='command']
 ```
-mvnw.cmd -pl query liberty:run
+mvnw.cmd -pl query liberty:dev
 ```
 --
 
@@ -358,7 +358,7 @@ mvnw.cmd -pl query liberty:run
 --
 [role='command']
 ```
-./mvnw -pl query liberty:run
+./mvnw -pl query liberty:dev
 ```
 --
 
@@ -366,7 +366,7 @@ mvnw.cmd -pl query liberty:run
 --
 [role='command']
 ```
-./mvnw -pl query liberty:run
+./mvnw -pl query liberty:dev
 ```
 --
 
