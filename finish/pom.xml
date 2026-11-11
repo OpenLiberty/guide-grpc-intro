@@ -11,5 +11,8 @@
         <module>system</module>
         <module>query</module>
     </modules>
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+    </properties>
 
 </project>
